@@ -8,7 +8,6 @@ Personal notes from posit::conf(2026) virtual, kept as Quarto documents.
 
 - `day1.qmd`, `day2.qmd` — the actual conference notes (one file per day). `day2.qmd` is still mostly empty as the conference progresses.
 - `README.md` — links to the day files and how to browse the Quarto site.
-- `docs.md` — reference documentation for Defuddle (unrelated to conference content; used to support the local fetch tooling below).
 - `knowledge/` — clean-markdown copies of URLs referenced in the day files, fetched locally, plus `knowledge/index.md` as the index. Populated by the `qmd-url-defuddle` skill; don't hand-edit its contents. Only the per-article subfolders (`knowledge/day1/`, `knowledge/day2/`, …) and `*.pdf` are gitignored — `knowledge/index.md` itself is tracked and committed, since `knowledge.qmd` includes it and the GitHub Pages build (see "Deployment" below) needs it present.
 - `m3u8/` — gitignored. Session recording HLS manifests (`.m3u8`), saved manually from the browser (signed URLs expire).
 - `subtitles/vtt/`, `subtitles/markdown/` — gitignored. WebVTT subtitle files and flowing-text transcripts derived from `m3u8/`, one pair per session, named `<day>-<kebab-case-session-title>`. Populated by the `m3u8-subtitles` skill; don't hand-edit. Not part of the Quarto site (see "Website" below) — kept as local files only.

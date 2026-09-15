@@ -27,6 +27,7 @@ Personal notes from posit::conf(2026) virtual, kept as Quarto documents.
     - Give every callout a `## Title` as its first line (short, a few words) — an untitled callout is harder to scan in a long page.
     - A definition list (`term\n:   definition`) beats a bullet list when a talk formally defines several terms (see Timothy Keyes's harness/tool/agent in `day1.qmd` for the pattern).
 - Don't commit anything under `knowledge/day1/`, `knowledge/day2/`, `subtitles/`, or `m3u8/` — they're gitignored on purpose (fetched/derived content, not source notes). `knowledge/index.md` is the one exception under `knowledge/` and is committed (see above).
+- `day1.qmd` and `day2.qmd` each open with a `::: {.callout-note}` disclaimer that notes are partly drafted from auto-generated captions and may contain mistakes — keep this in place (don't strip it when editing the file's top), and don't repeat it per-talk.
 - This is not a software project: no build, lint, or test commands apply here.
 
 ## Tooling
@@ -38,6 +39,8 @@ Project-local skills live in `.claude/skills/`:
 - `m3u8-subtitles` — extracts the English subtitle track from a session's `.m3u8` manifest (via `ffmpeg`) into `subtitles/vtt/<slug>.vtt`, then converts it into a flowing-text transcript at `subtitles/markdown/<slug>.md`.
 
 Use `qmd-url-defuddle` when asked to pull references out of the notes rather than fetching URLs ad hoc. Use `m3u8-subtitles` when asked to get subs/transcript from a session recording manifest.
+
+When asked to turn a `subtitles/markdown/` transcript into `day1.qmd`/`day2.qmd` notes: the transcript comes from auto-generated captions (not a human transcript), so it can contain misheard words, mangled names/jargon, and garbled sentences. Cross-check anything that looks off (speaker names, package/product names, numbers) against the talk's agenda listing or linked resources before writing it into the notes, rather than transcribing the transcript's mistakes verbatim.
 
 ## Website
 

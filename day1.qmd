@@ -1,5 +1,10 @@
 # Day 1: Conf Day 1
 
+::: {.callout-note}
+## Disclaimer
+Some sections of these notes are drafted from auto-generated session captions rather than a human transcript, then summarized. They may contain misheard names, jargon, or numbers — treat anything surprising as worth double-checking against the original talk.
+:::
+
 ## Correct, reproducible, and transparent data agents - Sara Altman & Simon Couch
 
 ### The core tension: convenience vs. correctness

@@ -255,6 +255,132 @@ A raw model can't answer "who's keynoting posit::conf," but Claude Desktop can �
 Talk to humans first, agree on what words mean, then make sure it's a question worth answering — in that order.
 :::
 
-## MCP, or not MCP — Neal Richardson
+## What Context Do Your AI Agents Actually Need - Sharon Wang
+
+### Reframing the question
+
+- The durable question isn't "what context do agents need" but "what context do *you* need" — that holds even as models/harnesses/best practices keep changing
+- 92 frontier LLMs released in 2025, ~127 projected for 2026; release rate up 4x+ since 2023 — even Positron's own context-management best practices from a year ago have had to be abandoned
+- You can't write down for an agent what you don't understand yourself — domain expertise is what makes AI-assisted analysis correct, not just plausible-looking
+
+### Building your own understanding
+
+- Inventory what you already know: what question you're answering, where the data came from, what a row represents, who else knows about this, constraints/deadlines, and any trusted code to reference (ties to the {commons} keynote)
+- Write down goals and ideal outcomes for *yourself* before starting, not for the agent — prevents scope creep and endless goalpost-moving during review
+
+### Managing context day to day
+
+- Context sources: what you paste in chat, what the harness auto-grabs (system prompt, IDE state, console, schema), files you write in advance (AGENTS.md, skills, memory), and on-demand context (file search, MCP)
+- Write understanding into project context files/AGENTS.md instead of re-explaining every session; use a Save Memory skill for learnings, a Create Skill skill for recurring workflows
+- Reference file paths instead of pasting full file contents — lets the agent search only what it needs, cuts token usage
+- Prefer text/file references over images/screenshots — models spend more tokens reconstructing pixels than reading text directly
+- For live data in an app, connect via MCP rather than pasting exports (points ahead to Neal Richardson's talk)
+
+::: {.callout-tip}
+## When to start a new chat
+A new task, a side quest, or catching yourself re-explaining in circles are all signs to start fresh rather than push through a degraded context window.
+:::
+
+### Building collaboratively
+
+- Build a shared team "understanding inventory," then translate it into shared context files — make space (team meetings, pairing, 1:1s) to discuss what is/isn't working with AI tooling
+- Revisit team workflows and habits regularly: some pre-agent habits no longer fit, others got dropped and should come back
+- Q&A: stale AGENTS.md/memory files are best caught by noticing recurring frustration/repetition as a team — this can also be encoded into a skill that keeps them updated
+
+## AI Agents Deserve R - James Wade
+
+### Framing: a coherent ecosystem, not the largest one
+
+- Recurring worry: "am I sacrificing capability by staying in R instead of Python/Claude Code?" — reframed to only switch language when there's a compelling reason, not by default
+- Agents don't need the largest ecosystem, they need a coherent one — that requirement falls on the developer (to hold a deep mental model of what they're building), since models already understand Python/JS well from training data
+
+### Demo: "real", a personal RSS reader
+
+- Built to fix generic AI daily-briefing tools: an LLM-driven "orientation" step ranks/filters articles and explains its reasoning, plus lightweight feedback (dismiss/engage) and a chat interface over individual articles or the full corpus
+- Built almost entirely from a small set of R packages, each contributing one distinct piece
+
+### Ecosystem tour
+
+- **Shiny Chat** (R & Python): conversation history (resume/search/rename/fork), exposed thinking traces with an interrupt button, dynamic tool-call display, slash commands reusable for in-app navigation — "a few lines of code" to add to any Shiny app
+- **Elmer**: LLM interfacing; new tool annotations let you flag a tool as read-only vs. world-affecting for downstream safety
+- **Deputy** (new, built on Elmer): adds permissions and usage limits on top of Elmer's tool-calling classes — enterprise-style safety controls
+- **DSPR**: an R port of Python's DSPy ("programming, not prompting") — define modules/signatures for inputs/outputs, then apply optimization algorithms against a scoring metric to auto-update prompts as models change, instead of manually rewriting them each release
+
+### Closing
+
+- Staying in R does mean missing out on some things — but the gaps are small enough to see and to build/contribute to yourself, since agents make porting a Python capability into an R package cheap
+- Encouraged the audience to build and contribute to the R agent ecosystem
+
+## MCP, or not MCP - Neal Richardson
 
 - https://enpiar.com/mcp-posit-conf-2026/#/section
+
+### The problem: Zendesk tickets Claude couldn't read
+
+- Posit's enterprise products run on customer infrastructure — support tickets (Zendesk) are the engineering team's only window into a customer issue, and reconstructing context from a ticket was manual and slow
+- Wanted to hand Claude Code a ticket URL directly, but hit two walls: no safe way to give it Zendesk credentials, and Zendesk's REST API isn't shaped for efficient/secure agent use
+
+### What MCP actually is
+
+- Fundamentally simple: a standard for hosting tools (functions + descriptions) for LLMs to call, and for clients to query them — "just another API standard," tailored to AI applications
+- Local MCP servers run on your machine; remote ones are shared via a URL — talk focuses on writing your own remote server
+
+### MCP vs. CLI vs. skills
+
+- Skills = plain instructions/context; enough on their own if the agent's existing tools (shell, web requests) can already do the job
+- A CLI beats MCP when the CLI already exists, is widely used, and is in the model's training data (e.g. `gh`) — no context spent teaching the model how to use it
+- A custom MCP server beats a new/custom CLI: a new CLI isn't in training data (costs the same context to teach it) and has its own distribution problem (everyone must install it)
+- Using an existing personal-auth CLI (e.g. `gh`) means the agent can do anything you personally can on that service — harder to scope down than a purpose-built MCP tool
+
+::: {.callout-warning}
+## The lethal trifecta (Simon Willison)
+An agent combining (1) access to private data, (2) exposure to untrusted content, and (3) the ability to communicate out can be tricked into exfiltrating private data via prompt injection — surprisingly easy to satisfy, e.g. reading a public GitHub issue (untrusted content) with an agent that also has private repo access and web-request ability.
+:::
+
+### Best practices for writing your own MCP server
+
+1. Only define the tools you need — less context, less chance the agent picks the wrong tool, and fewer dangerous tools to misuse (be especially careful with write/delete tools)
+2. Keep responses concise — strip anything from an upstream API response that isn't needed for the task, since everything returned goes into context
+3. Practice data hygiene — strip or redact PII/unneeded fields from API responses to reduce exposure
+
+### Demo: Zendesk MCP server on Posit Connect
+
+- Built with the `fastmcp` Python library, deployed to Connect like any other app
+- Connect handles Zendesk auth via a built-in integration (negotiates credentials on demand, no long-lived API key stored anywhere) and exposes an OAuth flow to Claude Code
+- Connect's MCP view lists available servers/tools with runnable descriptions, plus usage monitoring (who's using what, when)
+
+::: {.callout-important}
+## Guiding principle
+Remote MCP servers are cheap to write today — write narrow ones for exactly what you need, since narrow tools "leave prompt injection with empty hands," and let Connect handle auth, governance, and monitoring.
+:::
+
+## Why Is AI Costing Me So Much Money? - Winston Chang
+
+### LLM cost mechanics
+
+- LLMs are stateless — each request resends the *entire* prior conversation; there's no persistent "mind" holding context between turns
+- Context length (tokens per request) grows roughly linearly over a conversation, but total cost is the cumulative sum of every request — so total spend grows quadratically (like a parabola) with conversation length
+- Output tokens typically cost ~5x input tokens
+
+::: {.callout-tip}
+## Caching is the biggest lever
+If a request's input tokens repeat an earlier request's input tokens in the same order, the repeated portion is served from cache at roughly 1/10th the normal input-token cost.
+:::
+
+### Why coding agents specifically got expensive
+
+- A single user request can fan out into many agentic-loop round trips (tool call → result → tool call → ...), each resending the growing conversation — this, more than raw model pricing, is what drove costs up over the last year
+
+### Cost controls
+
+- Subscription plans (Claude Pro/Max, OpenAI Plus/Pro) can be worth up to 10x the token allowance vs. pay-as-you-go retail pricing — great for individuals, but usually unusable for enterprises needing data-privacy guarantees (subscription usage can be logged/trained on)
+- Posit AI Pass offers zero-data-retention (ZDR) agreements across its models, trading away the deep subscription discounts for that guarantee
+- Make cost visible: Positron Assistant shows running conversation cost plus a detailed breakdown; Wes McKinney's **Agents View** tool (local, self-hosted) tracks and lets you search cost across conversations
+- Start a new conversation once you pivot to an unrelated task, instead of paying to resend the unrelated earlier context every turn (Positron Assistant's token counter turns red on long conversations as a nudge)
+- Pick a cheaper model when the task allows it — e.g. Haiku (half of Sonnet), GPT-5.6 Luna (~1/10th of Sonnet, "more capable than Haiku 4.5"), GLM 5.3 Flash (~1/20th of Sonnet) — good for interactive/non-agentic coding, not full agentic loops
+- Write plans/reports/handoff docs to markdown instead of extending one long conversation; a **handoff document** (explicit continuation notes plus a ready-to-paste next prompt) gives more control than `/compact`'s automatic summary
+- Thinking/reasoning tokens count as output tokens; continuing a thinking trace in a later turn requires resending its identifier, which then counts as full input tokens again
+
+### Closing
+
+- Q&A: caching support depends on the serving software, not just the model — e.g. not consistently present when running open-weights models locally via Ollama/LM Studio

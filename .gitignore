@@ -1,0 +1,10 @@
+*.pdf
+subtitles
+videos
+m3u8
+/.quarto/
+/_site/
+**/*.quarto_ipynb
+knowledge/day1
+knowledge/day2
+subtitles

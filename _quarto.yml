@@ -1,0 +1,34 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - day1.qmd
+    - day2.qmd
+    - knowledge.qmd
+
+website:
+  title: "posit::conf(2026) Notes"
+  description: "Personal notes from posit::conf(2026) virtual"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: day1.qmd
+        text: Day 1
+      - href: day2.qmd
+        text: Day 2
+      - href: knowledge.qmd
+        text: Knowledge
+    right:
+      - icon: github
+        href: https://github.com/parmsam/posit-conf-2026-notes
+  page-footer:
+    center: "Personal notes from posit::conf(2026) virtual"
+
+format:
+  html:
+    theme: default
+    toc: true
+    toc-location: right
+    from: markdown+autolink_bare_uris

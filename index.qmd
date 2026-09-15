@@ -1,0 +1,20 @@
+---
+title: "posit::conf(2026) Notes"
+---
+
+Personal running notes from posit::conf(2026) virtual.
+
+::: {.text-center}
+[![](https://imgs.xkcd.com/comics/machine_learning.png){fig-alt="A pile of linear algebra pretending to be an intelligent robot."}](https://xkcd.com/1838/)
+
+*"The pile gets soaked with data and starts to feel silly." — [xkcd #1838](https://xkcd.com/1838/)*
+:::
+
+- [Day 1](day1.qmd) — conference notes for day one
+- [Day 2](day2.qmd) — conference notes for day two
+- [Knowledge](knowledge.qmd) — clean copies of every URL referenced in the notes
+
+::: {.callout-note}
+## How these notes get written
+The day notes are AI-assisted: Claude Code drafts and organizes each talk's notes from the raw session transcript and referenced URLs, then structures them into subsections/callouts. An `AGENTS.md` file in the repo acts as the persistent context — conventions for structure, conciseness, and styling — so the drafting stays consistent across separate sessions instead of depending on chat history.
+:::

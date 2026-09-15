@@ -1,0 +1,260 @@
+# Day 1: Conf Day 1
+
+## Correct, reproducible, and transparent data agents - Sara Altman & Simon Couch
+
+### The core tension: convenience vs. correctness
+
+> In the battle between convenience and correctness, convenience is winning.
+>
+> — Joe Cheng, Posit CTO
+
+- AI has broadened who can *convincingly* do data analysis, not who can do it *correctly*
+- **Opening hypothetical**: a VP asks a coding agent "how is traffic trending?" — the agent picks the wrong table and produces a plausible chart showing a 64% drop, but the real cause was a tracking bug, not an actual decline. A month later nobody can reproduce it (agent history/temp files are gone). Based on a real "vibe analyzing data" pattern Posit has observed.
+
+### Correctness problems predate AI
+
+- https://www.accountingweb.co.uk/business/management-accounting/convivialitys-spreadsheet-hell-sinks-the-business — a spreadsheet error sank a UK beverage wholesaler (Conviviality)
+- https://www.science.org/doi/10.1126/science.314.5807.1856 — a sign error in closed-source lab software forced five paper retractions
+
+### Correct *and* convenient — not mutually exclusive
+
+- https://rstudioblog.wordpress.com/2011/02/27/about-the-rstudio-project/ — RStudio's original 2011 mission:
+
+    > Our goal is to develop a powerful tool that supports the practices and techniques required for creating trustworthy, high quality analysis. At the same time, we want RStudio to be as straightforward and intuitive as possible to provide a friendly environment for new and experienced R users alike.
+    >
+    > — JJ Allaire
+
+- https://posit.co/blog/databot-is-not-a-flotation-device — Databot (Aug 2025, EDA agent in Positron) shipped with an explicit failure-mode warning; Joe Cheng called it his most exciting *and* most dangerous project
+- Why keep building despite the risk: curiosity is data science's throughline, and AI tools continue that lineage (like the tidyverse)
+
+### Models are improving, but that alone doesn't fix correctness
+
+- Eval 1: models shown scatterplots with an intentionally reversed relationship — failed as of ~Nov 2025 (described the expected relationship, not the actual one), improved sharply by ~May–Sep 2026
+- Eval 2: spotting data-quality issues in a plot (e.g. a suspiciously straight line) — even current top models are still weak here
+- Correct analysis also depends on context never in the data itself (dictionaries, tribal knowledge, semantic layers) — has to be curated before a model can use it
+
+### The "slap a human on it" trap
+
+- Human+AI doesn't reliably beat the better of the two alone
+- Approval fatigue: people stop reading agent requests and just click approve
+- Human trust/judgment shifts with system trust, timing, cognitive load, and social proof — the same expert may decide differently once an agent's involved
+- Conclusion: humans should stay in the loop, but the *system* needs to be designed for correctness, not patched with a checkpoint
+
+::: {.callout-important}
+## Guiding principle
+Help the agent be correct, and make it less bad when it's inevitably sometimes wrong.
+:::
+
+### Posit Assistant demo
+
+- Coding agent inside Positron; runs in your actual R/Python session; model/provider-agnostic
+- Demo: Houston flight-delay analysis — agent finds the `anyflights` package, reads its docs itself, pulls data
+- **Data cleaning mode**: surfaces missing values/outliers as interactive questions (not silent decisions), writes a persistent cleaning script for reproducibility
+- Shows plots inline in chat and still flags interpretation limits (checked n=32 before trusting a box plot)
+- Can generate a persistent Quarto report via a report-writing skill
+- Demo cost $0.05, mostly via GLM 5.3 Flash (~1/30th Opus 5's per-token cost) under the Posit AI Pass — Posit tracks the open-weights cost/capability frontier
+
+### {commons} — new open-source package (launched at this talk)
+
+- https://posit-dev.github.io/commons/
+- https://github.com/posit-dev/commons
+- https://posit-dev.github.io/commons/r/articles/commons.html
+- https://posit-dev.github.io/commons/r/articles/governance.html
+- https://opensource.posit.co/blog/2026-09-15_commons-0-1-0/
+- Built on Elmer/chatlas/shinychat (R & Python); bring-your-own model
+- Core idea: route questions through **trusted code** the team already relies on (packages, Shiny apps, Quarto docs, Databricks/Snowflake semantic views) instead of always generating bespoke code
+- Three deterministic response markers: 🟢 trusted calculation, 🔵 cited trusted context, 🟡 freehand code (no trust anchor)
+- Deploys as a Shiny app on Connect (normal permissions apply)
+- Opt-in OpenTelemetry logging lets the data team spot recurring freehand-fallback questions and promote them into new trusted calculations ("move up the trust ladder")
+- Framed beyond VP/business use cases too — biostatisticians/physicians, UX researchers/PMs, policy analysts/program leads
+- Thanks: Josh, Talon, Garrick, Aidan/Bowie, Carson Sievert
+
+### Clinical Trials Agent demo
+
+- https://github.com/posit-dev/clinical-trials-agent (simulated data) — trusted code = an internal TLG (tables/listings/graphs) catalog; example query: plot Kaplan-Meier curves
+
+### Closing
+
+- Plausible-looking wrong answers erode trust broadly — AI raises the stakes for correct/transparent/reproducible infrastructure, it doesn't lower the bar
+- **Canvas** — teased next-gen agent experience for people who don't want to work in code/an IDE; more from Joe Cheng later that day
+- Sara & Simon co-write Posit's biweekly **AI newsletter**
+
+## From chats to workflows to “agents”: Demystifying LLM jargon by example - Timothy Keyes
+
+### Setup
+
+- Speaker: Stanford Healthcare data scientist, also finishing med school
+- Colleagues started asking for "agents" for everything instead of "data analysis," making the usual translator role harder — the term had gotten vague/mystical
+- Drew from Hadley Wickham's Substack post on agents, the Anthropic Engineering Blog, and OpenAI's Python library
+
+### Live example: patient chart summarizer
+
+- Built live: an LLM system to summarize a (fake, HIPAA-safe) patient's chart before a visit, based on real Stanford Healthcare patterns — test patient has recent lightheadedness
+- Compared three systems on the same task:
+    - **Simple conversation** (3 lines of code) — fails predictably, no access to the private clinical database
+    - **Harness #1 — workflow**: developer-defined steps; map-reduce over notes (map = per-note summary, reduce = meta-summary). Works, but re-reads every note every time (expensive)
+    - **Harness #2 — agent**: LLM chooses its own steps via **tools** (list/preview/read notes) in an **agentic loop** — inspects results, decides to call more tools or answer, repeats until done
+
+### Definitions
+
+harness
+:   a computer program that coordinates calls to an LLM and other software systems
+
+tool
+:   a function the LLM can ask the harness to run on its behalf
+
+agent
+:   an LLM within a harness using tools iteratively in a loop until it accomplishes a task
+
+### Evaluation: quality vs. cost
+
+- 10 test queries, scored quality (1–5) vs. cost per query
+- Conversation: worst quality (no context). Workflow: good quality, most expensive. Agent: best quality *and* cheapest (only reads relevant notes)
+- Caveat: not universal — it's empirical; Stanford Healthcare runs all three patterns in production depending on use case
+
+### Takeaway: three questions before reaching for "agent"
+
+::: {.callout-tip}
+1. Do we need an agent, or would a workflow/something simpler work?
+2. How should the harness be designed — developer or LLM in control?
+3. How will we evaluate whether it works?
+:::
+
+- Q&A: stochasticity/variability may belong on your evaluation axis instead of (or with) cost; latency is another common axis
+
+## Yes And...AI in Your IDE - Allissa Dillman & Padmashri Saravanan
+
+- https://github.com/BioDataSage/yesand
+
+### Core question: does agreement mean correctness?
+
+- Opening bit: an LLM "yes, and"s every bad decision about how to give a conference talk
+- When an LLM agrees with you, is it because your reasoning is sound, or because it's picked up patterns of confidence/tone/deference from training data?
+- Cited research: politely-phrased questions scored 80.8% accuracy vs. 84.8% for rudely-phrased ones — a supposedly-irrelevant factor shifted performance
+- Code review isn't enough: most LLM coding failures are bad planning/reasoning, not syntax — "plausible code for the wrong analysis." Need to vet the question and framing, not just the code
+- IDE-based assistants have more context and proactively suggest next steps — so the model shapes the next question too, not just answers the current one
+
+### Persona study (NYC Squirrel Count dataset)
+
+- Gave Posit Assistant the same vague prompt ("I am a [persona], clean this data for me") across three personas on a fixed dataset/task
+- Dataset: 2020 NYC Squirrel Count (72 volunteers, 433 sightings, 24 parks) — messy, mixed structured/unstructured
+- Categorized every change the AI made: preserved / transformed / interpreted / discarded
+    - Data manager → preserved most, fewest destructive changes
+    - Data science student → more transformations, optimizing for a faster path to analysis
+    - Environmental researcher → dropped the most data, made the most assumptions
+
+::: {.callout-warning}
+## Irreversible by default
+Some of these choices are irreversible — a silent NA conversion or a discarded detail — even though the code still runs fine and looks correct.
+:::
+
+### Fix: skills that surface decisions earlier
+
+- Example 4-skill pipeline: analytics metrics → planning a data vis → accessible visualization → Quarto report
+- Problem with review-only feedback: by the time you see a draft, the analytical direction is locked in — feedback becomes revision, not decision-making
+
+::: {.callout-tip}
+## "Pause, ask, follow directions" skill design rules
+1. Only pause on decisions that change the question/method/story/interpretation
+2. Give just enough context to decide
+3. Never editorialize ("great choice," "are you sure?") — present the options and follow the user's direction
+:::
+
+- Demo: asking about report focus/audience/metric/chart specifics up front produced specific, meaningful output (e.g. density rankings, a borough with disproportionately more cinnamon squirrels) instead of a generic default chart
+
+### Limitations
+
+- A visible decision isn't automatically an informed one — domain expertise still matters
+- Too many pauses create fatigue; the model still controls which options are surfaced and how
+- Technical experience alone doesn't guarantee people can evaluate AI outputs well
+- Closing: treat model agreement as a prompt to interrogate assumptions/context/defaults, not the end of reasoning
+
+## Hello, robot: Introducing humans to LLM’s - Kristin Bott
+
+- https://github.com/posit-dev/ai-intro
+
+### Case study: Brittany
+
+- Accounts payable specialist (non-engineer) on Posit's finance team; built Claude skills over 6 months to draft finance entries and parse bills — saves 5–10 hrs/week, no sensitive data sent to Anthropic
+- Central question: how do you teach non-engineers to work effectively with AI?
+- Origin: 2025 Posit engineering LLM hackathons excited engineers but left the rest of the org unaddressed
+
+### "Intro to AI at Posit" course
+
+- Built with colleague Garrick, aimed at non-engineers
+- Goals: accurate mental models of how LLMs work, a sense of where they succeed/fail, conversational fluency, more effective use
+- Format: 5 hrs total over one week, groups of 10–14 from across the org, no homework, voluntary
+- Approach: strip away tooling/conveniences so learners see raw mechanics first — "words in, words out" before formal definitions
+- Garrick built custom apps so learners could *experience* concepts directly (stochasticity via regenerating a prompt, tokens via color-coded output) before naming them
+
+### Key exercises & demos
+
+- Failure modes covered: hallucinated-but-plausible library functions, and LLMs not correcting a false premise
+
+::: {.callout-note}
+## Model knowledge vs. tool capability
+A raw model can't answer "who's keynoting posit::conf," but Claude Desktop can — not because the model knows, but because its web-search tool found it. Separate what the model knows from what the harness/tooling can do (echoes Timothy Keyes's harness talk).
+:::
+
+- Exercise: predicted LLM success vs. task difficulty, then tested by counting "n"s in "unconventional" — asking directly vs. asking for code that counts. Code won clearly (tokens ≠ letters)
+
+### Outcomes
+
+> This class gave me a conceptual foundation that removed my fear. It gave me permission to try. And then I realized building tools was something I could actually do.
+>
+> — Brittany
+
+- 120+ Posit employees have taken the course; curriculum posted publicly
+- Closing pitch: small-group, safe-environment training focused on experience/curiosity is worth it
+- Q&A (James Wade): best practices go stale fast — durable foundational mental models transfer even as specific tips/tools change
+
+## From Tribal Knowledge to Trusted AI in Pharma - Tanya Cashorali
+
+### Setup
+
+- Speaker runs TCB Analytics (founded 2015), ~20 years using R
+- Opening bit: "is a hot dog a sandwich?" — running metaphor for definitional disagreement, revisited at the close
+- Client: a pharma company (rare disease/cancer therapies) wanted an agent to help sales reps answer data questions faster in the field
+- Core lesson: the hard part wasn't the technical build — it was figuring out what people meant and encoding scattered tribal knowledge (heads, Shiny apps, spreadsheets) into the model
+
+> If you don't talk to humans first, AI is a great way to automate misunderstandings.
+
+### Discovery: talking to the sales reps first
+
+- Had reps log real day-to-day questions in a spreadsheet rather than guessing what to build
+- Existing workflow: several siloed Shiny apps (some separated for compliance), manual filter/export cycle taking ~30 min per answer
+- Interviews surfaced hidden complexity:
+    - "Called on" meant *any* interaction (call, email, Zoom, in-office), not just phone calls
+    - "Active patient" needed an explicit definition (shipment received, not discontinued, within a time window)
+    - Reps disagreed on scope (one wanted specialty-distributor patients — a source not even in Snowflake yet) and on time windows ("recently" = 30 vs. 60 days)
+
+### Building trusted data products
+
+- Recurring question patterns became reusable Snowflake tables for the agent to query — compared directly to the "trusted queries" idea from the morning keynote ({commons})
+- Business logic encoded as explicit flags (e.g. `is_active`, `called_last_30_days`) to reduce SQL errors and give safe, flexible building blocks
+- More tribal knowledge pulled in: a manually-updated spreadsheet owned by one person (monthly sales-lead consensus), and logic already embedded in Shiny apps (manual doctor exclusions, "center of excellence" flags)
+- Pipeline: client script converts spreadsheets/manual adjustments to Parquet/CSV → scheduled R script on Posit Connect loads it into Snowflake, with failure-email alerts
+
+### Semantic layer
+
+- A Snowflake YAML config taught the AI to "speak the business's language": definitions (patient, quarter-to-date incl. a non-standard fiscal calendar), rules, synonyms/abbreviations (e.g. "PTS" = patients, drug slang), and entity relationships/joins across a billion-row dataset
+
+### Feedback loop & trust
+
+- Released as a chatbot; thumbs up/down plus a reason fed straight into fixes (sometimes shipped the next day)
+- Success example: an open-ended trip-planning question ("how should I plan my trip to San Antonio?") combined multiple business rules into a genuinely useful answer
+- Issues fixed via feedback: domain jargon (e.g. "BID dosing" = twice daily), a wrong call count traced to "seen"/"contacted"/"live" ambiguity, missing "center of excellence" data
+- Trust emerged because: fast visible feedback loop, the system spoke their language, and it ran on data/logic they already trusted (years of manual Shiny-app exclusions)
+
+### Closing
+
+- Returns to the hot dog question: the better question isn't the classification, it's "why do we need to classify it, and what decision are we making with the answer?" A question that can't drive a decision is just "making pretty pictures for fun." The AI doesn't get to decide definitions — the organization does
+
+::: {.callout-important}
+## Closing message
+Talk to humans first, agree on what words mean, then make sure it's a question worth answering — in that order.
+:::
+
+## MCP, or not MCP — Neal Richardson
+
+- https://enpiar.com/mcp-posit-conf-2026/#/section

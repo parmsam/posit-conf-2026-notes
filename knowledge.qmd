@@ -1,0 +1,7 @@
+---
+title: "Knowledge"
+---
+
+Clean-markdown copies of every URL referenced in the day notes, fetched locally via the `qmd-url-defuddle` skill.
+
+{{< include knowledge/index.md >}}

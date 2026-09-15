@@ -389,3 +389,139 @@ If a request's input tokens repeat an earlier request's input tokens in the same
 ### Closing
 
 - Q&A: caching support depends on the serving software, not just the model — e.g. not consistently present when running open-weights models locally via Ollama/LM Studio
+
+## data-dict & data-diff: two tools supporting AI-human data science collaboration - Hadley Wickham
+
+### Framing: data science agentic workflows differ from software engineering ones
+
+- Software engineering: you define the problem, can often automate a pass/fail check (unit tests), and are free to try many approaches and keep the best — favors letting an agent work more autonomously
+- Data science: trying to uncover something true about reality; you can never fully verify the answer, only assess the process — and you shouldn't keep re-querying the data until it "confesses" to something you want to see
+- Consequence: data scientists still need to read the code an agent writes, since that's the only way to sanity-check the process
+- Two "profound" but genuinely durable principles for tackling this:
+
+> Write shit down. And then look at how shit has changed.
+>
+> — Hadley Wickham
+
+### {datadict} — write it down
+
+- A YAML spec for recording facts about a dataset: column types/descriptions/examples, how tables join together, and a glossary of domain-specific terms
+- Ships as a self-contained Rust CLI (`data-dict`) — no R/Python runtime needed — that bundles the spec itself plus agent skills, so you can just tell an agent "use data-dict to document this dataset"
+- Agent-driven dictionary creation surfaces likely mistakes as it goes (e.g. a column labeled `pup_lgth` in kg that's obviously cm) and leaves TODOs for ambiguous cases (a numeric column stored as a string)
+- Rich constraint system: express expectations about the data in SQL/R/Python-*like* syntax (data-dict implements its own small parser, no dependency on those languages); violations produce a point-blank-inspired HTML report plus JSON logs for automated systems
+- Agent-driven data cleaning changes three things together — the code, the metadata (the YAML), and the data itself — cross-checking all three is far easier to trust than checking any one alone (demoed: string→date conversion, sentinel values like `-9` converted to real `NA`s, a `0`-as-missing column)
+
+### {datadiff} — look at how it changed
+
+- Shows the *semantic* difference between two data frames (currently Parquet only) interactively — much more useful than Positron's default binary diff view on a changed data file
+- Distinguishes a type-only change (e.g. an ISO-8601 string becoming a real date, values otherwise unchanged) from an actual value change; can enumerate large cell-level diffs (~116k changed cells in one demo) and sort by column
+- Surfaces columns that change together (e.g. two sentinel-coded columns flip to missing in lockstep) — a hint about structure in the data worth understanding
+
+### Closing
+
+- Both tools: standalone Rust binaries, fully polyglot (no bias toward R, Python, or SQL), easy to drop into CI; both still pre-1.0 and actively changing (one doesn't have a website yet, neither has a logo)
+- Built almost entirely with agentic help despite the author not really knowing Rust (using Kimi K2/K3) — turned "implement this algorithm from a paper," previously a weeks-long manual effort, into a fast iterative loop
+- Q&A: the YAML is meant to be mostly agent-authored day to day (still human-readable/editable for small fixes); data-dict is scoped to project/analysis-specific metadata, meant to complement rather than replace enterprise catalogs like Databricks/Snowflake
+
+## The Shiny AI Stack: shinychat, querychat, and the LLM Plumbing Beneath - Garrick Aden-Buie & Carson Sievert
+
+### The stack
+
+- Elmer/chatlas (tidy LLM interface, hides provider API differences) → **ShinyChat** (chat UI toolkit, R & Python) → domain-specific packages built on top, like {commons} (seen in the morning keynote) and query chat
+
+### ShinyChat updates
+
+- Demoed via a custom "which posit::conf talks should I see" agent app
+- Greeting can be static or LLM-generated each visit; comes with suggested starter prompts
+- Tool calls are shown by default (what the model itself sees), but can be swapped for richer human-facing output (e.g. a formatted table) while the model still receives plain text/JSON
+- New **stop button** to interrupt a response mid-generation
+- Editing and resending any past message creates a conversation **branch**, with UI to move between branches
+- **Citations** aren't just for web search — can be wired into RAG results too, with hover-to-inspect detail
+- **Slash commands**: developer-defined shortcuts that trigger preset instructions/tool calls (e.g. `/add-to-schedule`)
+- **Chat drawer**: a panel in `page_chat` for surfacing structured content alongside the conversation (e.g. a live, agent-editable schedule)
+- Persistent **chat history**: auto save/restore, rename, delete past conversations
+- Chat input now accepts **file attachments** (e.g. drag-and-drop an image)
+- Still just a normal Shiny app underneath — ordinary nav panels/inputs alongside the chat, plus recent bslib features (toolbars, off-canvas panels, dark mode, theming, hosted-trace logging for production use)
+
+### query chat
+
+- R & Python package built on ShinyChat: give it a data frame (or a DB connection, pins, Polars, Ibis, SQLAlchemy) plus an Elmer client and get a working chat app with an AI-generated greeting and starter suggestions
+- Gathers basic data metadata automatically, but designed to plug into a curated data dictionary (e.g. Hadley's {datadict}) for better grounding
+- Generates SQL grounded in that metadata; results shown with inspectable SQL
+- Visualization via **GG SQL** — a SQL extension for grammar-of-graphics visualization from the ggplot2 maintainers (covered in a parallel talk by Tomasz) — the chat can switch a numeric summary to a distribution (box plot) on request, with inspectable GG SQL code
+- New **hand-off** slash command: pick which results from a long chat to keep, choose an output format (Quarto/Shiny/Jupyter) and language (R/Python), get a streamed, editable source document, then download a zip (doc + README + small data files) — decouples a useful finding from the long-lived chat/app
+- Can drive a full custom Shiny dashboard: predetermined views sit alongside the chat, and the agent can reactively filter what's shown (demoed on loan data — asking for "small business loans" narrows the dashboard's views via a generated SQL filter)
+
+::: {.callout-note}
+## Deliberate capability restriction
+query chat intentionally restricts agent code execution to SQL/GG SQL only — a safety/capability tradeoff. Read-only DB permissions can be enforced at the database layer this way; custom tools for broader execution can still be added if you really want them.
+:::
+
+## AI Agents for Data Science: Posit Assistant, Commons, and Beyond - Joe Cheng
+
+- Framed as an appendix to the morning Sara Altman & Simon Couch keynote
+
+### Posit Assistant updates
+
+- Model landscape has broadened a lot in a year — no longer just Anthropic models recommended; Kimi K2/K3 (open-weights) and GPT-5.6 called out as strong for coding/data tasks
+- Running conversation cost is shown live (hover for a detailed token/cost breakdown) — debated including it as anxiety-inducing, but kept it since heavy users spend hundreds to thousands of dollars on tokens and deserve visibility
+- Cache-warmth timer shows how long before the next request loses prompt-cache pricing (can be a 10x cost swing); Posit Assistant can also send periodic dummy requests to keep the cache warm when that trade-off pencils out
+- New modes alongside normal/plan: **auto mode** (an LLM approves/denies tool-call requests instead of a human — counterintuitive, but empirically the best trade-off for most users), the **data cleaning mode** shown in the morning keynote, and a new **ask mode** (conversation only, no actions taken)
+- Runs in Positron, RStudio, and now the terminal (a TUI) — plots render there too
+
+### Canvas (early prototype, not yet released)
+
+- A non-IDE-centric agent surface, motivated by users spending less time directly in the R/Python session and more time just talking to the agent
+- Tool calls render collapsed/recessed by default (can coalesce multiple actions into one line); full code still viewable behind a toggle
+- Dedicated **artifacts pane** for plots instead of inline chat images — iterating on a plot replaces/versions it (v2) rather than appending a new one; asking for a genuinely different plot adds a new artifact; artifacts can be starred/kept
+- "Turn on live Quarto report mode" generates and continuously updates a living `.qmd` report reflecting the conversation, previewed in-app, with one-click publish to Connect/Connect Cloud
+- Built on the same engine as Posit Assistant: same skills/plugins/MCP support, same token-cost reporting, same core agentic personality and data-skepticism
+- Ships first as a mode of Positron (desktop and Workbench)
+- Reproducibility Q&A: all code is still stored, just visually de-emphasized by default; past conversations/tool calls can always be reopened and inspected, and generating a report is the natural point to lock in a reproducible artifact
+
+### Commons internals
+
+- Ingredients for a Commons agent: one or more tabular data sources (data frames, SQL DBs, pins, Snowflake/Databricks — {datadict} metadata works for any of them), zero or more **measures** (trusted R/Python functions), zero or more free-form context notes
+- Measures are just plain R/Python functions in a directory, tagged with a `@measure` annotation plus argument type hints — no special framework code required
+- Context notes are markdown files with a provenance field (why the user should trust this)
+- Explicitly framed as broader than BI/SQL — demoed on microscopy image-processing data, letting a biologist upload new samples and get them run through the team's existing domain-specific pipeline
+- **Trajectory reviewer**: captures real user conversations post-deployment (with disclosure to users) so the team can see what questions actually came up, then feeds that back into a coding agent to add new measures/context — moves more traffic onto the trust ladder over time
+
+## AI Governance in Posit Team: getting better results from agentic helpers - Elliot Murphy
+
+### Framing governance, compliance, and risk
+
+- **Governance** = "a collection of capabilities that drive principled performance" — first define the principles (e.g. trustworthy, verifiable analysis), then build capabilities that support them (e.g. code-first analysis is what makes a human-in-the-loop review meaningful in the first place)
+- **Compliance** = meeting someone else's rules; a quality floor, not a guarantee of good outcomes — good governance reduces the toil of proving compliance so it doesn't crowd out the actual work
+- **Risk** ≠ something to eliminate — it's a probability of loss tied to specific scenarios over time (credit, market, operational risk; cybersecurity sits under operational). The goal is managing magnitude/probability of loss, not driving it to zero (reference: *Financial Engineering Analytics*, William Foote)
+
+::: {.callout-tip}
+## Governance that survived four decades of technology change
+A long-standing FDIC policy requires bank employees to take an uninterrupted two-week vacation, specifically as a fraud control — someone else has to cover their duties, surfacing anything hidden. It predates phone banking, survived the internet and mobile banking, and still applies through "all this AI madness."
+:::
+
+### Managing agent risk in practice
+
+- "Has your agent ever done something you told it not to?" — about half the room raised hands; the rest likely just didn't notice, not that their prompting was airtight
+- The fix isn't stronger prompting or all-caps instructions in an AGENTS.md — it's a deterministic pre-tool-call hook (supported in Posit Assistant, Claude Code, opencode) that can block a command before it runs, free and fast since it needs no LLM
+- **destructive-command-guard**: open-source hook with prebuilt packs (blocks destructive git/package-manager commands by default, optional SQL pack); supports a one-time approval code to explicitly allow a normally-blocked command just once; auto-detects and configures itself for Posit Assistant/Claude Code
+- **Agents View** (Wes McKinney's open-source tool, also mentioned in Winston Chang's cost talk) grades individual coding-agent sessions (flagging D/F-grade ones) — useful for spotting too-frequent compaction or under-specified prompts, improving both cost and result quality
+
+### GRC capabilities coming to Posit Team
+
+- Workbench: enable/disable Posit Assistant globally, by group, or by user; enforce allowed inference providers/models (e.g. ban a model that violates a data-retention policy); enforce org-wide use of tools like destructive-command-guard
+- Agents View is now integrated into Workbench (September release) — cross-session activity visible across RStudio, Positron, and VS Code sessions
+- A new LLM cost auditing/enforcement gateway is built into both Connect and Workbench — per-user/model/agent spend visibility plus spend caps
+
+::: {.callout-warning}
+## Why the spend cap exists
+Posit's own team once burned $50,000 unexpectedly running Bedrock-backed deployments on Connect before anyone noticed — spend caps exist precisely to bound this kind of mistake.
+:::
+
+- Connect: any AI content (query chat apps, MCP servers, Quarto reports) gets owners, access controls, and a full audit trail
+- New (preview) approval workflows: sharing Connect content, and requesting new packages in Package Manager, can require review/approval before taking effect — another form of dual authorization
+- Package Manager: vulnerability scanning now integrates with Connect/Workbench scan results, so a vulnerable package version can be traced to exactly where it's installed org-wide
+
+### Closing
+
+- Invited attendees to share what governance/agent-risk approaches are and aren't working for them — contact via LinkedIn or the product lounge (Sam Edwards, PM for governance features)

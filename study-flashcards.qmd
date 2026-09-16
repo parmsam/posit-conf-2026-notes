@@ -7,7 +7,7 @@ format:
       flipKey: 'q'
       shuffleKey: 't'
       showFlipButton: true
-      resetOnSlideChange: true
+      resetOnSlideChange: false
       flipButtonColorFront: "#2a76dd"
       flipButtonColorBack: "#28a745"
 revealjs-plugins:

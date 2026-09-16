@@ -22,8 +22,6 @@ Press **q** to flip a card, **t** to shuffle and jump to the first card, or use 
 Based on [Day 1 notes](day1.qmd).
 :::
 
-# Correct, reproducible, and transparent data agents — Altman & Couch
-
 ## {background-color="#eef6ff"}
 
 ::: {.flashcard-front}
@@ -58,8 +56,6 @@ It routes agent questions through **trusted code** the team already relies on in
 🟢 trusted calculation · 🔵 cited trusted context · 🟡 freehand code (no trust anchor)
 :::
 
-# From chats to workflows to "agents" — Timothy Keyes
-
 ## {background-color="#fff7e6"}
 
 ::: {.flashcard-front}
@@ -83,8 +79,6 @@ In the patient-chart-summarizer eval, which harness pattern was both the best qu
 ::: {.flashcard-back}
 The **agent** harness — because it chooses which notes to read via tools instead of re-reading every note every time (unlike the workflow harness).
 :::
-
-# Yes And... AI in Your IDE — Dillman & Saravanan
 
 ## {background-color="#eef6ff"}
 
@@ -110,8 +104,6 @@ What are the three "pause, ask, follow directions" skill design rules?
 3. Never editorialize ("great choice," "are you sure?") — present options and follow the user's direction
 :::
 
-# Hello, robot — Kristin Bott
-
 ## {background-color="#fff7e6"}
 
 ::: {.flashcard-front}
@@ -131,8 +123,6 @@ What point did the "counting 'n's in unconventional" exercise make?
 ::: {.flashcard-back}
 Asking an LLM directly for a letter count fails, but asking it to *write code* that counts succeeds — because tokens aren't the same thing as letters.
 :::
-
-# Tribal Knowledge to Trusted AI in Pharma — Tanya Cashorali
 
 ## {background-color="#eef6ff"}
 
@@ -156,8 +146,6 @@ Give one example of "tribal knowledge" that turned out to need an explicit defin
 "Called on" meant *any* interaction (call, email, Zoom, in-office) — not just phone calls. ("Active patient" and "recently" = 30 vs. 60 days were two more.)
 :::
 
-# What Context Do Your AI Agents Actually Need — Sharon Wang
-
 ## {background-color="#fff7e6"}
 
 ::: {.flashcard-front}
@@ -177,8 +165,6 @@ Name two signs it's time to start a new chat instead of pushing through a degrad
 ::: {.flashcard-back}
 A new task, a side quest, or catching yourself re-explaining in circles.
 :::
-
-# AI Agents Deserve R — James Wade
 
 ## {background-color="#eef6ff"}
 
@@ -200,8 +186,6 @@ What does {deputy} add on top of {ellmer}?
 Permissions and usage limits on top of ellmer's tool-calling classes — enterprise-style safety controls.
 :::
 
-# MCP, or not MCP — Neal Richardson
-
 ## {background-color="#fff7e6"}
 
 ::: {.flashcard-front}
@@ -222,8 +206,6 @@ When does a CLI beat a custom MCP server, per Richardson?
 When the CLI already exists, is widely used, and is already in the model's training data (e.g. `gh`) — no context spent teaching the model how to use it.
 :::
 
-# Why Is AI Costing Me So Much Money? — Winston Chang
-
 ## {background-color="#eef6ff"}
 
 ::: {.flashcard-front}
@@ -243,8 +225,6 @@ What's the single biggest cost lever Chang highlighted?
 ::: {.flashcard-back}
 Prompt caching — repeated input tokens (in the same order as an earlier request) are served from cache at roughly 1/10th the normal input-token cost.
 :::
-
-# data-dict & data-diff — Hadley Wickham
 
 ## {background-color="#fff7e6"}
 
@@ -268,8 +248,6 @@ What does data-dict record, and how is it shipped?
 A YAML spec of column types/descriptions/examples, table joins, and a glossary of domain terms — shipped as a self-contained Rust CLI (no R/Python runtime needed).
 :::
 
-# The Shiny AI Stack — Aden-Buie & Sievert
-
 ## {background-color="#eef6ff"}
 
 ::: {.flashcard-front}
@@ -289,8 +267,6 @@ What is querychat's deliberate capability restriction, and why?
 ::: {.flashcard-back}
 It restricts agent code execution to SQL/ggsql only — a safety/capability tradeoff that lets read-only DB permissions be enforced at the database layer.
 :::
-
-# AI Agents for Data Science: Posit Assistant, Commons, and Beyond — Joe Cheng
 
 ## {background-color="#fff7e6"}
 
@@ -312,8 +288,6 @@ What is the **Trajectory reviewer** in Commons?
 It captures real post-deployment user conversations (with disclosure) so the team can see what questions actually came up, then feeds that back into a coding agent to add new measures/context — moving traffic up the trust ladder.
 :::
 
-# AI Governance in Posit Team — Elliot Murphy
-
 ## {background-color="#eef6ff"}
 
 ::: {.flashcard-front}
@@ -333,8 +307,6 @@ What's **destructive-command-guard**, and how does it fix the "agent did somethi
 ::: {.flashcard-back}
 An open-source, deterministic pre-tool-call hook that blocks destructive git/package-manager commands before they run — free and fast since it needs no LLM (stronger prompting alone doesn't reliably work).
 :::
-
-# Keynote: How to Be Clear When You Can't Be Certain — Christine Zhang
 
 ## {background-color="#fff7e6"}
 
@@ -365,8 +337,6 @@ What is the NYT election-night "needle," and why did the Times *not* use it for 
 ::: {.flashcard-back}
 Two dials — a margin estimate with an uncertainty band, plus a second dial in words (toss-up / lean X / likely X). Withheld for the primary because polling was so unreliable (off by ~9 points) that the dial's confident-looking swings would have overstated certainty.
 :::
-
-# The end
 
 ## {background-color="#e6ffe6"}
 

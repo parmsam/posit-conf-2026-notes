@@ -1,0 +1,140 @@
+---
+title: "Day 1 Quiz"
+format:
+  revealjs:
+    theme: default
+    quiz:
+      checkKey: 'c'
+      resetKey: 'q'
+      shuffleKey: 't'
+      allowNumberKeys: true
+      disableOnCheck: false
+      shuffleOptions: true
+      includeScore: true
+revealjs-plugins:
+  - quiz
+---
+
+## Day 1 Quiz
+
+Select an option, then click **Check** (or press **c**). Use **1**–**4** to pick an option, **q** to reset a question, **t** to shuffle question order.
+
+::: footer
+Based on [Day 1 notes](day1.qmd).
+:::
+
+## Per Joe Cheng's opening quote, what is winning the battle between convenience and correctness? {.quiz-question}
+
+- Correctness
+- [Convenience]{.correct}
+- Neither — they're tied
+- It depends on the model
+
+## In Timothy Keyes's terminology, what is a "tool"? {.quiz-question}
+
+- [A function the LLM can ask the harness to run on its behalf]{.correct}
+- A program that coordinates calls to an LLM
+- An LLM using tools iteratively in a loop
+- A prompt template stored in a skills folder
+
+## In Keyes's patient-chart-summarizer evaluation, which harness pattern was both the highest quality *and* the cheapest? {.quiz-question}
+
+- Simple conversation
+- Workflow (map-reduce over notes)
+- [Agent (LLM chooses its own tool calls)]{.correct data-explanation="It only reads the notes it actually needs, instead of rereading everything like the workflow harness."}
+- All three tied
+
+## In the NYC Squirrel Count persona study, which persona preserved the most data with the fewest destructive changes? {.quiz-question}
+
+- [Data manager]{.correct}
+- Data science student
+- Environmental researcher
+- They were all about the same
+
+## What is the "lethal trifecta" cited in Neal Richardson's MCP talk? {.quiz-question}
+
+- Three pricing tiers for LLM APIs
+- [Private data access + untrusted content exposure + ability to communicate out]{.correct data-explanation="Simon Willison's term — an agent combining all three can be tricked via prompt injection into exfiltrating private data."}
+- Three categories of hallucination
+- Three required fields in an MCP tool schema
+
+## Per Winston Chang, why does total LLM conversation cost grow roughly *quadratically* with conversation length? {.quiz-question}
+
+- Output tokens get more expensive over time
+- [Each request resends the entire prior conversation, so cost is a cumulative sum of growing requests]{.correct}
+- Models charge a flat fee per conversation
+- Caching becomes less effective the longer a conversation runs
+
+## What is the single biggest cost lever Winston Chang highlighted? {.quiz-question}
+
+- Using only open-weights models
+- [Prompt caching]{.correct data-explanation="Repeated input tokens served from cache cost roughly 1/10th the normal input-token price."}
+- Turning off thinking/reasoning tokens
+- Batching requests overnight
+
+## What YAML-based tool did Hadley Wickham introduce for documenting a dataset? {.quiz-question}
+
+- data-diff
+- [data-dict]{.correct}
+- {commons}
+- {ggdist}
+
+## What does querychat deliberately restrict agent code execution to? {.quiz-question}
+
+- Any R or Python code
+- Shell commands only
+- [SQL / ggsql only]{.correct data-explanation="A safety/capability tradeoff — read-only DB permissions can then be enforced at the database layer."}
+- Only pre-approved Shiny functions
+
+## What incident prompted Posit Team's new LLM spend-cap features, per Elliot Murphy? {.quiz-question}
+
+- A prompt-injection attack on Connect
+- [An unexpected $50,000 Bedrock bill running on Connect]{.correct}
+- A failed SOC 2 audit
+- A leaked API key
+
+## In Christine Zhang's keynote, why does the NYT publish a uniformly shaded margin-of-error band instead of the more statistically accurate bell-curve band? {.quiz-question}
+
+- The bell curve is harder to compute
+- [It's a compromise between statistical correctness and audience familiarity]{.correct}
+- Legal requires a uniform band
+- Bell curves don't render well in print
+
+## Why did the NYT withhold the election-night "needle" for the Michigan Senate Democratic primary? {.quiz-question}
+
+- A technical bug prevented it
+- [Primary polling was unreliable enough that the needle would overstate confidence]{.correct data-explanation="The pre-election forecast was off by about 9 points, and a needle's dial swings feel more decisive than an equivalent line-chart movement."}
+- Needles are never used for primaries as a matter of policy
+- There wasn't enough reported vote data
+
+## What R package did Christine Zhang use to build the bell-curve ("half-eye") uncertainty visualization? {.quiz-question}
+
+- [{ggdist}]{.correct}
+- {shiny}
+- {commons}
+- {datadict}
+
+## Per Sharon Wang's talk, what's the more durable question to ask instead of "what context do agents need?" {.quiz-question}
+
+- "What model should I use?"
+- [What context do *you* need?]{.correct}
+- "How much will this cost?"
+- "Which harness is best?"
+
+## Which of the following are things {commons} uses to route a question through trusted code rather than freehand generation? {.quiz-question .quiz-multiple}
+
+- [Existing R/Python packages]{.correct}
+- [Trusted measures (tagged functions)]{.correct}
+- [Curated context notes]{.correct}
+- A larger context window
+
+::: footer
+Select-all-that-apply: you need every correct option checked and no incorrect ones.
+:::
+
+## What should determine whether you switch from R to another language for building agents, per James Wade? {.quiz-question}
+
+- Popularity of the language alone
+- [A compelling reason — not switching by default]{.correct}
+- Whichever language the client prefers
+- Whatever the coding agent defaults to

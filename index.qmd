@@ -9,6 +9,7 @@ Personal running notes from posit::conf(2026) virtual.
 - [**Day 1**](day1.qmd) — full conference notes, talk by talk
 - [**Day 2**](day2.qmd) — still filling in as the conference progresses
 - [**Knowledge**](knowledge.qmd) — clean-markdown copies of every URL referenced in the day notes
+- [**Study Materials**](study.qmd) — flashcards and a quiz to self-test on Day 1
 
 ## About these notes
 

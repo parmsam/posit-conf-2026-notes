@@ -1,0 +1,22 @@
+title: Flashcards
+author: parmsam
+version: 1.1.0
+quarto-required: ">=1.3.0"
+contributes:
+  revealjs-plugins:
+    - name: RevealFlashcards
+      script:
+        - flashcards.js
+      stylesheet:
+        - flashcards.css
+      config:
+        flashcards:
+          flipKey: "q"
+          shuffleKey: "t"
+          showFlipButton: true
+          resetOnSlideChange: false
+          flipButtonColorFront: "#2a76dd"
+          flipButtonColorBack: "#28a745"
+  
+source: parmsam/quarto-flashcards@v1.2.0
+source-type: registry

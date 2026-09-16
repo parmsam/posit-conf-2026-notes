@@ -12,6 +12,7 @@ Personal notes from posit::conf(2026) virtual, kept as Quarto documents.
 - `m3u8/` — gitignored. Session recording HLS manifests (`.m3u8`), saved manually from the browser (signed URLs expire).
 - `subtitles/vtt/`, `subtitles/markdown/` — gitignored. WebVTT subtitle files and flowing-text transcripts derived from `m3u8/`, one pair per session, named `<day>-<kebab-case-session-title>`. Populated by the `m3u8-subtitles` skill; don't hand-edit. Not part of the Quarto site (see "Website" below) — kept as local files only.
 - `_quarto.yml`, `index.qmd`, `knowledge.qmd` — the Quarto website that ties all of the above together for browsing (see "Website" below). `_site/` (render output) and `.quarto/` (cache) are gitignored.
+- `study.qmd`, `study-flashcards.qmd`, `study-quiz.qmd` — the "Study Materials" tab: a landing page plus a flashcards deck and a quiz deck (both RevealJS, via the `_extensions/parmsam/flashcards` and `_extensions/parmsam/quiz` extensions) hand-written from `day1.qmd`. Refresh them when Day 1 notes gain new sections — see "Website" below for extension details.
 
 ## Conventions
 
@@ -37,6 +38,7 @@ Project-local skills live in `.claude/skills/`:
 - `qmd-url-defuddle` — scans `day1.qmd`/`day2.qmd` (or any `.qmd` file) for URLs, fetches each as clean markdown via the local Defuddle CLI, and saves results under `knowledge/<day>/`, updating `knowledge/index.md`.
 - `defuddle-cli` — the underlying single-URL fetch-as-markdown helper.
 - `m3u8-subtitles` — extracts the English subtitle track from a session's `.m3u8` manifest (via `ffmpeg`) into `subtitles/vtt/<slug>.vtt`, then converts it into a flowing-text transcript at `subtitles/markdown/<slug>.md`.
+- `quarto-flashcards` / `quarto-quiz` — reference for the RevealJS extension syntax (`.flashcard-front`/`.flashcard-back` divs; `{.quiz-question}` slides with `[answer]{.correct}`) used by `study-flashcards.qmd`/`study-quiz.qmd`. The extensions themselves live in `_extensions/parmsam/flashcards` and `_extensions/parmsam/quiz`.
 
 Use `qmd-url-defuddle` when asked to pull references out of the notes rather than fetching URLs ad hoc. Use `m3u8-subtitles` when asked to get subs/transcript from a session recording manifest.
 
@@ -44,7 +46,9 @@ When asked to turn a `subtitles/markdown/` transcript into `day1.qmd`/`day2.qmd`
 
 ## Website
 
-`quarto preview` (live) or `quarto render` (one-shot, outputs to `_site/`) builds a small site with four pages: Home (`index.qmd`), Day 1, Day 2, and Knowledge. Transcripts (`subtitles/markdown/`) are deliberately excluded from the site — kept as local files, not published.
+`quarto preview` (live) or `quarto render` (one-shot, outputs to `_site/`) builds a small site with these pages: Home (`index.qmd`), Day 1, Day 2, Knowledge, and Study Materials (`study.qmd`, linking out to `study-flashcards.qmd` and `study-quiz.qmd`). Transcripts (`subtitles/markdown/`) are deliberately excluded from the site — kept as local files, not published.
+
+- **Study Materials** (`study-flashcards.qmd`, `study-quiz.qmd`) render with `format: revealjs` (set in each file's own YAML frontmatter, overriding the project's default `html` format) via the `_extensions/parmsam/flashcards` and `_extensions/parmsam/quiz` extensions — installed with `quarto add parmsam/quarto-flashcards` / `quarto add parmsam/quarto-quiz` and checked into `_extensions/` per those extensions' own convention. See the `quarto-flashcards`/`quarto-quiz` skills or each extension's README for the slide markup.
 
 - **Knowledge** (`knowledge.qmd`) pulls in `knowledge/index.md`'s table via `{{< include knowledge/index.md >}}` — the individual per-article files under `knowledge/day*/` are deliberately *not* rendered as their own site pages (just the index table, nothing more). This means the table's `File` column links won't resolve inside the site (Quarto warns "Unable to resolve link target" at render time — harmless, ignore it); those links are only meaningful when browsing `knowledge/index.md` directly (e.g. on disk or GitHub).
 

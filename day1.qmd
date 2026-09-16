@@ -417,6 +417,7 @@ https://github.com/tidyverse/data-dict
 
 ### data-diff — look at how it changed
 
+https://data-dict.tidyverse.org
 https://github.com/hadley/data-diff
 
 - Shows the *semantic* difference between two data frames (currently Parquet only) interactively — much more useful than Positron's default binary diff view on a changed data file
@@ -448,8 +449,13 @@ https://github.com/hadley/data-diff
 - Persistent **chat history**: auto save/restore, rename, delete past conversations
 - Chat input now accepts **file attachments** (e.g. drag-and-drop an image)
 - Still just a normal Shiny app underneath — ordinary nav panels/inputs alongside the chat, plus recent bslib features (toolbars, off-canvas panels, dark mode, theming, hosted-trace logging for production use)
+### Posit Conf Chat demo
+
+https://bit.ly/posit-conf-chat
 
 ### querychat
+
+https://posit-dev.github.io/querychat/r/
 
 - R & Python package built on shinychat: give it a data frame (or a DB connection, pins, Polars, Ibis, SQLAlchemy) plus an ellmer client and get a working chat app with an AI-generated greeting and starter suggestions
 - Gathers basic data metadata automatically, but designed to plug into a curated data dictionary (e.g. Hadley's data-dict) for better grounding
@@ -474,6 +480,8 @@ querychat intentionally restricts agent code execution to SQL/ggsql only — a s
 - Cache-warmth timer shows how long before the next request loses prompt-cache pricing (can be a 10x cost swing); Posit Assistant can also send periodic dummy requests to keep the cache warm when that trade-off pencils out
 - New modes alongside normal/plan: **auto mode** (an LLM approves/denies tool-call requests instead of a human — counterintuitive, but empirically the best trade-off for most users), the **data cleaning mode** shown in the morning keynote, and a new **ask mode** (conversation only, no actions taken)
 - Runs in Positron, RStudio, and now the terminal (a TUI) — plots render there too
+    - https://assistant.posit.co/docs/downloads/tui/
+    - https://assistant.posit.co/docs/reference/tui/
 
 ### Canvas (early prototype, not yet released)
 
@@ -510,7 +518,7 @@ A long-standing FDIC policy requires bank employees to take an uninterrupted two
 
 - "Has your agent ever done something you told it not to?" — about half the room raised hands; the rest likely just didn't notice, not that their prompting was airtight
 - The fix isn't stronger prompting or all-caps instructions in an AGENTS.md — it's a deterministic pre-tool-call hook (supported in Posit Assistant, Claude Code, opencode) that can block a command before it runs, free and fast since it needs no LLM
-- **destructive-command-guard**: open-source hook with prebuilt packs (blocks destructive git/package-manager commands by default, optional SQL pack); supports a one-time approval code to explicitly allow a normally-blocked command just once; auto-detects and configures itself for Posit Assistant/Claude Code
+- **destructive-command-guard**: open-source hook with prebuilt packs (blocks destructive git/package-manager commands by default, optional SQL pack); supports a one-time approval code to explicitly allow a normally-blocked command just once; auto-detects and configures itself for Posit Assistant/Claude Code - https://github.com/Dicklesworthstone/destructive_command_guard
 - **Agents View** (Wes McKinney's open-source tool, also mentioned in Winston Chang's cost talk) grades individual coding-agent sessions (flagging D/F-grade ones) — useful for spotting too-frequent compaction or under-specified prompts, improving both cost and result quality
 
 ### GRC capabilities coming to Posit Team

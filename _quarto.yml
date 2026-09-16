@@ -6,6 +6,9 @@ project:
     - day1.qmd
     - day2.qmd
     - knowledge.qmd
+    - study.qmd
+    - study-flashcards.qmd
+    - study-quiz.qmd
 
 website:
   title: "posit::conf(2026) Notes"
@@ -20,6 +23,8 @@ website:
         text: Day 2
       - href: knowledge.qmd
         text: Knowledge
+      - href: study.qmd
+        text: Study Materials
     right:
       - icon: github
         href: https://github.com/parmsam/posit-conf-2026-notes

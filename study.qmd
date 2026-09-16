@@ -1,0 +1,15 @@
+---
+title: "Study Materials"
+---
+
+Self-test decks generated from the [Day 1 notes](day1.qmd), built with the [quarto-flashcards](https://github.com/parmsam/quarto-flashcards) and [quarto-quiz](https://github.com/parmsam/quarto-quiz) RevealJS extensions. Each opens as its own slide deck — use the browser back button to return here.
+
+## Contents
+
+- [**Flashcards**](study-flashcards.qmd) — one flip card per talk's key concept; press `q` to flip, `t` to shuffle
+- [**Quiz**](study-quiz.qmd) — multiple-choice questions across all of Day 1, with a running score; press `c` to check an answer
+
+::: {.callout-note}
+## Keep these in sync
+Both decks are hand-written from `day1.qmd`, not auto-generated — when new Day 1 sections are added, the flashcards/quiz should be refreshed to match.
+:::

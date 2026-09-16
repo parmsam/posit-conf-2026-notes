@@ -1,0 +1,379 @@
+---
+title: "Day 1 Flashcards"
+format:
+  revealjs:
+    theme: default
+    flashcards:
+      flipKey: 'q'
+      shuffleKey: 't'
+      showFlipButton: true
+      resetOnSlideChange: true
+      flipButtonColorFront: "#2a76dd"
+      flipButtonColorBack: "#28a745"
+revealjs-plugins:
+  - flashcards
+---
+
+## Day 1 Flashcards
+
+Press **q** to flip a card, **t** to shuffle and jump to the first card, or use the arrow keys / flip button to navigate.
+
+::: footer
+Based on [Day 1 notes](day1.qmd).
+:::
+
+# Correct, reproducible, and transparent data agents — Altman & Couch
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+Per Joe Cheng's opening quote, what is "winning" the battle between convenience and correctness?
+:::
+
+::: {.flashcard-back}
+Convenience.
+
+> In the battle between convenience and correctness, convenience is winning.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What is "approval fatigue," and why does it undercut the "just add a human reviewer" fix?
+:::
+
+::: {.flashcard-back}
+People stop reading agent requests and just click approve — so a human-in-the-loop checkpoint doesn't reliably catch mistakes; the *system* needs to be designed for correctness instead.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What does {commons} do, and what do its three response markers (🟢 🔵 🟡) mean?
+:::
+
+::: {.flashcard-back}
+It routes agent questions through **trusted code** the team already relies on instead of always generating bespoke code.
+
+🟢 trusted calculation · 🔵 cited trusted context · 🟡 freehand code (no trust anchor)
+:::
+
+# From chats to workflows to "agents" — Timothy Keyes
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+Define **harness**, **tool**, and **agent** per Keyes's talk.
+:::
+
+::: {.flashcard-back}
+**harness** — a program that coordinates calls to an LLM and other software systems
+
+**tool** — a function the LLM can ask the harness to run on its behalf
+
+**agent** — an LLM within a harness using tools iteratively in a loop until it accomplishes a task
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+In the patient-chart-summarizer eval, which harness pattern was both the best quality *and* the cheapest — and why?
+:::
+
+::: {.flashcard-back}
+The **agent** harness — because it chooses which notes to read via tools instead of re-reading every note every time (unlike the workflow harness).
+:::
+
+# Yes And... AI in Your IDE — Dillman & Saravanan
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+In the NYC Squirrel Count persona study, which persona preserved the most data with the fewest destructive changes, and which discarded the most?
+:::
+
+::: {.flashcard-back}
+**Data manager** — preserved most, fewest destructive changes.
+
+**Environmental researcher** — dropped the most data, made the most assumptions.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What are the three "pause, ask, follow directions" skill design rules?
+:::
+
+::: {.flashcard-back}
+1. Only pause on decisions that change the question/method/story/interpretation
+2. Give just enough context to decide
+3. Never editorialize ("great choice," "are you sure?") — present options and follow the user's direction
+:::
+
+# Hello, robot — Kristin Bott
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What did Brittany (Posit's finance team) build, and what did it save her?
+:::
+
+::: {.flashcard-back}
+Claude skills to draft finance entries and parse bills, as a non-engineer — saved 5–10 hrs/week, with no sensitive data sent to Anthropic.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What point did the "counting 'n's in unconventional" exercise make?
+:::
+
+::: {.flashcard-back}
+Asking an LLM directly for a letter count fails, but asking it to *write code* that counts succeeds — because tokens aren't the same thing as letters.
+:::
+
+# Tribal Knowledge to Trusted AI in Pharma — Tanya Cashorali
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What was Cashorali's closing message, and in what order?
+:::
+
+::: {.flashcard-back}
+Talk to humans first → agree on what words mean → make sure it's a question worth answering.
+
+> If you don't talk to humans first, AI is a great way to automate misunderstandings.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+Give one example of "tribal knowledge" that turned out to need an explicit definition in the pharma project.
+:::
+
+::: {.flashcard-back}
+"Called on" meant *any* interaction (call, email, Zoom, in-office) — not just phone calls. ("Active patient" and "recently" = 30 vs. 60 days were two more.)
+:::
+
+# What Context Do Your AI Agents Actually Need — Sharon Wang
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What's Sharon Wang's core reframe of "what context do agents need"?
+:::
+
+::: {.flashcard-back}
+The durable question is "what context do *you* need" — you can't write down for an agent what you don't understand yourself.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+Name two signs it's time to start a new chat instead of pushing through a degraded context window.
+:::
+
+::: {.flashcard-back}
+A new task, a side quest, or catching yourself re-explaining in circles.
+:::
+
+# AI Agents Deserve R — James Wade
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What's James Wade's reframe of "am I sacrificing capability by staying in R?"
+:::
+
+::: {.flashcard-back}
+Agents don't need the largest ecosystem, they need a *coherent* one — only switch languages when there's a compelling reason, not by default.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What does {deputy} add on top of {ellmer}?
+:::
+
+::: {.flashcard-back}
+Permissions and usage limits on top of ellmer's tool-calling classes — enterprise-style safety controls.
+:::
+
+# MCP, or not MCP — Neal Richardson
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What is the "lethal trifecta" (Simon Willison), cited in this talk?
+:::
+
+::: {.flashcard-back}
+An agent combining (1) access to private data, (2) exposure to untrusted content, and (3) the ability to communicate out — can be tricked via prompt injection into exfiltrating private data.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+When does a CLI beat a custom MCP server, per Richardson?
+:::
+
+::: {.flashcard-back}
+When the CLI already exists, is widely used, and is already in the model's training data (e.g. `gh`) — no context spent teaching the model how to use it.
+:::
+
+# Why Is AI Costing Me So Much Money? — Winston Chang
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+Why does total conversation cost grow roughly *quadratically*, not linearly, with conversation length?
+:::
+
+::: {.flashcard-back}
+LLMs are stateless — every request resends the entire prior conversation, so total spend is the cumulative sum of every growing request.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What's the single biggest cost lever Chang highlighted?
+:::
+
+::: {.flashcard-back}
+Prompt caching — repeated input tokens (in the same order as an earlier request) are served from cache at roughly 1/10th the normal input-token cost.
+:::
+
+# data-dict & data-diff — Hadley Wickham
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What are Wickham's two "profound but durable" principles for AI-human data science collaboration?
+:::
+
+::: {.flashcard-back}
+> Write shit down. And then look at how shit has changed.
+
+(data-dict = write it down; data-diff = look at how it changed)
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What does data-dict record, and how is it shipped?
+:::
+
+::: {.flashcard-back}
+A YAML spec of column types/descriptions/examples, table joins, and a glossary of domain terms — shipped as a self-contained Rust CLI (no R/Python runtime needed).
+:::
+
+# The Shiny AI Stack — Aden-Buie & Sievert
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What's the layering of the Shiny AI stack, bottom to top?
+:::
+
+::: {.flashcard-back}
+ellmer/chatlas (tidy LLM interface) → shinychat (chat UI toolkit) → domain-specific packages on top, like {commons} and querychat.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What is querychat's deliberate capability restriction, and why?
+:::
+
+::: {.flashcard-back}
+It restricts agent code execution to SQL/ggsql only — a safety/capability tradeoff that lets read-only DB permissions be enforced at the database layer.
+:::
+
+# AI Agents for Data Science: Posit Assistant, Commons, and Beyond — Joe Cheng
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What is Positron **Canvas**?
+:::
+
+::: {.flashcard-back}
+An early, non-IDE-centric agent surface prototype — collapsed tool calls, a dedicated artifacts pane for plots, and a "live Quarto report mode," built on the same engine as Posit Assistant.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What is the **Trajectory reviewer** in Commons?
+:::
+
+::: {.flashcard-back}
+It captures real post-deployment user conversations (with disclosure) so the team can see what questions actually came up, then feeds that back into a coding agent to add new measures/context — moving traffic up the trust ladder.
+:::
+
+# AI Governance in Posit Team — Elliot Murphy
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What incident motivated Posit Team's new LLM spend-cap features?
+:::
+
+::: {.flashcard-back}
+Posit's own team once burned $50,000 unexpectedly running Bedrock-backed deployments on Connect before anyone noticed.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What's **destructive-command-guard**, and how does it fix the "agent did something I told it not to" problem?
+:::
+
+::: {.flashcard-back}
+An open-source, deterministic pre-tool-call hook that blocks destructive git/package-manager commands before they run — free and fast since it needs no LLM (stronger prompting alone doesn't reliably work).
+:::
+
+# Keynote: How to Be Clear When You Can't Be Certain — Christine Zhang
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+Why does the NYT publish a *uniformly* shaded margin-of-error band instead of the more statistically accurate bell-curve band?
+:::
+
+::: {.flashcard-back}
+It's a deliberate compromise between statistical correctness and audience familiarity — many readers aren't used to reading a density/histogram shape.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What is "non-response bias," and how is it different from sampling error?
+:::
+
+::: {.flashcard-back}
+Bias from certain kinds of people being less likely to respond to a poll at all — unlike sampling error, it isn't calculable from a simple formula.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What is the NYT election-night "needle," and why did the Times *not* use it for the Michigan Senate primary?
+:::
+
+::: {.flashcard-back}
+Two dials — a margin estimate with an uncertainty band, plus a second dial in words (toss-up / lean X / likely X). Withheld for the primary because polling was so unreliable (off by ~9 points) that the dial's confident-looking swings would have overstated certainty.
+:::
+
+# The end
+
+## {background-color="#e6ffe6"}
+
+::: {.flashcard-front}
+Nicely done working through Day 1!
+:::
+
+::: {.flashcard-back}
+Head to the [quiz](study-quiz.qmd) to test yourself, or back to [Study Materials](study.qmd).
+:::

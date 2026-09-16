@@ -66,7 +66,7 @@ Help the agent be correct, and make it less bad when it's inevitably sometimes w
 - https://posit-dev.github.io/commons/r/articles/commons.html
 - https://posit-dev.github.io/commons/r/articles/governance.html
 - https://opensource.posit.co/blog/2026-09-15_commons-0-1-0/
-- Built on Elmer/chatlas/shinychat (R & Python); bring-your-own model
+- Built on ellmer/chatlas/shinychat (R & Python); bring-your-own model
 - Core idea: route questions through **trusted code** the team already relies on (packages, Shiny apps, Quarto docs, Databricks/Snowflake semantic views) instead of always generating bespoke code
 - Three deterministic response markers: 🟢 trusted calculation, 🔵 cited trusted context, 🟡 freehand code (no trust anchor)
 - Deploys as a Shiny app on Connect (normal permissions apply)
@@ -299,17 +299,19 @@ A new task, a side quest, or catching yourself re-explaining in circles are all 
 - Recurring worry: "am I sacrificing capability by staying in R instead of Python/Claude Code?" — reframed to only switch language when there's a compelling reason, not by default
 - Agents don't need the largest ecosystem, they need a coherent one — that requirement falls on the developer (to hold a deep mental model of what they're building), since models already understand Python/JS well from training data
 
-### Demo: "real", a personal RSS reader
+### Demo: rill, a personal RSS reader
+
+https://github.com/JamesHWade/rill
 
 - Built to fix generic AI daily-briefing tools: an LLM-driven "orientation" step ranks/filters articles and explains its reasoning, plus lightweight feedback (dismiss/engage) and a chat interface over individual articles or the full corpus
 - Built almost entirely from a small set of R packages, each contributing one distinct piece
 
 ### Ecosystem tour
 
-- **Shiny Chat** (R & Python): conversation history (resume/search/rename/fork), exposed thinking traces with an interrupt button, dynamic tool-call display, slash commands reusable for in-app navigation — "a few lines of code" to add to any Shiny app
-- **Elmer**: LLM interfacing; new tool annotations let you flag a tool as read-only vs. world-affecting for downstream safety
-- **Deputy** (new, built on Elmer): adds permissions and usage limits on top of Elmer's tool-calling classes — enterprise-style safety controls
-- **DSPR**: an R port of Python's DSPy ("programming, not prompting") — define modules/signatures for inputs/outputs, then apply optimization algorithms against a scoring metric to auto-update prompts as models change, instead of manually rewriting them each release
+- **shinychat** (R & Python): conversation history (resume/search/rename/fork), exposed thinking traces with an interrupt button, dynamic tool-call display, slash commands reusable for in-app navigation — "a few lines of code" to add to any Shiny app - https://posit-dev.github.io/shinychat/
+- **ellmer**: LLM interfacing; new tool annotations let you flag a tool as read-only vs. world-affecting for downstream safety - https://ellmer.tidyverse.org
+- **deputy** (new, built on ellmer): adds permissions and usage limits on top of ellmer's tool-calling classes — enterprise-style safety controls - https://github.com/JamesHWade/deputy
+- **dsprrr**: an R port of Python's DSPy ("programming, not prompting") — define modules/signatures for inputs/outputs, then apply optimization algorithms against a scoring metric to auto-update prompts as models change, instead of manually rewriting them each release - https://github.com/JamesHWade/dsprrr
 
 ### Closing
 
@@ -403,7 +405,9 @@ If a request's input tokens repeat an earlier request's input tokens in the same
 >
 > — Hadley Wickham
 
-### {datadict} — write it down
+### data-dict — write it down
+
+https://github.com/tidyverse/data-dict
 
 - A YAML spec for recording facts about a dataset: column types/descriptions/examples, how tables join together, and a glossary of domain-specific terms
 - Ships as a self-contained Rust CLI (`data-dict`) — no R/Python runtime needed — that bundles the spec itself plus agent skills, so you can just tell an agent "use data-dict to document this dataset"
@@ -411,7 +415,9 @@ If a request's input tokens repeat an earlier request's input tokens in the same
 - Rich constraint system: express expectations about the data in SQL/R/Python-*like* syntax (data-dict implements its own small parser, no dependency on those languages); violations produce a point-blank-inspired HTML report plus JSON logs for automated systems
 - Agent-driven data cleaning changes three things together — the code, the metadata (the YAML), and the data itself — cross-checking all three is far easier to trust than checking any one alone (demoed: string→date conversion, sentinel values like `-9` converted to real `NA`s, a `0`-as-missing column)
 
-### {datadiff} — look at how it changed
+### data-diff — look at how it changed
+
+https://github.com/hadley/data-diff
 
 - Shows the *semantic* difference between two data frames (currently Parquet only) interactively — much more useful than Positron's default binary diff view on a changed data file
 - Distinguishes a type-only change (e.g. an ISO-8601 string becoming a real date, values otherwise unchanged) from an actual value change; can enumerate large cell-level diffs (~116k changed cells in one demo) and sort by column
@@ -427,9 +433,9 @@ If a request's input tokens repeat an earlier request's input tokens in the same
 
 ### The stack
 
-- Elmer/chatlas (tidy LLM interface, hides provider API differences) → **ShinyChat** (chat UI toolkit, R & Python) → domain-specific packages built on top, like {commons} (seen in the morning keynote) and query chat
+- ellmer/chatlas (tidy LLM interface, hides provider API differences) → **shinychat** (chat UI toolkit, R & Python) → domain-specific packages built on top, like {commons} (seen in the morning keynote) and query chat
 
-### ShinyChat updates
+### shinychat updates
 
 - Demoed via a custom "which posit::conf talks should I see" agent app
 - Greeting can be static or LLM-generated each visit; comes with suggested starter prompts
@@ -443,18 +449,18 @@ If a request's input tokens repeat an earlier request's input tokens in the same
 - Chat input now accepts **file attachments** (e.g. drag-and-drop an image)
 - Still just a normal Shiny app underneath — ordinary nav panels/inputs alongside the chat, plus recent bslib features (toolbars, off-canvas panels, dark mode, theming, hosted-trace logging for production use)
 
-### query chat
+### querychat
 
-- R & Python package built on ShinyChat: give it a data frame (or a DB connection, pins, Polars, Ibis, SQLAlchemy) plus an Elmer client and get a working chat app with an AI-generated greeting and starter suggestions
-- Gathers basic data metadata automatically, but designed to plug into a curated data dictionary (e.g. Hadley's {datadict}) for better grounding
+- R & Python package built on shinychat: give it a data frame (or a DB connection, pins, Polars, Ibis, SQLAlchemy) plus an ellmer client and get a working chat app with an AI-generated greeting and starter suggestions
+- Gathers basic data metadata automatically, but designed to plug into a curated data dictionary (e.g. Hadley's data-dict) for better grounding
 - Generates SQL grounded in that metadata; results shown with inspectable SQL
-- Visualization via **GG SQL** — a SQL extension for grammar-of-graphics visualization from the ggplot2 maintainers (covered in a parallel talk by Tomasz) — the chat can switch a numeric summary to a distribution (box plot) on request, with inspectable GG SQL code
+- Visualization via **ggsql** — a SQL extension for grammar-of-graphics visualization from the ggplot2 maintainers (covered in a parallel talk by Tomasz) — the chat can switch a numeric summary to a distribution (box plot) on request, with inspectable ggsql code
 - New **hand-off** slash command: pick which results from a long chat to keep, choose an output format (Quarto/Shiny/Jupyter) and language (R/Python), get a streamed, editable source document, then download a zip (doc + README + small data files) — decouples a useful finding from the long-lived chat/app
 - Can drive a full custom Shiny dashboard: predetermined views sit alongside the chat, and the agent can reactively filter what's shown (demoed on loan data — asking for "small business loans" narrows the dashboard's views via a generated SQL filter)
 
 ::: {.callout-note}
 ## Deliberate capability restriction
-query chat intentionally restricts agent code execution to SQL/GG SQL only — a safety/capability tradeoff. Read-only DB permissions can be enforced at the database layer this way; custom tools for broader execution can still be added if you really want them.
+querychat intentionally restricts agent code execution to SQL/ggsql only — a safety/capability tradeoff. Read-only DB permissions can be enforced at the database layer this way; custom tools for broader execution can still be added if you really want them.
 :::
 
 ## AI Agents for Data Science: Posit Assistant, Commons, and Beyond - Joe Cheng
@@ -481,7 +487,7 @@ query chat intentionally restricts agent code execution to SQL/GG SQL only — a
 
 ### Commons internals
 
-- Ingredients for a Commons agent: one or more tabular data sources (data frames, SQL DBs, pins, Snowflake/Databricks — {datadict} metadata works for any of them), zero or more **measures** (trusted R/Python functions), zero or more free-form context notes
+- Ingredients for a Commons agent: one or more tabular data sources (data frames, SQL DBs, pins, Snowflake/Databricks — data-dict metadata works for any of them), zero or more **measures** (trusted R/Python functions), zero or more free-form context notes
 - Measures are just plain R/Python functions in a directory, tagged with a `@measure` annotation plus argument type hints — no special framework code required
 - Context notes are markdown files with a provenance field (why the user should trust this)
 - Explicitly framed as broader than BI/SQL — demoed on microscopy image-processing data, letting a biologist upload new samples and get them run through the team's existing domain-specific pipeline
@@ -525,3 +531,69 @@ Posit's own team once burned $50,000 unexpectedly running Bedrock-backed deploym
 ### Closing
 
 - Invited attendees to share what governance/agent-risk approaches are and aren't working for them — contact via LinkedIn or the product lounge (Sam Edwards, PM for governance features)
+
+## Keynote: How to Be Clear When You Can't Be Certain - Christine Zhang
+
+- Speaker: graphics editor, The New York Times
+- Not an AI talk — closing keynote, framed around three data-journalism case studies that all boil down to "squaring the circle": representing uncertain/evolving reality with a necessarily simplified chart
+
+### Case study 1: polls and the margin of error
+
+- Live-polled the audience with three visualization options for the same hypothetical poll (49% support, ±5 margin of error):
+    - **B** — dot plot with a *uniformly* shaded margin-of-error band (the Times' classical approach)
+    - **C** — a bell-curve/density style band (statistically more accurate, since error isn't uniform — values near the point estimate are more likely than values at the tail ends of the 95% interval)
+- Margin of error = sampling error: a poll surveys a sample (e.g. 600 people), not the full population (e.g. 1M+ voters); bigger sample → smaller margin
+- The Times deliberately publishes the *less* statistically precise option B over C — a compromise between statistical correctness and audience familiarity (many readers aren't used to reading a density/histogram shape)
+- Built option C in R using **{ggdist}** (`stat_dist_halfeye`), a package from Matthew Kay's 2022 posit::conf lightning talk that extends ggplot2 with uncertainty-distribution geoms
+- Update since: the published shaded bands now taper at the edges instead of uniform shading — "constantly evolving," not a solved problem
+
+::: {.callout-note}
+## Sampling error isn't the only error
+Non-response bias (some kinds of people are less likely to answer polls at all) isn't calculable by a formula the way sampling error is — showing the margin of sampling error precisely can misleadingly imply it's the *only* source of uncertainty.
+:::
+
+- Deeper uncertainty in polls: a poll measures voting intention "if the election were held today," but the election is weeks away — people register, change their minds, or don't vote at all before then. The reality being measured is itself still changing.
+
+### Case study 2: live election night forecasts
+
+- 2024 presidential results (Michigan, Virginia): early reported vote can be misleading purely because of *ballot-counting order* — e.g. Michigan's first-reported batch was heavily-Democratic Detroit-suburb absentee ballots, giving Harris a lead that reversed as more (more pro-Trump) in-person votes were counted
+- The Times pairs the raw results table with a live time-series forecast chart: dotted line = reported margin so far, solid line = model's forecast margin, shaded band = uncertainty interval that narrows over the night
+- The forecast can diverge from the reported vote — it's built by comparing incoming results against pre-election expectations (polling, voter-file data, historical results), so it called Trump ahead in Michigan's forecast before he was ahead in the reported vote
+- That full time-series chart packs in 4 series at once (reported margin, forecast margin, 50% and 95% intervals) — simplified for broad audiences into the **"needle"**: a margin dial plus a second dial translating the uncertainty band into words (toss-up / lean X / likely X)
+- Needles scale better than line charts across many races at once (a presidential page needs an overall needle, an electoral college needle, a popular vote needle, plus one per key state)
+
+### Case study 2 continued: choosing *not* to show the needle
+
+- Michigan's Aug. 2024 Senate Democratic primary (El-Sayed vs. Stevens): the Times ran the live forecast but deliberately omitted the needle, showing only the time-series line chart
+- Why: primary polling is far less reliable than general-election polling — the pre-election forecast had El-Sayed +10; he won by under 1 point, and the uncertainty band spanned nearly the entire chart
+- A needle's dial swing *feels* more decisive/prescriptive than the equivalent movement of a line — risky for a race that's genuinely this uncertain
+- Primary-night audiences tend to be more engaged and want the full trajectory (what did the estimate say 5 minutes ago?), not just an arrow
+- Internal Shiny dashboards tracking live vote batches (e.g. a mail-in-ballot batch breaking 21.5 points for Stevens) informed real-time text updates explaining *why* a race remained unsettled — something no public chart alone could convey
+
+::: {.callout-tip}
+## Words vs. visuals for uncertainty
+Describing uncertainty in words is often easier than depicting it in a chart — some audiences need the explanatory detail only prose can give, even when the visualization is otherwise clear.
+:::
+
+### Case study 3: economic data revisions (the jobs report)
+
+- The monthly BLS jobs report *feels* like objective, backward-looking "hard data," but it's itself a large-scale survey (of businesses) and gets revised in later months as responses trickle in
+- July 2025 report revised May/June job gains down by a combined 258,000 — became a political flashpoint (the administration alleged BLS bias/manipulation, with no evidence presented)
+- Longer view: revisions go both up and down over time; the biggest swings track major macro shocks (2008 financial crisis, 2020 pandemic, 2021 recovery), not election cycles
+- Behind the scenes: the original monthly-bars chart is normally generated from a template, but the revision annotations were added by hand in Adobe Illustrator under deadline pressure — a viewer later rebuilt the same chart programmatically in ggplot2 in a 42-minute YouTube tutorial
+- Fix going forward: de-emphasize the noisy month-to-month bars in favor of a 3-month moving-average trend line, so readers focus on trend rather than over-reading a single monthly figure — while still calling out revisions separately when they're big enough to matter
+
+::: {.callout-important}
+## Closing lessons
+1. Don't be afraid to show uncertainty, even when doing so clearly and accurately is hard
+2. Design the presentation for your specific audience, not a generic "correct" chart
+3. When reality gets revised after the fact, call attention to the revision, but keep the emphasis on the broader trend rather than any single point estimate
+:::
+
+### Q&A
+
+- The recurring "squaring the circle" visual motif was inspired by artist Robert Mangold's imperfect geometric paintings
+- No confidence interval is shown on the jobs-report chart because: the survey is orders of magnitude larger than an election poll, so sampling error isn't the dominant source of uncertainty there; also, revisions — while individually newsworthy — haven't fundamentally changed the long-run understanding of labor-market trends
+- Graphics go through editorial review before publishing, but mistakes still happen — the jobs-revision chart itself later ran with a published correction
+- On AI: feels "wobbly" about it personally — uses it less than many peers and often feels behind, but values critical thinking; the Times has ethical standards requiring humans to understand what any AI-assisted code (e.g. election-night forecast code) is actually doing
+- Team toolset: **Positron** (built on VS Code) is now the team's widely-adopted primary editor, plus Adobe Illustrator, Datawrapper for common off-the-shelf chart forms, and R/ggplot2 for the first sketch of nearly everything before it becomes anything else

@@ -39,10 +39,9 @@ Project-local skills live in `.claude/skills/`:
 - `defuddle-cli` — the underlying single-URL fetch-as-markdown helper.
 - `m3u8-subtitles` — extracts the English subtitle track from a session's `.m3u8` manifest (via `ffmpeg`) into `subtitles/vtt/<slug>.vtt`, then converts it into a flowing-text transcript at `subtitles/markdown/<slug>.md`.
 - `quarto-flashcards` / `quarto-quiz` — reference for the RevealJS extension syntax (`.flashcard-front`/`.flashcard-back` divs; `{.quiz-question}` slides with `[answer]{.correct}`) used by `study-flashcards.qmd`/`study-quiz.qmd`. The extensions themselves live in `_extensions/parmsam/flashcards` and `_extensions/parmsam/quiz`.
+- `conf-notetaker` — turns one or more `subtitles/markdown/` transcripts into `day1.qmd`/`day2.qmd` notes following the conventions above. For each session it dispatches a subagent that reads that session's transcript directly and drafts a fragment (keeping the raw transcript, which can run 50–70k characters for a multi-talk session, out of the main conversation), then assembles the fragments into the target day file in schedule order. Handles both single-talk sessions and multi-talk blocks (a schedule of several 20-minute talks recorded back-to-back as one file) — pass along any schedule (title/speaker/time) the user gives in chat.
 
-Use `qmd-url-defuddle` when asked to pull references out of the notes rather than fetching URLs ad hoc. Use `m3u8-subtitles` when asked to get subs/transcript from a session recording manifest.
-
-When asked to turn a `subtitles/markdown/` transcript into `day1.qmd`/`day2.qmd` notes: the transcript comes from auto-generated captions (not a human transcript), so it can contain misheard words, mangled names/jargon, and garbled sentences. Cross-check anything that looks off (speaker names, package/product names, numbers) against the talk's agenda listing or linked resources before writing it into the notes, rather than transcribing the transcript's mistakes verbatim.
+Use `qmd-url-defuddle` when asked to pull references out of the notes rather than fetching URLs ad hoc. Use `m3u8-subtitles` when asked to get subs/transcript from a session recording manifest. Use `conf-notetaker` when asked to turn transcript(s) into day notes — it already encodes the caption-error handling (transcripts are auto-generated captions, not a human transcript, so misheard words/mangled names/jargon need judgment-based cross-checking rather than verbatim transcription) and the house style rules, so there's no need to restate those separately.
 
 ## Website
 

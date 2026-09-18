@@ -1,5 +1,5 @@
 ---
-title: "Day 1 Quiz"
+title: "Day 1 & 2 Quiz"
 format:
   revealjs:
     theme: default
@@ -15,12 +15,12 @@ revealjs-plugins:
   - quiz
 ---
 
-## Day 1 Quiz
+## Day 1 & 2 Quiz
 
 Select an option, then click **Check** (or press **c**). Use **1**–**4** to pick an option, **q** to reset a question, **t** to shuffle question order.
 
 ::: footer
-Based on [Day 1 notes](day1.qmd).
+Based on [Day 1 notes](day1.qmd) and [Day 2 notes](day2.qmd).
 :::
 
 ## {.quiz-question}
@@ -170,3 +170,162 @@ Select-all-that-apply: you need every correct option checked and no incorrect on
 - [A compelling reason — not switching by default]{.correct}
 - Whichever language the client prefers
 - Whatever the coding agent defaults to
+
+## Day 2
+
+::: footer
+Questions below are based on [Day 2 notes](day2.qmd).
+:::
+
+## {.quiz-question}
+
+**Per Wes McKinney's keynote, what three things become more valuable, not less, in agent-driven work?**
+
+- Speed, scale, and automation
+- [Judgment, taste, and agency]{.correct data-explanation="Without them, agent-driven work becomes slop that gets thrown away or left for someone else to maintain."}
+- Memory, context, and tokens
+- Architecture, testing, and documentation
+
+## {.quiz-question}
+
+**In McKinney's "Clanker Constitution," what does "act with judgment" mean?**
+
+- Always ask permission before every change
+- [Scale process/tooling to the size of the task — don't build a 5,000-line test framework for a minor feature]{.correct}
+- Never make a decision without a human
+- Maximize test coverage on every change
+
+## {.quiz-question}
+
+**Per McKinney (via Cory Doctorow), what is a "reverse centaur"?**
+
+- A human assisted by a machine, like a bicycle for the mind
+- [A machine assisted by a human, who just presses the buttons the machine can't press itself]{.correct}
+- Two AI agents working without human oversight
+- A human who refuses to use AI tools at all
+
+## {.quiz-question}
+
+**Per Charlotte Wickham, what accessibility standard does the ADA Title II web rule (and similar legislation) actually point to?**
+
+- Section 508 only
+- [WCAG 2.1 AA]{.correct}
+- ISO 9001
+- PDF/UA
+
+## {.quiz-question}
+
+**What was the single largest category of author-side accessibility violations Charlotte Wickham's tool found on quarto.org?**
+
+- Color contrast failures
+- [Missing alt text (98 violations)]{.correct data-explanation="Quarto will never generate alt text for you — only the author knows why a figure is there."}
+- Missing skip-to-content links
+- Broken heading order
+
+## {.quiz-question}
+
+**What is Quarto 2, per Emil Hvitfeldt and Carlos Scheidegger?**
+
+- A minor patch release of Quarto 1
+- [An entirely new, MIT-licensed codebase — a large chunk of Pandoc ported to Rust and compiled to WASM to run in the browser]{.correct}
+- A rebrand of Quarto Pub
+- A Python-only reimplementation of Quarto
+
+## {.quiz-question}
+
+**What underlying technology does Quarto Hub use to sync edits between collaborators?**
+
+- A central SQL database with row locking
+- [Automerge, an open-source CRDT for JSON data]{.correct}
+- Git branches merged automatically every second
+- WebSockets with a custom diff format
+
+## {.quiz-question}
+
+**In Leslie Emery's clinical data harmonization workflow, what are the three pieces of the system?**
+
+- Raw data, a chatbot, and a spreadsheet
+- [Data model files, harmonization config files, and pipeline code]{.correct}
+- A vector database, an LLM, and a dashboard
+- Trial data, a codebook, and a Shiny app
+
+## {.quiz-question}
+
+**In Mirian Lima's OSA Metrics workflow, what does the "save the story, not the answer" step actually export?**
+
+- The full raw dataset used in the analysis
+- [A `session.json` with the table schema, generating queries, and every query/chart pair — no raw data]{.correct}
+- A PDF report with embedded charts
+- A video recording of the analyst's screen
+
+## {.quiz-question}
+
+**Per Kelli Goggans, what's the first step when messy data doesn't fit the question?**
+
+- Identify standards
+- [Define your limits — decide what data you actually need and what's extraneous]{.correct}
+- Refine your analyses
+- Discard incompatible sources immediately
+
+## {.quiz-question}
+
+**In Yasha Kaushal's talk, what happened when the same merge prompt was run on the same 5 files in two different Claude Code sessions?**
+
+- It produced an error both times
+- [It silently produced different results — 407 households one time, 464 the next]{.correct data-explanation="Invisible failure, no decision trail, and a smarter model doesn't fix it — the fix is deterministic logic, not a better chatbot."}
+- It took twice as long the second time
+- It required a different prompt each time
+
+## {.quiz-question}
+
+**Per Max Kuhn, what is tidymodels' most effective way of building "wisdom" into an API?**
+
+- Verbose prompt engineering
+- [Guardrails baked into the API itself — e.g. naming the final-evaluation function `last_fit()` so you can't misuse the test set]{.correct}
+- A chatbot that warns you after the fact
+- Mandatory code review by a second analyst
+
+## {.quiz-question}
+
+**Per Sam Clark's "Three Agents" talk, what turned out to matter more than the underlying model?**
+
+- The price per token
+- [The harness — what determines whether a model's capabilities take the shape of real data science work]{.correct}
+- The number of tools available
+- The programming language used
+
+## {.quiz-question}
+
+**Besides "good to go," what other verdicts can Nicky Bell's Circuit tool return on an AI-generated analysis?**
+
+- "Excellent" and "needs polish"
+- [Provisional and walk away]{.correct data-explanation="Circuit is designed to say an analysis is unsolvable or fatally flawed rather than always producing an answer."}
+- "A+" through "F"
+- Pass and fail only
+
+## {.quiz-question}
+
+**What are Tyson Barrett's three buckets for any AI task?**
+
+- Fast, medium, slow
+- [Delegate, collaborate, own]{.correct}
+- Easy, hard, impossible
+- Trust, verify, reject
+
+## {.quiz-question}
+
+**Per Jenny Bryan's lightning talk, what makes a file name excellent?**
+
+- It's as short as possible
+- [It's machine readable, human readable, and sorts usefully]{.correct}
+- It includes the author's initials
+- It never includes numbers
+
+## {.quiz-question}
+
+**What problem does Thomas Lin Pedersen's Hephaestus rendering engine solve for ggplot2?**
+
+- Slow rendering of large datasets
+- [Exported plot images having the wrong aspect ratio/resolution/colors for a given presentation — solved via a dynamic, resizable `.hep` file format]{.correct}
+- Lack of theming support
+- Inability to export to PDF

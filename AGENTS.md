@@ -12,7 +12,7 @@ Personal notes from posit::conf(2026) virtual, kept as Quarto documents.
 - `m3u8/` — gitignored. Session recording HLS manifests (`.m3u8`), saved manually from the browser (signed URLs expire).
 - `subtitles/vtt/`, `subtitles/markdown/` — gitignored. WebVTT subtitle files and flowing-text transcripts derived from `m3u8/`, one pair per session, named `<day>-<kebab-case-session-title>`. Populated by the `m3u8-subtitles` skill; don't hand-edit. Not part of the Quarto site (see "Website" below) — kept as local files only.
 - `_quarto.yml`, `index.qmd`, `knowledge.qmd` — the Quarto website that ties all of the above together for browsing (see "Website" below). `_site/` (render output) and `.quarto/` (cache) are gitignored.
-- `study.qmd`, `study-flashcards.qmd`, `study-quiz.qmd` — the "Study Materials" tab: a landing page plus a flashcards deck and a quiz deck (both RevealJS, via the `_extensions/parmsam/flashcards` and `_extensions/parmsam/quiz` extensions) hand-written from `day1.qmd`. Refresh them when Day 1 notes gain new sections — see "Website" below for extension details.
+- `study.qmd`, `study-flashcards.qmd`, `study-quiz.qmd` — the "Study Materials" tab: a landing page plus a flashcards deck and a quiz deck (both RevealJS, via the `_extensions/parmsam/flashcards` and `_extensions/parmsam/quiz` extensions) hand-written from `day1.qmd` and `day2.qmd`, in that order, with a plain `## Day 2` divider slide separating each day's cards/questions in both decks. Refresh them when either day's notes gain new sections — see "Website" below for extension details.
 
 ## Conventions
 

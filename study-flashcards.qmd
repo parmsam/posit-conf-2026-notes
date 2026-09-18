@@ -1,5 +1,5 @@
 ---
-title: "Day 1 Flashcards"
+title: "Day 1 & 2 Flashcards"
 format:
   revealjs:
     theme: default
@@ -14,12 +14,12 @@ revealjs-plugins:
   - flashcards
 ---
 
-## Day 1 Flashcards
+## Day 1 & 2 Flashcards
 
 Press **q** to flip a card, **t** to shuffle and jump to the first card, or use the arrow keys / flip button to navigate.
 
 ::: footer
-Based on [Day 1 notes](day1.qmd).
+Based on [Day 1 notes](day1.qmd) and [Day 2 notes](day2.qmd).
 :::
 
 ## {background-color="#eef6ff"}
@@ -338,10 +338,301 @@ What is the NYT election-night "needle," and why did the Times *not* use it for 
 Two dials — a margin estimate with an uncertainty band, plus a second dial in words (toss-up / lean X / likely X). Withheld for the primary because polling was so unreliable (off by ~9 points) that the dial's confident-looking swings would have overstated certainty.
 :::
 
+## Day 2
+
+::: footer
+Cards below are based on [Day 2 notes](day2.qmd).
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+Per Wes McKinney's keynote, what three things matter more, not less, in agent-driven work?
+:::
+
+::: {.flashcard-back}
+**Judgment** (deciding what to do), **taste** (knowing when it's good), and **agency** (making it happen) — without them, agent-driven work becomes slop that gets thrown away or left for someone else to maintain.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What are the four rules of McKinney's "Clanker Constitution"?
+:::
+
+::: {.flashcard-back}
+1. Honor the request
+2. Act with judgment — scale process/tooling to the task
+3. Verify reality — don't hallucinate results
+4. Communicate for humans — plain language, not walls of text
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+Per McKinney (via Cory Doctorow), what's the difference between a **centaur** and a **reverse centaur**?
+:::
+
+::: {.flashcard-back}
+A centaur is a human assisted by a machine (a "bicycle for the mind"). A reverse centaur is a machine assisted by a human, who just presses the buttons the machine can't press itself — much white-collar AI adoption risks becoming this.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What's McKinney's "code isn't actually free" warning?
+:::
+
+::: {.flashcard-back}
+Generating code feels free, but every line that lands becomes a future burden on every agent session that touches it afterward — "no," and hitting escape, is one of the most powerful tools available.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What accessibility standard does the ADA Title II web rule (and similar legislation) actually point to, per Charlotte Wickham?
+:::
+
+::: {.flashcard-back}
+WCAG 2.1 AA (Web Content Accessibility Guidelines) — Quarto's job is to translate markdown into accessible markup; the author's job is correct heading structure and alt text.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What was the single biggest category of author-side accessibility violations found on quarto.org?
+:::
+
+::: {.flashcard-back}
+Missing alt text — 98 violations. Quarto will never generate alt text for you, since only the author knows why a figure is there.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+Name two manual accessibility checks that automated tools can't do, per Wickham.
+:::
+
+::: {.flashcard-back}
+Tab through with no mouse to confirm you never get stuck; zoom in and confirm text actually gets bigger. (Also: check mobile layout, and review any figures/HTML your own code generates.)
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What is Quarto 2, per Emil Hvitfeldt and Carlos Scheidegger?
+:::
+
+::: {.flashcard-back}
+An entirely new, MIT-licensed codebase — a large chunk of Pandoc ported to Rust, compiled to WASM, and run inside the browser. Roughly 100x faster rendering than Quarto 1.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What underlying technology lets Quarto Hub sync edits between collaborators in real time?
+:::
+
+::: {.flashcard-back}
+Automerge, an open-source CRDT for JSON data — decentralized by design, so collaboration can run fully local or through a hosted service.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What warning did Posit's legal team give about the public Quarto Hub preview?
+:::
+
+::: {.flashcard-back}
+"Anything you enter is apparently not protected" — use only for non-sensitive personal experiments; the preview was expected to be turned off again within two weeks.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+How does the NASA Earthdata Cloud Cookbook organize its content, per Andy Teucher?
+:::
+
+::: {.flashcard-back}
+Explanation (core concepts) → how-to guides (short, task-focused) → tutorials (longer, chaining how-tos) → reference (technical detail/links) — with the contributing guide front-and-center.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What are the three pieces of Leslie Emery's clinical data harmonization workflow?
+:::
+
+::: {.flashcard-back}
+**Data model** files (YAML target schema) and **harmonization config** files (YAML mapping per trial) are LLM-drafted; **pipeline code** applies them. Data model + pipeline are one-time setup; configs repeat per data set.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What's Mirian Lima's core thesis about "packaging" judgment?
+:::
+
+::: {.flashcard-back}
+Unpackaged, your judgment dies inside the context window. Packaged (via skills, MCP, hooks, etc.), it accumulates — turning a generic agent into a custom one.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What are the four verbs in OSA Metrics' workflow, and what does the last one save?
+:::
+
+::: {.flashcard-back}
+Discovery → semantic model → iterative Q&A → **save the story, not the answer**: a `session.json` with the table schema and every query/chart pair generated — no raw data, so the analysis is fully reproducible from spec alone.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What are Kelli Goggans's three steps for when messy data doesn't fit the question?
+:::
+
+::: {.flashcard-back}
+**Define your limits** (what data you actually need) → **identify standards** (fixed components, validated then followed rigorously) → **refine your analyses** (the question is a North Star, not a strict spec).
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+In Yasha Kaushal's talk, what happened running the same merge prompt on the same 5 files in two different Claude Code sessions?
+:::
+
+::: {.flashcard-back}
+407 households one time, 464 the next — with no error thrown. The failure is invisible, there's no decision trail, and a smarter model doesn't fix it since any model still makes its own judgment calls under ambiguity.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What's the middle-ground architecture Kaushal's team built instead of "just let Claude Code merge the files"?
+:::
+
+::: {.flashcard-back}
+A predetermined schema → **Agent 1** maps raw columns to it (flagging low-confidence mappings for human review) → a **deterministic engine** applies fixed rules → **Agent 2** cross-verifies output and writes a plain-language QA report.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+Per Max Kuhn, how do intelligence and wisdom differ for LLMs?
+:::
+
+::: {.flashcard-back}
+Intelligence is "book smart" (factual, cerebral) — LLMs have plenty. Wisdom is "street smart" (judgment, knowing what *not* to do) — it hasn't caught up, and is hard to teach directly.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What's tidymodels' most effective way of building "wisdom" into an API, per Kuhn?
+:::
+
+::: {.flashcard-back}
+Guardrails baked into the API itself so you can't do feature selection incorrectly through normal use — the final-evaluation function is even named `last_fit()` to signal "this is the last thing you do."
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What selection-bias incident did Kuhn describe almost sinking a real project?
+:::
+
+::: {.flashcard-back}
+Improper feature-selection validation made a model (~75% of the team's R&D budget) look ~85% accurate. New patient data later showed it was closer to 0% accurate. Lesson: always hold out an unbiased test set, never "double dip."
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What's the "real lesson" from Sam Clark's Positron Assistant / DataBot / Posit Assistant story?
+:::
+
+::: {.flashcard-back}
+Models weren't the bottleneck — they kept improving regardless. The **harness** is what determines whether a model's capabilities take the shape of real data science work.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What are Circuit's seven reviewer categories, per Nicky Bell?
+:::
+
+::: {.flashcard-back}
+Measurement, data-generating process/sampling, causality, sample size & variance/uncertainty, missing data, outliers, and data visualization.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+Beyond "good to go," what other verdicts can Circuit return?
+:::
+
+::: {.flashcard-back}
+**Provisional** or **walk away** — designed to say an analysis is unsolvable or fatally flawed rather than always producing an answer.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What are Tyson Barrett's three buckets for any AI task?
+:::
+
+::: {.flashcard-back}
+**Delegate** (trust it fully), **collaborate** (AI types/plans, you decide), **own** (your expertise is essential — full control). Most harnesses default to "delegate," so you have to design your usage deliberately.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+Per Barrett, what's the difference in how CLAUDE.md/AGENTS.md vs. skills get loaded?
+:::
+
+::: {.flashcard-back}
+CLAUDE.md/AGENTS.md is read on *every* session, so keep it lean. Skills are triggered only when relevant (via a "use when..." description), so they're cheaper — not loaded into every prompt.
+:::
+
+## {background-color="#eef6ff"}
+
+::: {.flashcard-front}
+What's Jenny Bryan's rule of thumb for excellent file names?
+:::
+
+::: {.flashcard-back}
+Machine readable, human readable, and self-sorting — her own convention: underscores delimit fields, hyphens delimit words within a field, dates as `YYYY-MM-DD`, left-padded numeric prefixes.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+What problem does Thomas Lin Pedersen's Hephaestus solve for ggplot2, and how?
+:::
+
+::: {.flashcard-back}
+Exported PNGs having the wrong aspect ratio/resolution/colors for a given presentation — solved with a new `.hep` file format: a dynamic, resizable plot object exportable to PNG/JPEG/WebP/SVG/PDF, with live theming.
+:::
+
+## {background-color="#fff7e6"}
+
+::: {.flashcard-front}
+Define Joe Cheng's three pieces of jargon: bike shedding, onion in the varnish, rubber ducking.
+:::
+
+::: {.flashcard-back}
+**Bike shedding** — over-debating a trivial detail while high-stakes decisions go unexamined.
+**Onion in the varnish** — a step faithfully repeated long after its original reason is gone.
+**Rubber ducking** — explaining a problem in detail often reveals the solution yourself.
+:::
+
 ## {background-color="#e6ffe6"}
 
 ::: {.flashcard-front}
-Nicely done working through Day 1!
+Nicely done working through Day 1 and Day 2!
 :::
 
 ::: {.flashcard-back}

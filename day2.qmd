@@ -566,6 +566,198 @@ Barrett noted that Posit Assistant's harness already embodies a similar collabor
 
 - CLAUDE.md vs. skill: a skill is a "kitchen sink" for one specific recurring task, since it's only loaded when triggered; CLAUDE.md should stay minimal since it's read (and costs tokens) on every single prompt
 
+## Never Block, Never Copy: mirai + mori from Shiny to the Cluster - Charlie Gao
+
+### Shiny as a demanding production service
+
+- Charlie Gao, open source engineer at Posit; past focus on performance/reliability of parallel and async R, most recently (last ~6 months) on safety
+- Frames Shiny as a stand-in for any code running in production (always-on, external users, not run interactively) — and as the most demanding kind of R service because it runs an event loop servicing every user
+- A slow function (e.g. 10 seconds of data munging) run on the main Shiny loop blocks the entire app for every user, not just the one who triggered it
+- Standard fix is async: hand the task off to a `mirai` daemon (a worker) instead of running it on the main loop; Shiny's `ExtendedTask` API (available ~2-3 years) makes this easy
+
+### The dispatcher risk
+
+- Tasks sent to `mirai` go through a "dispatcher" — a task queue living inside the Shiny process that ensures optimal scheduling (next free worker always gets the next queued task)
+- Risk: if workers can't keep up with incoming tasks, the queue grows unbounded and can trigger an out-of-memory event that takes down dispatcher and the whole Shiny app
+- Old workaround: turn off dispatcher entirely, so tasks go to each worker in round robin — not optimal scheduling (one worker can be stuck with a backlog while others sit idle), but an OOM only kills one worker's queue rather than the whole app; you can then launch a replacement worker with a single function call
+- This is only recovery, not prevention: a downed worker still raises errors for the tasks it was holding, and relaunching a worker isn't instant, especially on an HPC cluster
+
+### Scaling safely: bounded queues and tryMirai
+
+- New primitives: a memory bound on `daemons()` (sized in megabytes) plus a new `tryMirai()` call
+- Once the queue exceeds the bound, a further `mirai()` call blocks — deliberate behavior for non-interactive/batch use, but unacceptable inside an event loop
+- `tryMirai()` behaves like `mirai()` except when the bound is hit: it returns `NULL` immediately instead of blocking, handing control straight back to the app so the developer can decide how to respond — warn the user, auto-retry, or fall back to a smaller subset of data
+
+### mori: shared memory for R
+
+- New package `mori` ("a phonetic play on memory"): one copy, many reads
+- Problem it solves: every async task submission serializes everything the expression needs, including any dataset it touches — e.g. a 200MB dataset gets re-serialized into the queue on every single task, and with many concurrent tasks this rapidly hits the dispatcher's memory bound
+- Fix: `share()` a dataset once into shared memory; subsequent task submissions pass a ~200-byte reference instead of the full 200MB object, so a Shiny app can support far more concurrent users within the same memory bound
+- `mori` objects are read-only by design — this is what guarantees correctness, since R functions can have side effects and a lazily-shared mutable reference could be silently mutated by another task (especially relevant for pipelines)
+
+### Deploy everywhere, extended
+
+- Recap from last year: prototype locally using cores on one machine; scale to other machines over SSH (local network or cloud instances, e.g. AWS); or launch workers on an HPC cluster via `mirai`'s cluster launcher; compute profiles let you route specific tasks to specific worker types
+- New this year: an HTTP launcher (any cloud service with a REST API for launching jobs can host a `mirai` worker), a launcher for on-prem Kubernetes (launch a worker in a pod), and auto-configuration on Posit Workbench (no configuration needed at all)
+
+::: {.callout-important}
+## Never block, never copy
+The two failure modes to design against in production R services: blocking the event loop (fix with async via `mirai`) and re-copying large objects into every task (fix with shared memory via `mori`).
+:::
+
+- Q&A: the `mirai`/`mori` combo isn't Shiny-specific — heavy modeling workloads (repeatedly sampling/iterating over the same dataset) are a strong use case, and Charlie is currently working with the tidymodels team to integrate this
+- Q&A: still relevant for Shiny apps containerized on Kubernetes — workers can be launched on other Kubernetes pods
+
+## Friends till the End(-to-end): Moving R and Python Projects into Pipelines with targets and Hamilton - Cory Adkins
+
+### The problem: ad hoc projects become fragile
+
+- Starting point: "one and done" projects — quick stakeholder request, some cleaning/analysis, a report, done — except stakeholders come back with new data, new features, or data-quality questions, usually all at once on a tight deadline
+- Result looks like "a crime scene": multiple "final" copies of a dataset, unclear whether a given figure came from the model with or without outliers removed, no record of what made it into the final report
+- 2026-specific wrinkle: LLM-added files nobody fully understands, "concerningly" sometimes prefixed `probe`
+
+### Data flow orchestrators and the DAG
+
+- A data flow orchestrator provides an opinionated language for expressing data processes plus tooling for managing their repeated execution
+- Core concept: the DAG (directed acyclic graph) — effectively a one-way flow chart; solid shapes are nodes, connecting lines are edges
+- Benefits: visible relationships between data assets; a git hash tied to the DAG's state (so you know exactly which commit produced which output/config, e.g. outliers-removed vs. not); caching — rerunning after a change only recomputes what actually changed downstream, reusing everything else
+
+### targets (R) and Hamilton (Python): a shared paradigm
+
+- Two orchestrators compared: R's `targets` package (created by Will Landau, released 2021) and Python's Apache Hamilton
+- `targets` is function-oriented (feels natural if you're used to tidyverse/functional programming with `purrr`) and embedded — it runs as an ephemeral R process rather than a separate persistent service
+- Hamilton scratches the same itch in Python and, Cory argues, will feel natural to an R user writing Python pipelines
+- Worked example: Palmer Penguins dataset, comparing a model using only bill measurements vs. one using bill + flipper measurements
+- Both frame a data flow as a package in its language: `targets` uses an `R/` directory of functions loaded by a `_targets.R` runner script; Hamilton uses a `source` folder of modules loaded by a `run.py` runner script
+- `targets` requires explicitly naming each node separately from its function (tip: nouns for node names since they're assets, verbs for function names since they do things); Hamilton infers the DAG directly from function names and parameters, so the function *is* the node — more succinct, but no longer a separate node/function split
+- Execution: `tar_make()` for targets, `driver.execute()` for Hamilton — both are commonly just run from the command line
+
+::: {.callout-tip}
+## The core mantra
+Functions declare nodes, and arguments draw edges. Whenever the mental model gets confusing, this single rule resolves it — in both `targets` and Hamilton.
+:::
+
+### Scaling with programmatic node definition
+
+- To move beyond hand-writing every node, both packages support a "function factory" approach — generating nodes programmatically rather than one at a time
+- Hamilton does this via Python decorators; three standouts:
+  - `@config` — conditionally branch a pipeline (e.g. the earlier outliers-removed-or-not toggle), useful for running the same flow in slightly different contexts
+  - `@parameterize` — reuse one function definition to produce multiple nodes (needed in Hamilton specifically because the function *is* the node, unlike in `targets`)
+  - `@subdag` — the favorite: analogous to `purrr::pmap` or Python's `itertools.starmap`, applying one function/tag across a grid of argument combinations; demoed fitting many model variants at once (e.g. varying feature engineering — binned vs. spline — and model parameterization — ordinal vs. binomial) instead of writing out each node by hand, useful especially for modeling frameworks not already well-served by tidymodels or scikit-learn workflows (e.g. a Stan model)
+
+::: {.callout-warning}
+## Not built for stateful ETL
+`targets` and Hamilton are ephemeral/stateless tools — they don't work well for complex extract-transform-load workloads writing into a stateful data warehouse/database, where the pipeline can drift out of sync with what's actually stored. Bolt-on tools exist (e.g. Python's `dlt` for data engineering), but neither package is well-suited to this by itself.
+:::
+
+### Closing
+
+- Both tools also double as a way to quickly rein in and prune unreviewed LLM-generated code contributions, by making the dependency graph visible
+- Suggested next step: take an existing ad hoc project and ask an LLM (e.g. Claude) to convert it into a `targets` pipeline — the payoff shows up in seconds
+- Q&A: main advantage over Unix `make` — `make` is file-oriented, while `targets`/Hamilton are function-oriented; if you like functional programming, you'll prefer the latter, but `make` remains a reasonable option
+
+## Quack to the Future: Building Traceable Data Lakehouses with DuckLake in R - Travis Gerke
+
+### The problem: data has no git-like audit trail
+
+- Opens with a "Marty McFly" bit — a talk about time travel for data, moving in reverse from the session theme (cluster back to laptop)
+- Motivating scenario: an analyst pulls a dated folder (`2026_0314`) and uses a `v2_final` Excel file for a March report; in July, returning to compare quarters, the March total has changed because the file was edited in place, with no record of why or by whom
+- Contrast with code: git gives every change a commit, author, and message, lets you check out past states, and gives you `git blame` — for data, teams generally just rely on dated folders and naming conventions, with no formal versioning or diffing
+
+### DuckLake: a lakehouse in a folder
+
+- `ducklake` is an R wrapper around the DuckLake lakehouse ecosystem (created by Hannes Mühleisen and Mark Raasveldt — names as transcribed were garbled, flagging for a check)
+- Lakehouse concept: tables live as open-format files (almost always Parquet — cheap storage/compute, columnar); a catalog tracks each table's files, versions, and metadata; writes are atomic transactions (never a half-committed state) — the same idea behind Delta Lake and Iceberg in the Spark world, but without needing a Spark cluster or platform team
+- On disk, a DuckLake is just a folder: Parquet files hold the data, and a plain SQL catalog (DuckDB by default; can be Postgres for multi-writer support, or MySQL) tracks tables, columns, metadata, and the change log
+- Works alongside existing R/DuckDB tooling (`duckdb`, `duckplyr`) with a similarly dplyr-flavored verb/noun interface
+- Setup is two lines: `library(ducklake)`, then `ducklake_attach()` — attaches an existing lakehouse at the given lake path, or creates a new one (with an `author` argument recorded for future audit) if nothing exists there yet
+
+### Building a medallion pipeline
+
+- Uses the medallion architecture: bronze (raw data, untouched, "sacred"), silver (cleaned/conformed — type conversions, renaming, deduplication), gold (analysis-ready, business logic applied, feeds reports)
+- Demo: creates the three schemas inside `with_transaction()` (borrowing the `with()` pattern to isolate the DuckDB transaction from the R session) — snapshot 1, authored and commit-messaged
+- Loads raw `mtcars`-style data into `bronze.vehicles` — snapshot 2
+- `get_ducklake_table()` pulls a **lazy** table from bronze; silver is built by selecting four columns and retyping `cylinder` from character to integer, then written with `with_transaction()` — snapshot 3
+- Gold groups by cylinder, computes average MPG and model count per cylinder — snapshot 4
+- Lazy evaluation matters for two reasons: it keeps the work inside DuckDB rather than pulling data into R (efficient), and DuckLake tables can exceed machine memory, so operations need to stay on disk until `collect()` is called
+- `list_table_snapshots()` surfaces the full audit log — every author and commit message across all five snapshots so far
+
+### Time travel: snapshots, diffs, and restoring mistakes
+
+- Demo: "Biff" deletes all vehicles getting more than 20 MPG from silver via `rows_delete()`, with the commit message "small tweak" — snapshot 5, row count silently drops from 32 to 18
+- `get_table_changes()` queries snapshot 5 directly and shows exactly what changed — 14 deletions, including the specific values removed
+- `restore_table_version()` restores `silver.vehicles` back to snapshot 3 (the known-good version), recorded as a new snapshot 6 with its own author — nothing is lost: the original correct version, Biff's mistake, and the restore are all preserved in the trail, which matters for regulated work (Travis works in pharma and needs to log exactly where data has been)
+
+::: {.callout-note}
+## Connects to Hadley's talk
+The row/column/cell-level diff UI shown live (click through snapshots to see exactly what changed) was inspired by Hadley Wickham's DataDiff talk on Day 1 — Travis built it the night before, with credit to Hadley for the idea.
+:::
+
+### Column-level lineage
+
+- A companion package (transcribed as `deeplineage`, name uncertain — flagging for a check) adds column-level lineage, the kind of capability tools like dbt or SQLMesh provide
+- `extract_lineage()` takes a table or list of tables; `lineage_flow()` walks the `dbplyr` tree behind the query/mutations and renders it as a diagram — e.g. showing that `silver.vehicles.cylinder` came from a character-to-integer transform on bronze, while `gold` columns like average MPG trace back through `mean(..., na.rm = TRUE)`
+- `lineage_downstream()` answers "what would break if I change this column" (e.g. bronze MPG changes cascade to silver MPG and gold average MPG)
+- The reverse function answers "where did this value come from" — e.g. gold's average MPG could trace back to either the raw bronze MPG or the curated silver MPG — turning impact analysis into a function call before touching upstream data
+
+### What's next
+
+- Both `ducklake` and the lineage package are on CRAN
+- DuckDB v2 is expected around October 2026 with significant changes; expect DuckLake to evolve alongside it (multi-writer support, sub-links, and related formalization work are active areas)
+- Q&A: snapshot storage cost scales with data size, but Parquet is storage-efficient; Travis's own work (clinical trials, phase 3 trials typically under ~8GB, mostly lab data) hasn't run into this — for genuinely large data, refer to DuckLake's own (non-R) documentation
+- Q&A: bringing in years of historical SAS/Excel files (one file per version) is feasible — `create_table()` can ingest CSV, Parquet, or Excel files directly, not just in-memory R objects; references someone locally known in Houston (name given as "Keith Magrally," uncertain — flagging for a check) who did a similar data-recovery investigation
+
+## Prepare locally, run remotely: Easily scale Tidymodels on Databricks with sparklyr - Edgar Ruiz
+
+### The problem: tuning is embarrassingly parallel but hardware-bound
+
+- Motivating example: a tidymodels grid search with 10 resampling folds x 100 hyperparameter combinations = 1,000 model fits — embarrassingly parallel in principle, but bounded by local hardware
+- Benchmarked on the tidymodels hospital-readmission dataset (fits in memory — not a big-data problem, just a lot of permutations): about an hour on a 4-core/4-thread Windows machine (the typical work laptop), about 30 minutes on an 8-core Linux machine
+- Options considered: stay local (core-limited); rent grid compute (cost, and still requires rewriting R code); move to a Spark cluster (solves the compute problem but requires rewriting the workflow in `sparklyr` and getting help standing up the cluster); run inside a Databricks notebook (still effectively limited to one node's cores even if the cluster has more)
+- Goal: reuse the exact same local tidymodels code, changing nothing except where the slow step (`tune_grid()`) actually executes
+
+### tune_grid_spark(): prepare locally, run remotely
+
+- Normal tidymodels flow (split, resample folds, preprocess, define model, build grid, tune) runs fast locally except step six, tuning — that's the one step this solution targets
+- `sparklyr` now provides `tune_grid_spark()` as a drop-in replacement for `tune_grid()` — same arguments (spec, recipe, resamples, `control_grid`), plus a Spark connection telling it where to run
+- Enabled by Spark Connect / Databricks Connect: the full resample, model, and recipe R objects are serialized and shipped to Spark directly (previously only flat/rectangular data could be sent this way)
+- Objects are hashed, so re-running after a small change (e.g. a tweaked recipe step) only re-uploads what actually changed, not everything
+- Tuning itself executes using R installed inside the Spark cluster; results are collected back into a standard tidymodels tune-results object, so the rest of the workflow continues unchanged
+
+### Getting full cluster parallelism
+
+- Gotcha: `tune()`'s `parallel_over` argument defaults to `"resamples"`, which caps concurrency at the fold count (e.g. 10) — invisible locally (an 8-core laptop can't exceed 8 anyway), but it also caps a 32-core Spark cluster at 10 concurrent tasks
+- Switching `parallel_over` to `"everything"` unlocks full cluster parallelism — every core the Spark session has becomes available
+
+::: {.callout-tip}
+## parallel_over is the real lever
+When moving tuning to Spark, changing `tune()`'s `parallel_over` argument from the default `"resamples"` to `"everything"` is what actually unlocks full cluster-wide parallelism — without it, concurrency stays capped at the fold count regardless of cluster size.
+:::
+
+### Benchmarks and caveats
+
+- Results on a 32-core cluster: ~5 minutes with `parallel_over = "resamples"`, ~2.8 minutes with `parallel_over = "everything"` — down from the ~1 hour (Windows) / ~30 minute (Linux) local baseline
+- Not geometric gains, but enough to change behavior: at an hour per run, further experimentation feels not worth it; at a few minutes, it opens the door to trying more parameter/feature combinations
+
+::: {.callout-warning}
+## Practical caveats
+- R and all required R packages must be installed on the cluster
+- Cross-OS runs (e.g. tuning on Windows/Mac vs. running on Linux) can produce slightly different results due to differing math engines — usually small, but worth validating
+- Pulling all predictions back across the wire adds significant time, especially over the internet
+- This solves the "fits in laptop memory but takes too long" problem, not a true big-data problem — larger-than-memory data still needs a full `sparklyr` rewrite
+:::
+
+### Databricks integration and cluster tooling
+
+- Databricks Connect makes spinning clusters up/down easy and lets you stay entirely in your own IDE (RStudio/Positron) rather than switching to a web notebook
+- Dedicated-mode Databricks clusters offer flexible package installation via a web UI (CRAN, alternate repos like Package Manager, other languages)
+- `brickster` (built by a Databricks-based package developer) lets you script cluster package installation instead of manually reinstalling through the UI each time a cluster is recreated
+- `rpy2` (a Python package) is required for R-to-Spark communication on Databricks and isn't installed by default — this also needs to be scripted into cluster setup
+- Documentation and a deployment write-up live at spark.posit.co (audio was garbled here — flagging the URL for a check)
+- Q&A: this workflow targets active model development, not scheduled/production model updates or drift monitoring, which is a different problem
+- Q&A: the underlying tuning algorithm is unchanged — it's still whatever's in the `tune` package; the engineering work was in faithfully replicating `tune`'s behavior inside Spark
+- Q&A: debugging a failed worker mid-tuning is possible via the Spark UI/logs (described as "a little clunky") but rarely necessary, since Spark-side logs typically expose more detail than a local `tune_grid()` run would
+
 ## Keynote: Pint Sized Presentations from Posit People
 
 - This replaced the originally-scheduled closing keynote (Emily's talk) after she became unavailable ("under the weather"); instead, the host (Hadley Wickham, per in-jokes from several speakers) recruited 12 Posit colleagues on short notice to each give an unrehearsed five-minute lightning talk, with a gong threatened for anyone running long.

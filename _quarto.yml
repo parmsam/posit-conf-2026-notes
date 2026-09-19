@@ -9,6 +9,7 @@ project:
     - study.qmd
     - study-flashcards.qmd
     - study-quiz.qmd
+    - study-teachback.qmd
 
 website:
   title: "posit::conf(2026) Notes"

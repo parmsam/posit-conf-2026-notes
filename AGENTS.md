@@ -12,7 +12,7 @@ Personal notes from posit::conf(2026) virtual, kept as Quarto documents.
 - `m3u8/` — gitignored. Session recording HLS manifests (`.m3u8`), saved manually from the browser (signed URLs expire).
 - `subtitles/vtt/`, `subtitles/markdown/` — gitignored. WebVTT subtitle files and flowing-text transcripts derived from `m3u8/`, one pair per session, named `<day>-<kebab-case-session-title>`. Populated by the `m3u8-subtitles` skill; don't hand-edit. Not part of the Quarto site (see "Website" below) — kept as local files only.
 - `_quarto.yml`, `index.qmd`, `knowledge.qmd` — the Quarto website that ties all of the above together for browsing (see "Website" below). `_site/` (render output) and `.quarto/` (cache) are gitignored.
-- `study.qmd`, `study-flashcards.qmd`, `study-quiz.qmd` — the "Study Materials" tab: a landing page plus a flashcards deck and a quiz deck (both RevealJS, via the `_extensions/parmsam/flashcards` and `_extensions/parmsam/quiz` extensions) hand-written from `day1.qmd` and `day2.qmd`, in that order, with a plain `## Day 2` divider slide separating each day's cards/questions in both decks. Refresh them when either day's notes gain new sections — see "Website" below for extension details.
+- `study.qmd`, `study-flashcards.qmd`, `study-quiz.qmd`, `study-teachback.qmd` — the "Study Materials" tab: a landing page plus a flashcards deck, a quiz deck, and a teach-back prompts page, all hand-written from `day1.qmd` and `day2.qmd`, in that order. The flashcards/quiz decks are RevealJS (via the `_extensions/parmsam/flashcards` and `_extensions/parmsam/quiz` extensions) with a plain `## Day 2` divider slide separating each day's cards/questions. `study-teachback.qmd` is a plain (non-RevealJS) page — one open-ended synthesis prompt per talk with a `::: {.callout-tip collapse="true"}` key-points answer, under `## Day 1`/`## Day 2` headings — since it's meant to be read and answered in writing, not clicked through like a deck. Refresh all three when either day's notes gain new sections — see "Website" below for extension details.
 
 ## Conventions
 
@@ -45,7 +45,7 @@ Use `qmd-url-defuddle` when asked to pull references out of the notes rather tha
 
 ## Website
 
-`quarto preview` (live) or `quarto render` (one-shot, outputs to `_site/`) builds a small site with these pages: Home (`index.qmd`), Day 1, Day 2, Knowledge, and Study Materials (`study.qmd`, linking out to `study-flashcards.qmd` and `study-quiz.qmd`). Transcripts (`subtitles/markdown/`) are deliberately excluded from the site — kept as local files, not published.
+`quarto preview` (live) or `quarto render` (one-shot, outputs to `_site/`) builds a small site with these pages: Home (`index.qmd`), Day 1, Day 2, Knowledge, and Study Materials (`study.qmd`, linking out to `study-flashcards.qmd`, `study-quiz.qmd`, and `study-teachback.qmd`). Transcripts (`subtitles/markdown/`) are deliberately excluded from the site — kept as local files, not published.
 
 - **Study Materials** (`study-flashcards.qmd`, `study-quiz.qmd`) render with `format: revealjs` (set in each file's own YAML frontmatter, overriding the project's default `html` format) via the `_extensions/parmsam/flashcards` and `_extensions/parmsam/quiz` extensions — installed with `quarto add parmsam/quarto-flashcards` / `quarto add parmsam/quarto-quiz` and checked into `_extensions/` per those extensions' own convention. See the `quarto-flashcards`/`quarto-quiz` skills or each extension's README for the slide markup.
 

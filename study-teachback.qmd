@@ -1,0 +1,397 @@
+---
+title: "Day 1 & 2 Teach-Back Prompts"
+---
+
+One open-ended prompt per talk — explain it out loud or in writing, as if to a colleague who wasn't there. These test synthesis and understanding, not recall, so they complement the [flashcards](study-flashcards.qmd) and [quiz](study-quiz.qmd) rather than duplicating them. Each prompt has a collapsed **Key points to hit** callout — check it only after you've tried to answer.
+
+## Day 1
+
+Prompts below are based on [Day 1 notes](day1.qmd).
+
+### Correct, reproducible, and transparent data agents — Sara Altman & Simon Couch
+
+**A colleague says "AI makes data analysis faster, so it must make it better." Push back on that, using the talk's own framing.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- AI broadens who can *convincingly* do analysis, not who can do it *correctly* — the traffic-drop hypothetical shows a plausible-looking wrong answer
+- Correctness problems (Conviviality's spreadsheet, the lab sign-error retractions) predate AI — it's not a new category of risk, just a faster way to produce it
+- "Slap a human on it" doesn't reliably fix this — approval fatigue and shifting trust mean human review degrades under an agent's plausible output
+- The fix is systemic (trusted-code routing like {commons}, data cleaning mode surfacing decisions) not a bolted-on checkpoint
+:::
+
+### From chats to workflows to "agents" — Timothy Keyes
+
+**Define harness, tool, and agent in your own words, and explain why the patient-chart-summarizer eval showed the agent pattern beating the workflow pattern on both quality *and* cost.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Harness = coordinates LLM + other systems; tool = a function the LLM can ask the harness to run; agent = an LLM using tools iteratively in a loop until done
+- Workflow (map-reduce over notes) re-reads every note every time — thorough but expensive
+- Agent only reads the notes it decides are relevant, so it's cheaper *and* avoids diluting quality with irrelevant context
+- Caveat: this isn't universal — it's empirical per task, which is why the three-question checklist (need an agent? who's in control? how will you evaluate it?) matters more than a rule of thumb
+:::
+
+### Yes And...AI in Your IDE — Allissa Dillman & Padmashri Saravanan
+
+**Using the squirrel-count persona study, explain why the same vague prompt on the same dataset produced three very different — and differently risky — outcomes.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Same prompt, three personas (data manager, data science student, environmental researcher) → different preserved/transformed/interpreted/discarded choices
+- The model shapes itself to match the deference/framing it's given, not just the literal task — echoes the politely- vs. rudely-phrased-question accuracy gap
+- Some changes are irreversible (silent NA conversion) even though the code runs fine and looks correct
+- Fix isn't better review — it's surfacing decisions *before* they're locked in, via narrowly-scoped pauses (only on question/method/story/interpretation changes, no editorializing)
+:::
+
+### Hello, robot: Introducing humans to LLM's — Kristin Bott
+
+**A non-technical colleague asks why an LLM can't tell them who's keynoting a conference. Explain the distinction the talk draws, and why it matters for how you'd train someone.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Model knowledge vs. tool capability — the raw model doesn't know, but a harness with a web-search tool can find out
+- The "Intro to AI" course deliberately stripped away conveniences first ("words in, words out") so learners built accurate raw mental models before naming concepts
+- The counting-letters-in-a-token exercise shows why intuition about difficulty can be wrong (tokens ≠ letters) — code beat direct-asking
+- Payoff wasn't tips/tricks (those go stale) but durable foundational understanding that removes fear and builds permission to experiment
+:::
+
+### From Tribal Knowledge to Trusted AI in Pharma — Tanya Cashorali
+
+**Why did this project's hardest problem turn out not to be technical? Walk through what "talking to humans first" actually uncovered.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Interviews revealed hidden ambiguity in terms everyone assumed they agreed on: "called on," "active patient," "recently"
+- Scattered tribal knowledge lived in heads, Shiny apps, and one person's manually-updated spreadsheet — none of it was in Snowflake yet
+- Recurring question patterns became reusable trusted data products (flags like `is_active`) plus a semantic layer teaching the AI the business's language
+- Closing point: the AI doesn't get to decide what words mean or whether a question is worth answering — the organization does, and that has to happen before the build
+:::
+
+### What Context Do Your AI Agents Actually Need — Sharon Wang
+
+**Why does the talk reframe "what context do agents need" as "what context do *you* need"? What's the risk of skipping that step?**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Best practices for agents churn constantly (92 frontier models in 2025, ~127 projected 2026) — a durable question has to be about you, not the current tooling
+- You can't write down for an agent what you don't understand yourself — domain expertise is what makes output correct, not just plausible
+- Context sources span pasted chat, harness auto-context, pre-written files (AGENTS.md, skills, memory), and on-demand lookup (MCP, file search)
+- Signs to start a new chat: a new task, a side quest, or catching yourself re-explaining in circles
+:::
+
+### AI Agents Deserve R — James Wade
+
+**A colleague argues you should always build agent tooling in Python because it's "the AI language." Counter that using the talk's framing.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Agents don't need the largest ecosystem, they need a *coherent* one — that coherence is the developer's job, not the language's
+- Only switch language when there's a compelling reason, not by default — models already understand Python/JS/R well enough from training
+- The `rill` demo shows a small set of R packages (shinychat, ellmer, deputy, dsprrr) each contributing one distinct capability
+- Gaps in the R ecosystem are small enough to see and port yourself — agents make that porting cheap
+:::
+
+### MCP, or not MCP — Neal Richardson
+
+**Explain when you'd reach for a skill, a CLI, or a custom MCP server, and why "the lethal trifecta" is the risk to keep in mind regardless of which you pick.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Skills are enough if the agent's existing tools can already do the job; a CLI beats MCP when it already exists and is in training data (e.g. `gh`); a custom MCP server beats a new CLI when neither of those hold
+- Using a personal-auth CLI hands the agent everything you can personally do on that service — harder to scope down than a purpose-built MCP tool
+- Lethal trifecta: private data access + untrusted content exposure + ability to communicate out = exfiltration risk via prompt injection, easy to satisfy accidentally
+- Best-practice defense: narrow tool scope, concise responses, data hygiene — narrow tools "leave prompt injection with empty hands"
+:::
+
+### Why Is AI Costing Me So Much Money? — Winston Chang
+
+**Explain why coding-agent costs grow roughly quadratically with conversation length, and name two concrete levers to control it.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- LLMs are stateless — every request resends the entire prior conversation, so cost is a cumulative sum of growing requests, not a flat per-turn cost
+- Agentic loops multiply this: one user request can fan out into many tool-call round trips, each resending the growing conversation
+- Caching is the biggest lever — repeated input tokens served at ~1/10th cost if they match a prior request's order
+- Other levers: start a new conversation per task, pick a cheaper model when the task allows it, write handoff docs instead of extending one long chat
+:::
+
+### data-dict & data-diff — Hadley Wickham
+
+**Explain "write shit down, then look at how shit has changed" using data-dict and data-diff specifically — and why data science needs this more than software engineering does.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Software engineering can automate pass/fail checks (unit tests) and try many approaches; data science is trying to uncover something true about reality that can never be fully verified — only the *process* can be sanity-checked
+- data-dict: a YAML spec recording column types/descriptions/joins/glossary — written down *before* trusting agent-driven cleaning
+- data-diff: shows the semantic difference between two data frames, distinguishing type-only changes from real value changes, surfacing columns that change together
+- Agent-driven cleaning changes code, metadata, and data together — cross-checking all three is far more trustworthy than checking any one alone
+:::
+
+### The Shiny AI Stack — Garrick Aden-Buie & Carson Sievert
+
+**Describe the ellmer → shinychat → domain-package stack, and explain what querychat's SQL-only restriction buys you.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- ellmer/chatlas normalize provider differences → shinychat provides the chat UI toolkit (R & Python) → domain-specific packages like {commons} or querychat build on top
+- querychat deliberately restricts agent code execution to SQL/ggsql only — a safety/capability tradeoff that lets read-only DB permissions be enforced at the database layer
+- New shinychat features (branching, citations, slash commands, chat drawer, persistent history) all point toward chat as a first-class app surface, not a bolt-on widget
+- querychat's hand-off command converts a chat finding into a standalone, editable source document — decoupling a result from the long-lived chat session
+:::
+
+### AI Agents for Data Science: Posit Assistant, Commons, and Beyond — Joe Cheng
+
+**Explain the trust-ladder idea behind Commons — what are the three response markers, and how does the Trajectory Reviewer move traffic up the ladder over time?**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Three markers: 🟢 trusted calculation, 🔵 cited trusted context, 🟡 freehand code with no trust anchor
+- Commons routes questions through trusted code the team already relies on instead of always generating bespoke code
+- Trajectory Reviewer captures real post-deployment conversations (with disclosure) to see what questions actually come up
+- That feedback loop feeds a coding agent to add new measures/context — turning recurring freehand-fallback questions into new trusted calculations
+:::
+
+### AI Governance in Posit Team — Elliot Murphy
+
+**Explain why "stronger prompting" is the wrong fix for an agent that ignored an instruction, and what the talk proposes instead.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- About half the room had seen an agent do something they told it not to — prompting isn't reliable enough to prevent that
+- Fix: a deterministic pre-tool-call hook that blocks a command before it runs — no LLM involved, so it can't be argued or missed
+- Governance = capabilities that drive principled performance; compliance = a quality floor, not a guarantee; risk = probability of loss to manage, not eliminate
+- The FDIC two-week-vacation rule illustrates: good governance mechanisms outlive the specific technology they were designed against
+:::
+
+### Keynote: How to Be Clear When You Can't Be Certain — Christine Zhang
+
+**Using at least two of the three case studies, explain why "the statistically correct chart" isn't always the right chart to publish.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Polls: the Times chose the less statistically precise uniform-band chart over the bell-curve chart because most readers aren't fluent in reading density shapes
+- Election night: full time-series forecasts got simplified into "needles" for broad audiences, but the Michigan primary deliberately dropped the needle because its dial-swing feels more decisive than warranted when polling is unreliable
+- Jobs report: no confidence interval shown, since sampling error isn't the dominant uncertainty at that survey's scale, and the fix for volatile monthly bars is a moving average, not an interval
+- Closing lessons: don't hide uncertainty just because it's hard to show clearly; design for your specific audience; call out revisions without losing the trend
+:::
+
+## Day 2
+
+Prompts below are based on [Day 2 notes](day2.qmd).
+
+### Keynote: Navigating the Agentic Future — Wes McKinney
+
+**Explain the judgment/taste/agency framing, and why McKinney argues these matter *more*, not less, in an agent-driven workflow.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Judgment (deciding what to do), taste (knowing when it's good), agency (making it happen) — without them, agent output becomes slop someone else has to clean up
+- Surgical-team model (Brooks): implementers aren't just labor, they check the architect's conceptual integrity — replacing them with compliant agents concentrates that burden onto fewer people
+- Code isn't free — every line that lands is a future burden on every later agent session; "no" and hitting escape are underused tools
+- Reverse-centaur risk: a human just pressing buttons a machine can't press itself, rather than the machine genuinely assisting the human
+:::
+
+### Quarto + Accessibility + You — Charlotte Wickham
+
+**Explain the division of responsibility between Quarto and the author for accessibility, with a concrete example of each side's job.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Quarto's job: translate correct markdown into correct, accessible markup (e.g. `##` → a real `<h2>`)
+- Author's job: structure with proper heading levels and descriptive heading text, and supply alt text — Quarto will never invent alt text for you
+- Concrete example: quarto.org's missing skip-to-content link was Quarto's own gap (fixed in 1.11); missing `fig-alt` on a figure is the author's gap
+- Automated tools can't catch everything — manual checks (tab-only navigation, zoom, mobile layout, reviewing generated figures) still matter
+:::
+
+### Slideware Is Dead - Long Live Quarto — Emil Hvitfeldt
+
+**Trace the two failed(-ish) attempts at drag-and-drop slide editing before Quarto Hub, and explain what actually removed the bottleneck.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- V1 (Reveal Editable extension): a hack that regexes the rendered HTML back into source — works but fragile, and still requires a full render cycle
+- V2 (menu-bar UI): removes needing to pre-mark elements, but the UI/UX render-and-wait loop is still too slow in practice
+- The bottleneck was never the *feature* concept — it was render latency; Quarto 2's Rust rewrite cuts render time from minutes to fractions of a second
+- Quarto Hub then syncs the rendered view and source instantaneously, turning a two-week feature build into ~15 minutes
+:::
+
+### Quarto Hub — Carlos Scheidegger
+
+**Explain what makes real-time multi-person editing possible here, and name one thing Quarto Hub deliberately doesn't do yet.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Built on Automerge (a CRDT), decentralized by design — collaboration can run local or hosted
+- Runs entirely in-browser via a virtual file system with a large chunk of Pandoc ported to Rust/WASM, re-rendering the whole document on every keystroke since it's fast enough to do so
+- Source and WYSIWYG editors are independent collaborators over the same representation, not two modes converted between — fixes the old source↔visual-editor sync pain
+- Not yet there: non-HTML output formats, IDE integration, code execution, Git integration, custom extensions — and the public preview explicitly isn't for sensitive data
+:::
+
+### The NASA Earthdata Cloud Cookbook — Andy Teucher
+
+**Explain why Quarto specifically fit this project's needs, beyond "it can render R and Python."**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Contributors split between Python and R, and are mostly scientists rather than software developers — Quarto's plain-text simplicity and first-class dual-language support lower the bar to contribute
+- Accepts both `.qmd` and Jupyter `.ipynb` and renders both consistently
+- Freeze lets each document manage its own dependencies independently, so the whole site doesn't need one shared environment
+- The real workflow driver is the biweekly co-working model (screen-sharing as onboarding) — Quarto is the enabling tool, not the whole story
+:::
+
+### Clinical data harmonization with LLMs — Leslie Emery
+
+**Explain the three-piece workflow (data model, harmonization config, pipeline code) and why the team started with the "wrong" easiest-looking dataset first.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Data model and pipeline code are one-time reusable setup; harmonization config files are the one step repeated per dataset per trial
+- Both YAML artifacts are LLM-drafted, but working from data dictionaries (not full datasets) keeps token usage far lower
+- Starting with the "easiest" dataset (demographics) backfired — hundreds of columns blew the model's context; a narrower-but-longer dataset had to come first
+- General lesson: design around the LLM's actual constraints, not human intuition about what's easy
+:::
+
+### Package Your Judgment, Keep Your Intent — Mirian Lima
+
+**Explain the core thesis in your own words, and how OSA Metrics' four-verb workflow puts it into practice.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Unpackaged, your judgment dies inside the context window; packaged (skills, MCP, hooks), it accumulates
+- Four verbs: discovery (find relevant indicators), semantic model (define dimensions/metrics), iterative Q&A (inspectable query + chart pairs), save the story not the answer (a reproducible session export with no raw data)
+- Split architecture (centralized engine, decentralized metrics package) keeps analysts self-service without sacrificing traceability
+- Only the codifiable part of tacit knowledge can be packaged — intent (what matters, what's relevant) stays with the human
+:::
+
+### When the data doesn't fit the question — Kelli Goggans
+
+**Using the "messy data is bad format, not bad data" framing, explain the three-step process (define your limits, identify standards, refine your analysis) with the publication-database example.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- The question doesn't set your limits — you do; narrowed 5 databases with 100+ incompatible variables down to 4 usable columns
+- No database could be crowned "most correct," so the standard became the union of all publication IDs across all 5 — the ~75% overlap was trustworthy, scrutiny focused on the remaining ~25%
+- The literal question ("which database is best") got reframed around accuracy once the data showed that framing didn't fit
+- End result was a reusable environment/method a colleague could step into, not just a one-off answer
+:::
+
+### LLM-Powered Data Workflows — Yasha Kaushal, PhD
+
+**Explain why pointing Claude Code directly at raw files failed, and what "deterministic core + human-in-the-loop + LLMs for tedium" means concretely.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Same prompt, same files, different sessions → different results (407 vs. 464 households) with no error thrown — invisible, unauditable, and not fixed by a smarter model
+- Arithmetic (matching, summing, deduplication) never touches a model; only ambiguous classification/mapping does
+- Architecture: Agent 1 maps raw columns to a fixed schema (flagging low-confidence cases for human review) → deterministic engine applies fixed rules → Agent 2 writes a plain-language QA report
+- None of reproducibility, auditability, explainability, or downstream cost improve just because the model gets smarter
+:::
+
+### Roll for Wisdom — Max Kuhn
+
+**Explain the intelligence-vs-wisdom framing, and the three concrete ways the talk proposes to build wisdom into a system.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Intelligence = book smart (factual); wisdom = street smart (judgment, knowing what not to do) — LLMs have plenty of the former, not the latter
+- The DataBot test-set example: 9/10 runs correctly asked before evaluating, but once it just fit and reported test-set results because the function happened to expose that argument
+- Three fixes, ranked by effectiveness: APIs with guardrails (tidymodels' `last_fit()`) > prompt nudges (report test-set usage count) > rules/skill files (verbose, costly, unclear payoff)
+- Closing point: humans with domain expertise remain the safety net regardless of which fix you use
+:::
+
+### Three Agents, Two Mistakes — Sam Clark
+
+**Trace Positron Assistant → DataBot → Posit Assistant, and explain the "real lesson" the talk draws from that lineage.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Positron Assistant (forked Copilot): batteries-included but behaved like software-engineering autocomplete, not data-science-aware, and cost a huge ongoing upstream-merge burden
+- DataBot: minimal tools (2), real autonomy, but no file-editing meant regenerating whole documents for one-line changes
+- Posit Assistant: DataBot's shape (session access, inline plots) + Positron Assistant's reach (ambient context, bring-your-own-model) + new capabilities (skills, plugins) neither parent had
+- The real lesson: models weren't the bottleneck (they kept improving regardless) — the harness determines whether that capability actually takes the shape of real data science work
+:::
+
+### Between Code and Conclusions — Nicky Bell
+
+**Explain the three reasons LLMs won't naturally develop a "data analyst mindset," and what Circuit's "walk away" verdict is meant to prevent.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Outcome-oriented (self-critique isn't seen as efficient token use), lack imagination (weak at reasoning about what *isn't* in the data), learned our bad habits (picked up humans' selection-bias/causation-correlation errors from training data)
+- Circuit fans out 7 specialized reviewers (measurement, sampling, causality, uncertainty, missing data, outliers, visualization) over an LLM-generated analysis
+- "Walk away" and "provisional" verdicts exist so the tool can say an analysis is unsolvable or fatally flawed, instead of always producing a confident answer
+- Framed as part of a shared responsibility: labs pacing the frontier isn't enough — users need the analyst mindset too, especially as it reaches into everyday decisions
+:::
+
+### Teach Once, Use Often — Tyson Barrett
+
+**Explain the delegate/collaborate/own framework, and why the talk argues most harnesses default to the wrong bucket.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Delegate = full trust, mistakes are obvious (slides, color palettes); collaborate = AI drafts, you decide (code, planning, EDA); own = your expertise is essential (model spec, interpretation)
+- Most harnesses default to "delegate" for everything, so you have to deliberately design your usage rather than accept the default
+- CLAUDE.md/AGENTS.md is read every session so it should stay lean (explicit rules only); skills are triggered on demand so they can be a "kitchen sink" for one recurring task
+- Closing metaphor: "hammer down the nails" — control what you delegate/collaborate/own rather than letting AI default to full delegation
+:::
+
+### Never Block, Never Copy: mirai + mori — Charlie Gao
+
+**Explain the two production failure modes this talk designs against, and how each new primitive (`tryMirai`, `mori`) addresses one of them.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Blocking the event loop: a slow function on Shiny's main loop blocks the app for *every* user, not just the one who triggered it — fixed with async via `mirai`
+- Unbounded queue risk: if workers can't keep up, the dispatcher's queue can grow into an OOM that takes down the whole app
+- `tryMirai()` returns `NULL` immediately once a memory bound is hit instead of blocking — hands control back to the app to decide how to respond
+- `mori` shares a dataset once into shared memory so each task submission passes a small reference instead of re-serializing the full object — fixes re-copying large objects into every task
+:::
+
+### Friends till the End(-to-end): targets and Hamilton — Cory Adkins
+
+**Explain the "functions declare nodes, arguments draw edges" mantra, and what problem a data-flow orchestrator solves that ad hoc scripts don't.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- An ad hoc "one and done" project accumulates multiple "final" datasets and unclear provenance once stakeholders come back with changes
+- A DAG makes relationships between data assets visible, ties a git hash to exactly what produced what, and caches so only what changed downstream gets recomputed
+- `targets` is function-oriented and embedded (ephemeral R process); Hamilton infers the DAG from function names/parameters directly, so the function *is* the node
+- Both are ephemeral/stateless — not built for complex stateful ETL into a data warehouse, which needs different tooling
+:::
+
+### Quack to the Future: DuckLake — Travis Gerke
+
+**Explain what a DuckLake gives you that a folder of dated Excel files doesn't, using the "Biff deletes rows" example.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- A lakehouse pairs open-format files (Parquet) with a catalog tracking versions/metadata via atomic transactions — like Delta Lake/Iceberg but without needing a Spark cluster
+- Every write is a snapshot with an author and commit message — nothing like `git blame` exists for a folder of dated Excel files
+- When Biff silently deletes rows, `get_table_changes()` shows exactly what changed, and `restore_table_version()` recovers the known-good version — the mistake, the fix, and the original are all preserved in the trail
+- Column-level lineage (`lineage_downstream()`/reverse) answers "what breaks if I change this" and "where did this value come from" as a function call, not manual archaeology
+:::
+
+### Prepare locally, run remotely: sparklyr on Databricks — Edgar Ruiz
+
+**Explain what `tune_grid_spark()` actually changes about a tidymodels workflow, and why `parallel_over` mattered so much for the speedup.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit
+- Goal: reuse the exact same local tidymodels code, changing nothing except *where* `tune_grid()` executes
+- Spark Connect ships the full resample/model/recipe R objects to the cluster directly, hashed so only changed objects re-upload
+- `parallel_over` defaults to `"resamples"`, capping concurrency at the fold count — invisible on a laptop, but it also caps a 32-core cluster at 10 concurrent tasks
+- Switching to `"everything"` unlocked most of the observed speedup (~5 min → ~2.8 min on 32 cores) — a config default, not raw compute, was the bottleneck
+:::
+
+### Keynote: Pint Sized Presentations from Posit People
+
+**Pick two of the twelve lightning talks. For each, explain the non-AI/non-technical story used as the framing device, and the one lesson it was meant to illustrate.**
+
+::: {.callout-tip collapse="true"}
+## Key points to hit (a few examples — pick any two you remember)
+- Jenny Bryan: a personal file-naming convention (underscores for fields, hyphens for words, left-padded numbers) removes small daily decisions and keeps files machine- and human-readable
+- Karim Ghatani: termite mounds self-repair overnight through emergent architecture — "nature is constantly building great products without an AI subscription"
+- James Blair (Fred the plant): consistency and patience produce growth that isn't visible moment to moment
+- Joe Cheng's jargon trio: bike shedding (arguing the trivial while the hard decision goes unexamined), onion in the varnish (a step repeated long after its original reason is gone), rubber ducking (explaining a problem out loud often reveals the fix)
+:::

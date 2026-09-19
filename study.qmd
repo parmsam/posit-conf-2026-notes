@@ -2,14 +2,15 @@
 title: "Study Materials"
 ---
 
-Self-test decks generated from the [Day 1](day1.qmd) and [Day 2](day2.qmd) notes, built with the [quarto-flashcards](https://github.com/parmsam/quarto-flashcards) and [quarto-quiz](https://github.com/parmsam/quarto-quiz) RevealJS extensions. Each opens as its own slide deck — use the browser back button to return here.
+Self-test materials generated from the [Day 1](day1.qmd) and [Day 2](day2.qmd) notes. The flashcards and quiz are RevealJS decks built with the [quarto-flashcards](https://github.com/parmsam/quarto-flashcards) and [quarto-quiz](https://github.com/parmsam/quarto-quiz) extensions and open as their own slide decks — use the browser back button to return here. Teach-back prompts are a plain page, meant to be read and answered in writing rather than clicked through.
 
 ## Contents
 
 - [**Flashcards**](study-flashcards.qmd) — one flip card per talk's key concept, Day 1 then Day 2; press `q` to flip, `t` to shuffle
 - [**Quiz**](study-quiz.qmd) — multiple-choice questions across both days, with a running score; press `c` to check an answer
+- [**Teach-Back Prompts**](study-teachback.qmd) — one open-ended synthesis prompt per talk, with a collapsed key-points answer to check against; tests understanding rather than recall
 
 ::: {.callout-note}
 ## Keep these in sync
-Both decks are hand-written from `day1.qmd`/`day2.qmd`, not auto-generated — when new sections are added to either day, the flashcards/quiz should be refreshed to match.
+All three are hand-written from `day1.qmd`/`day2.qmd`, not auto-generated — when new sections are added to either day, the flashcards/quiz/teach-back prompts should be refreshed to match.
 :::

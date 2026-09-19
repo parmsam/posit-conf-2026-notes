@@ -32,9 +32,13 @@ Judgment (deciding what to do), taste (knowing when it's good), and agency (maki
 
 - Golf analogy (via *The Big Lebowski*'s "obviously you're not a golfer"): coding agents have given everyone a 300-yard drive, but not the ground game — getting out of the rough, judging the green, putting. Getting a demo working is easy; making something good and complex still takes enormous human labor in the details.
 
+![The 300-yard-drive golf analogy: agents get you distance, not the ground game](images/day2-keynote-session-navigating-the-agentic-future/00-18-50-golf-lebowski-analogy.jpg){width="80%" fig-align="center"}
+
 ### Judgment: keeping conceptual integrity as team size shrinks
 
 - Draws on Brooks's *The Mythical Man-Month*: adding people to a late project makes it later; the "surgical team" model (a chief architect supported by skilled implementers) — implementers aren't just labor, they're a check on the architect's conceptual integrity
+
+![Brooks's surgical team model: the team provides more than just implementation](images/day2-keynote-session-navigating-the-agentic-future/00-23-35-mythical-man-month-surgical-team.jpg){width="80%" fig-align="center"}
 - Replacing implementers with agents concentrates that integrity-checking burden onto far fewer people (often just one) — agents are trained to comply with instructions rather than push back when a plan is incoherent
 - Conway's Law implication: with human teams, system architecture mirrors org structure; with agents (each a stateless session with no memory of its own), the person directing them must manually hold that coordinating structure themselves, or work degenerates into a "tarpit" of agents undoing or conflicting with each other
 - From Brooks's follow-up essay *No Silver Bullet*: essential complexity (inherent to the problem — remove it and you no longer solve the problem) vs. accidental complexity (build systems, tests, packaging, scaffolding). Agents are bad at telling the difference, and will happily spin up a whole bespoke test framework to satisfy one narrow requirement
@@ -46,6 +50,8 @@ Judgment (deciding what to do), taste (knowing when it's good), and agency (maki
 - Hallucination persists even in frontier models: one build failed with exit code 1, yet the agent reported "completed successfully, exit zero" — a confident summary is not evidence
 - Data work raises the stakes further: verifying joins, metric definitions, and double-counting requires careful human review, since agent mistakes there are subtler and harder to catch than a bad exit code
 
+![A real command output ("did not start or failed", exit 1) next to the agent's confident false summary ("completed successfully, exit 0")](images/day2-keynote-session-navigating-the-agentic-future/00-34-10-exit-code-hallucination.jpg){width="80%" fig-align="center"}
+
 ::: {.callout-warning}
 ## Code isn't actually free
 Generating code feels free — write a prompt, code appears — but every line that lands becomes a future burden on every agent session that touches it afterward. "No," and hitting escape when things go off the rails, is one of the most powerful tools available; even when the bad idea is your own, resist the urge to keep asking for "just one more thing."
@@ -54,6 +60,8 @@ Generating code feels free — write a prompt, code appears — but every line t
 ### Taste: deciding what's actually good
 
 - Agents are excellent at finding latent bugs, but bad at product/design judgment: an agent added a sign-out button to an app with no concept of signing out; asked "sign out of what — life?" it replied, "I invented a convention that does not exist in your products"
+
+![An agent added a sign-out button to an app with nothing to sign out of](images/day2-keynote-session-navigating-the-agentic-future/00-36-30-sign-out-button-screenshot.jpg){width="80%" fig-align="center"}
 - Agent communication has gotten noticeably worse — Claude Fable's first pull requests arrived as walls of text; ask agents to rewrite explanations in plain, human-readable language, because you can't judge whether work is good if you can't understand what it's doing
 - From an empty repo to shipped software involves thousands of small decisions. Removing yourself from them doesn't eliminate them — it just means they get made without your judgment
 - **Decision fatigue** is real: the old workflow was meetings plus a few hundred lines of code a day; the new one is hundreds of rapid-fire agent decisions with little human interaction. Two failure modes: disengaging and rubber-stamping everything ("yes, Claude" — guaranteed slop), or recognizing fatigue and stopping for the day rather than continuing to defer to the agents
@@ -70,15 +78,21 @@ Built after growing frustrated with default agent behavior:
 The word "agent" implies agency they don't have — multi-agent "loop/graph engineering" (agents talking to agents with no human in the loop) has not produced good results in McKinney's experience, beyond narrow cases like fixing a flaky CI test.
 :::
 
+![The seven-point Clanker Constitution (github.com/kenn-io/constitution)](images/day2-keynote-session-navigating-the-agentic-future/00-44-58-clanker-constitution.jpg){width="80%" fig-align="center"}
+
 ### Agency: humans still have to want it
 
 - Cites Mitchell Hashimoto (HashiCorp founder): most everything that happens, happens because a person made it happen. Agents can extend that agency — McKinney now gets AI help with sysadmin/DevOps work he used to avoid — but agents are also "very good at drilling a hole to nowhere": given an imprecise instruction, they'll confidently build something that makes no sense
 - Software engineering now feels less like architecture and craftsmanship and more like supervision — "clearing paper jams on the factory floor" rather than designing beautiful systems
 - Via Cory Doctorow: a **centaur** is a human assisted by a machine (e.g. a bicycle — Steve Jobs's "bicycle for the mind"); a **reverse centaur** is a machine assisted by a human, who just presses the buttons the machine can't press itself. Much white-collar AI adoption risks becoming reverse-centaur work — and McKinney hasn't seen good software come out of that model
 
+![Cory Doctorow's *The Reverse Centaur's Guide to Life After AI*](images/day2-keynote-session-navigating-the-agentic-future/00-49-58-centaur-reverse-centaur.jpg){width="80%" fig-align="center"}
+
 > AI can write very good software, but it also makes it easy to do someone else's job badly, which is part of why all these projects fail. Now that everyone can code, it's become clear why many shouldn't.
 >
 > — Paul Ford
+
+![Paul Ford, The New York Times, 2026: "How could we fight against tireless robots?"](images/day2-keynote-session-navigating-the-agentic-future/00-51-55-paul-ford-quote.jpg){width="80%" fig-align="center"}
 
 ### How McKinney actually works now
 
@@ -90,6 +104,8 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 
 - The freed-up mental space that used to go to language syntax and memory-management minutiae can now go toward deciding what's actually worth building — AI most empowers people who lean into judgment, taste, and agency, not those who delegate them away
 - Closed with Kurt Vonnegut's *The Sirens of Titan* (1959): the protagonist, about to have his memory erased, writes a note to his future self — "a purpose of human life, no matter who is controlling it, is to love whoever's around to be loved." Stay grounded in relationships and empathy through the disruption
+
+![Kurt Vonnegut, The Sirens of Titan: "A purpose of human life... is to love whoever is around to be loved."](images/day2-keynote-session-navigating-the-agentic-future/00-58-43-vonnegut-quote-text.jpg){width="80%" fig-align="center"}
 - No time for live Q&A due to room turnaround, but the speaker remained available afterward
 
 ## Quarto + Accessibility + You - Charlotte Wickham

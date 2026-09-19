@@ -39,6 +39,7 @@ Judgment (deciding what to do), taste (knowing when it's good), and agency (maki
 - Draws on Brooks's *The Mythical Man-Month*: adding people to a late project makes it later; the "surgical team" model (a chief architect supported by skilled implementers) — implementers aren't just labor, they're a check on the architect's conceptual integrity
 
 ![Brooks's surgical team model: the team provides more than just implementation](images/day2-keynote-session-navigating-the-agentic-future/00-23-35-mythical-man-month-surgical-team.jpg){width="80%" fig-align="center"}
+
 - Replacing implementers with agents concentrates that integrity-checking burden onto far fewer people (often just one) — agents are trained to comply with instructions rather than push back when a plan is incoherent
 - Conway's Law implication: with human teams, system architecture mirrors org structure; with agents (each a stateless session with no memory of its own), the person directing them must manually hold that coordinating structure themselves, or work degenerates into a "tarpit" of agents undoing or conflicting with each other
 - From Brooks's follow-up essay *No Silver Bullet*: essential complexity (inherent to the problem — remove it and you no longer solve the problem) vs. accidental complexity (build systems, tests, packaging, scaffolding). Agents are bad at telling the difference, and will happily spin up a whole bespoke test framework to satisfy one narrow requirement
@@ -107,6 +108,7 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 - Closed with Kurt Vonnegut's *The Sirens of Titan* (1959): the protagonist, about to have his memory erased, writes a note to his future self — "a purpose of human life, no matter who is controlling it, is to love whoever's around to be loved." Stay grounded in relationships and empathy through the disruption
 
 ![Kurt Vonnegut, The Sirens of Titan: "A purpose of human life... is to love whoever is around to be loved."](images/day2-keynote-session-navigating-the-agentic-future/00-58-43-vonnegut-quote-text.jpg){width="80%" fig-align="center"}
+
 - No time for live Q&A due to room turnaround, but the speaker remained available afterward
 
 ## Quarto + Accessibility + You - Charlotte Wickham

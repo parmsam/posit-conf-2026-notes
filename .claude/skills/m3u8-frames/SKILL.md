@@ -51,7 +51,7 @@ $ARGUMENTS: optional path to a specific `.m3u8` file, and/or the session slug/ti
    ![architecture diagram](images/day1-example-talk/12-34.jpg)
    ```
 
-   so the user can drop it straight into the relevant `###` subsection of `day1.qmd`/`day2.qmd`.
+   so the user can drop it straight into the relevant `###` subsection of `day1.qmd`/`day2.qmd`. If dropping these in directly yourself rather than handing them back, always leave a blank line after the image line before whatever follows (another bullet, a heading, prose) — an image glued directly to the next line with no blank line between them is a subtle Quarto/pandoc markdown bug that's easy to miss on a quick read.
 
 ## Notes
 

@@ -62,6 +62,7 @@ Generating code feels free — write a prompt, code appears — but every line t
 - Agents are excellent at finding latent bugs, but bad at product/design judgment: an agent added a sign-out button to an app with no concept of signing out; asked "sign out of what — life?" it replied, "I invented a convention that does not exist in your products"
 
 ![An agent added a sign-out button to an app with nothing to sign out of](images/day2-keynote-session-navigating-the-agentic-future/00-36-30-sign-out-button-screenshot.jpg){width="80%" fig-align="center"}
+
 - Agent communication has gotten noticeably worse — Claude Fable's first pull requests arrived as walls of text; ask agents to rewrite explanations in plain, human-readable language, because you can't judge whether work is good if you can't understand what it's doing
 - From an empty repo to shipped software involves thousands of small decisions. Removing yourself from them doesn't eliminate them — it just means they get made without your judgment
 - **Decision fatigue** is real: the old workflow was meetings plus a few hundred lines of code a day; the new one is hundreds of rapid-fire agent decisions with little human interaction. Two failure modes: disengaging and rubber-stamping everything ("yes, Claude" — guaranteed slop), or recognizing fatigue and stopping for the day rather than continuing to defer to the agents

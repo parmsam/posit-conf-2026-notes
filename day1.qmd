@@ -16,10 +16,14 @@ Some sections of these notes are drafted from auto-generated session captions ra
 - AI has broadened who can *convincingly* do data analysis, not who can do it *correctly*
 - **Opening hypothetical**: a VP asks a coding agent "how is traffic trending?" — the agent picks the wrong table and produces a plausible chart showing a 64% drop, but the real cause was a tracking bug, not an actual decline. A month later nobody can reproduce it (agent history/temp files are gone). Based on a real "vibe analyzing data" pattern Posit has observed.
 
+![The agent's confident-but-wrong "64% down" chart demo](images/day1-keynotes-correct-reproducible-transparent-data-agents-and-building-the-future/00-11-48-traffic-chart-64-drop.jpg){width="80%" fig-align="center"}
+
 ### Correctness problems predate AI
 
 - https://www.accountingweb.co.uk/business/management-accounting/convivialitys-spreadsheet-hell-sinks-the-business — a spreadsheet error sank a UK beverage wholesaler (Conviviality)
 - https://www.science.org/doi/10.1126/science.314.5807.1856 — a sign error in closed-source lab software forced five paper retractions
+
+![The Conviviality spreadsheet-error headline](images/day1-keynotes-correct-reproducible-transparent-data-agents-and-building-the-future/00-15-42-conviviality-spreadsheet.jpg){width="80%" fig-align="center"}
 
 ### Correct *and* convenient — not mutually exclusive
 
@@ -29,14 +33,22 @@ Some sections of these notes are drafted from auto-generated session captions ra
     >
     > — JJ Allaire
 
+![JJ Allaire's 2011 RStudio mission statement](images/day1-keynotes-correct-reproducible-transparent-data-agents-and-building-the-future/00-17-24-rstudio-2011-quote.jpg){width="80%" fig-align="center"}
+
 - https://posit.co/blog/databot-is-not-a-flotation-device — Databot (Aug 2025, EDA agent in Positron) shipped with an explicit failure-mode warning; Joe Cheng called it his most exciting *and* most dangerous project
 - Why keep building despite the risk: curiosity is data science's throughline, and AI tools continue that lineage (like the tidyverse)
+
+![Joe Cheng: Databot was "the most exciting... and also the most dangerous" software he's worked on](images/day1-keynotes-correct-reproducible-transparent-data-agents-and-building-the-future/00-20-19-databot-most-dangerous.jpg){width="80%" fig-align="center"}
 
 ### Models are improving, but that alone doesn't fix correctness
 
 - Eval 1: models shown scatterplots with an intentionally reversed relationship — failed as of ~Nov 2025 (described the expected relationship, not the actual one), improved sharply by ~May–Sep 2026
 - Eval 2: spotting data-quality issues in a plot (e.g. a suspiciously straight line) — even current top models are still weak here
 - Correct analysis also depends on context never in the data itself (dictionaries, tribal knowledge, semantic layers) — has to be curated before a model can use it
+
+![Eval 1: a model confidently describes a reversed carat/price relationship it can't actually see](images/day1-keynotes-correct-reproducible-transparent-data-agents-and-building-the-future/00-23-50-reversed-scatterplot-eval.jpg){width="80%" fig-align="center"}
+
+![Eval 2: a suspiciously straight line models still fail to flag as a data-quality issue](images/day1-keynotes-correct-reproducible-transparent-data-agents-and-building-the-future/00-25-28-straight-line-eval.jpg){width="80%" fig-align="center"}
 
 ### The "slap a human on it" trap
 

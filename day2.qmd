@@ -125,6 +125,9 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 - Quarto's job: translate your markdown into correct, accessible markup for the target format (e.g. a `##` heading becomes a real, machine-readable `<h2>`)
 - Author's job: actually structure the document with headings, use the right heading levels (don't skip from H1 to H3), and write heading text that accurately describes the section
 - Concrete gap found this way: quarto.org's docs site had no "skip to content" link — tabbing from the top took 59 presses to reach the main content. Fixed for free starting in Quarto 1.11 (pre-release); still missing in 1.10
+
+![quarto.org with the new "Skip to main content" link](images/day2-quarto-connected/05-38.jpg)
+
 - Quarto doesn't have a public accessibility conformance report (VPAT) yet — in progress
 
 ### Auditing quarto.org
@@ -137,6 +140,8 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 
 - 98 violations from missing alt text alone — set via `fig-alt` (markdown images), a `fig-alt` code-cell option, or an `-alt` YAML option (e.g. a nav logo); Quarto will never generate alt text for you since only the author knows why a figure is there
 - Color contrast failures once you customize colors (one example: a link at 2.43:1 contrast against a 4.5:1 requirement) — fixed with custom SCSS; the checker's `findings.json` output is designed for an AI agent to locate the exact problem and propose a fix
+
+![Color contrast is hard: #9565a7 on #bfbfbf = 2.43 (needs 4.5:1)](images/day2-quarto-connected/13-30.jpg)
 
 ::: {.callout-tip}
 ## Manual checks automated tools can't do
@@ -162,6 +167,9 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 ### V1: the Quarto Reveal Editable extension
 
 - Loads an extension, marks an element with an `editable` class, and after re-rendering you can drag/resize the image directly in the browser; saving writes the change back into the source document
+
+![quarto-revealjs-editable demo: Save / Add / Modify controls over a rendered slide](images/day2-quarto-connected/24-45.jpg)
+
 - Pros: still working entirely in Quarto, roughly 2x faster than hand-editing CSS, intuitive drag-based controls
 - Cons: fundamentally a hack — it embeds the whole rendered document as a JS string inside the HTML, locates elements with three regular expressions, and rewrites the source file from that; fragile by design
 - "Did we beat PowerPoint? Not yet" — moving one image still took around 30 seconds
@@ -198,6 +206,9 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 
 - Representation is built on Automerge, an open-source CRDT for JSON data — decentralized by design, so collaboration can run fully local/on your own network or through a hosted service
 - Quarto 2 is an entirely new, MIT-licensed codebase, available on GitHub today (installer, still very rough around the edges): a large chunk of Pandoc has been ported to Rust, compiled to WASM, and run inside the browser
+
+![What is Hub? Collaborative editor, representation for collaborative projects, Quarto 2 codebase](images/day2-quarto-connected/39-20.jpg)
+
 - Precise source-location tracking is preserved through the entire pipeline — including Lua filters — all the way to the HTML output; this exact tracking is what makes Emil Hvitfeldt's editable-slides workflow possible
 - Because it's fast enough, Quarto 2 re-renders the *entire* document on every keystroke
 - Runs fully inside the browser via a virtual file system (no direct disk access) — which is what lets more than one person manipulate the same in-memory document simultaneously
@@ -205,6 +216,8 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 - Source editor and WYSIWYG editor are independent collaborators over the same Automerge representation rather than two modes you convert between — intended to finally fix the long-standing source↔visual-editor sync pain from the RStudio/Positron visual editor
 - Built-in features: inline comments (resolve automatically once addressed) and full history/change-tracking with per-author attribution (colored highlights, author name and timestamp)
 - Quarto 2 render speed: roughly 100x faster than Quarto 1 in internal testing (some docs went from ~5 minutes to ~3–4.5 seconds)
+
+![Comments, history, and q2 is 100x faster than Quarto 1 in the happy path](images/day2-quarto-connected/53-42.jpg)
 
 ::: {.callout-warning}
 ## Do not use for sensitive data
@@ -235,6 +248,9 @@ The public Quarto Hub preview is explicitly not private or secure — per Posit'
 ### What the Cookbook is
 
 - The Earth Data Cloud Cookbook is a Quarto website, published via GitHub Pages, bringing together documentation and tutorials — in both Python and R — for accessing and using NASA Earth Science data from the cloud
+
+![The NASA Earthdata Cloud Cookbook site](images/day2-quarto-connected/64-45.jpg)
+
 - History: OpenScapes and the NASA "mentors" were among Quarto's first external users, dating back to studio::conf 2022 (Julie Lowndes' keynote with Posit's Mine Çetinkaya-Rundel) — the mentors worked directly with JJ Allaire and the early Quarto team over Zoom during COVID, pressure-testing very early Quarto builds
 - Content is organized into a deliberate framework so users and contributors both know where things go: explanation (core concepts/background), how-to guides (short, task-focused), tutorials (longer, in-depth, chaining multiple how-tos into a full analysis), and reference (technical detail and links)
 - The contributing guide is placed front-and-center rather than "backstage," to make it easy for anyone who finds a gap to fill it
@@ -251,6 +267,9 @@ The public Quarto Hub preview is explicitly not private or secure — per Posit'
 ### The co-working model
 
 - A biweekly, 90-minute Zoom "co-working" session with the NASA mentors — OpenScapes provides the scaffolding (scheduling, a running shared notes document); the group forms breakout rooms matching expertise to tasks and gets concrete work done, not planning
+
+![What is coworking? Zoom session plus running notes doc](images/day2-quarto-connected/71-45.jpg)
+
 - Screen-sharing is central: it models open practices directly and doubles as onboarding, since people learn by watching and by being watched while they work
 
 > Before OpenScapes on Quarto, I was hesitant to put unfinished tutorials on a public platform. But I've really come to appreciate this new open way of collaborating and developing in a way that lets others scale up our efforts and learn. I see Quarto as a tool that enables us to open up and share our process and artifacts in a way that is friendly to the broader data user community.
@@ -276,6 +295,9 @@ The public Quarto Hub preview is explicitly not private or secure — per Posit'
 - Three pieces: **data model** files, **harmonization config** files, and **pipeline code**
 - Data model and pipeline code are one-time setup, reusable across similar harmonization projects; the config files are the one step repeated for every data set in every trial
 - **Data model**: YAML files specifying the exact target output — column name, primary key status, data type, and other type-specific attributes. Drafted by an LLM (Posit Assistant) given several "seed" trial data sets (e.g. 10 demographics data sets) plus one example YAML. Tracked in a GitHub repo so a harmonized output can always be traced back to the data model version used
+
+![Data model defines output format: demographics data model YAML](images/day2-taming-messes-with-ai/07-28.jpg)
+
 - **Harmonization config files**: also YAML, mapping each trial's original column names/locations/units to the data model. Also LLM-drafted, given the data model, one trial's data set, and an example config. E.g. a baseline-height column sourced from `HEIGHT_BL`, flagged as stored in inches so the pipeline knows to convert to cm
 
 ### Lessons from the pilot (intern-built)
@@ -287,6 +309,9 @@ The public Quarto Hub preview is explicitly not private or secure — per Posit'
 ### Pipeline code
 
 - A single `harmonize_trial_dataset()`-style function takes one config file + the data model, does tidyverse select/rename, then applies custom transformations (type conversion, unit conversion — e.g. inches to cm)
+
+![Harmonize a dataset with modular code + configs](images/day2-taming-messes-with-ai/12-22.jpg)
+
 - One function call harmonizes one data set in one trial; repeating it across data sets and trials produces modular harmonized data sets that can be row-bound together for any given analysis
 
 ### What's next
@@ -328,12 +353,18 @@ Unpackaged, your judgment dies inside the context window. Packaged, it accumulat
     2. **Semantic model** — define dimensions and metrics on top of the focus table
     3. **Iterative Q&A** — ask the agent questions, get back query + chart pairs; both are inspectable (SQL for the query, Vega-Lite/Altair spec for the chart)
     4. **Save the story, not the answer** — a `session.json` export contains the table schema and the generating query, plus every query/chart pair built during the session — no raw data — so the analysis is fully reproducible from spec alone
+
+![Four verbs take an analyst from question to answer: Discover, Select, Model, Iterate](images/day2-taming-messes-with-ai/27-22.jpg)
+
 - Fully open source ("built on the shoulders of giants"); ships with sample data and a setup skill so an agent can configure the system for you
 
 ### Why package judgment: the social-good case
 
 - World Bank *World Development Report 2026*: AI can help government officials do their existing jobs better (forecasting, resource allocation) — augmentation, not replacement
 - Stanford Digital Economy Lab: draws a distinction between **codified knowledge** (already encoded in text/data — AI is very good at reproducing/applying it) and **tacit knowledge** (AI is not). Employment has declined among young workers in codified-knowledge-heavy roles and risen among experienced workers in tacit-knowledge-heavy roles; declines concentrate where AI *automates* rather than *complements* work
+
+![One distinction is between codified and tacit knowledge (Stanford Digital Economy Lab)](images/day2-taming-messes-with-ai/33-42.jpg)
+
 - This threatens the traditional junior-to-senior pipeline (tactical work → absorbed tacit knowledge → strategic work); packaging and sharing judgment is one way to help rebuild that bridge
 
 > You can outsource your thinking but you cannot outsource your understanding.
@@ -352,6 +383,9 @@ Unpackaged, your judgment dies inside the context window. Packaged, it accumulat
 
 - A good data set is like an explorable environment (map: boundaries, landmarks, paths); messy data (missing values, wrong-purpose data, or no data at all) gets dismissed as "junk," but the data itself often isn't bad — just its format/environment is unusable
 - Analogy: old video game CDs aren't obsolete because the content is bad, but because modern computers don't have CD players; emulation creates a new environment so the old content still works
+
+![Junk. Trash. Useless. Waste of space. (the CD analogy)](images/day2-taming-messes-with-ai/40-20.jpg)
+
 - Speaker works at NIH, measuring how grant funding translates into scientific impact via publications that cite that funding — but there are ~10+ external publication databases (PubMed, Dimensions, OpenAlex, etc.) plus internal NIH databases, and no agreement on which is most comprehensive, accurate, or accessible
 
 Define your limits
@@ -386,6 +420,8 @@ Refine your analyses
 - Doesn't scale either: 50 parishes × 5 concurrent archdiocese projects = 250 parishes = 250 independently-drifting Claude Code sessions. A fully manual alternative (a human renames every column to a predefined schema) means 1,250 files by hand — introducing "100 or more" human errors
 - Regardless of approach, ~90% of pipeline time is spent on the first two steps (ingest and structure)
 
+![How can you build an automated workflow with drifting schema? Steps 1-2 circled](images/day2-taming-messes-with-ai/65-16.jpg)
+
 ### The middle ground: deterministic core + human-in-the-loop + LLMs for tedium
 
 1. Write down decision rules — a fixed order of operations the system always follows, instead of letting a model reinvent it each run
@@ -393,7 +429,12 @@ Refine your analyses
 3. Keep a human in the loop only where genuinely needed, with visibility into every decision the model makes — not just a final answer
 
 - Applied architecture: a predetermined schema (from domain expertise) → **Agent 1** classifies/maps raw columns to that schema, flagging low-confidence or missing mappings instead of silently guessing, with a human confirming the mapping → a **deterministic engine** applies fixed data rules (same input, same output, always) → **Agent 2** cross-verifies the merged output against the original files and writes a plain-language QA report, since most of the team can't read or edit config/code directly
+
+![Split the job by where the judgment call actually is: Agent 1, deterministic engine, Agent 2](images/day2-taming-messes-with-ai/67-10.jpg)
+
 - Pilot interface (demoed, ~4 minutes end to end): drag-and-drop the 5 files with a unique parish ID, preview field mappings (schema on the left, low-confidence fields flagged for human review, columns can be masked/excluded), run the merge (deterministic engine, shown with match-method breakdown and confidence levels), drill into any decision back to which agent/rule made it, then a final standardized export/cleaning pass (phone numbers, emails, etc.)
+
+![Parish Data Processor pilot: file preview, schema, and guidance for Agent 1](images/day2-taming-messes-with-ai/68-52.jpg)
 
 reproducibility
 :   same input through the pipeline twice → same output twice
@@ -420,6 +461,9 @@ downstream cost
 ### Framing: intelligence vs. wisdom
 
 - D&D-inspired framing: intelligence is "book smart" (factual, cerebral), wisdom is "street smart" (judgment, intuition, knowing what *not* to do)
+
+![Intelligence (facts, book smarts) vs. wisdom (intuition, good judgment)](images/day2-ai-in-data-science/02-45.jpg)
+
 - LLMs are unquestionably intelligent (essentially very complex look-up tables), but their wisdom hasn't caught up to their intelligence
 - Wisdom is hard to teach directly — usually learned by getting burned, like a kid who won't believe a stove is hot until they touch it (opened with quotes from Hesse's *Siddhartha* and Aimee Mann on this)
 
@@ -456,6 +500,8 @@ Kuhn described a high-profile early-career project (~75% of the team's R&D budge
 2. **Prompt nudges** — telling a model to explicitly report how many times it has already used the test set discouraged repeated peeking, better than a flat "don't do that"
 3. **Encoding wisdom via rules/skill files** — works but is verbose and expensive (constant added token cost), and it's unclear how effective it really is
 
+![How do we level-up wisdom? Guardrails count: trusted APIs that preemptively avoid issues](images/day2-ai-in-data-science/14-30.jpg)
+
 ### Closing
 
 ::: {.callout-important}
@@ -477,6 +523,8 @@ Whether encoded into the system or kept in the loop, the people with domain expe
 - Still had to bolt on data-science-specific tools (view plots, explore datasets, run R/Python) and extra providers (Anthropic, Bedrock, OpenAI, Snowflake, Databricks) beyond stock Copilot — ended up with 47 tools
 - Lesson: a software-engineering harness doesn't understand data science — it behaved like "intelligent autocomplete," e.g. rendering a Quarto file by spinning up a terminal + browser instead of using Positron's built-in preview
 
+![Lesson 1: software engineering harnesses lack the understanding for use in data science](images/day2-ai-in-data-science/26-35.jpg)
+
 ### Agent 2: DataBot (same time) — session-only, minimal tools
 
 - Philosophy: give the model direct access to your live R/Python session — launched with just 2 tools (vs. Positron Assistant's 47)
@@ -489,6 +537,8 @@ Whether encoded into the system or kept in the loop, the people with domain expe
 - Direct successor to DataBot (not a rewrite/greenfield project) — keeps DataBot's *shape* (session access, plots inline in chat, one place to see the whole analysis flow) and adds Positron Assistant's *reach* (ambient editor/console context, bring-your-own-model/key support via Bedrock, Posit AI Pass, etc.)
 - New capabilities neither parent had: data cleaning mode, **skills** (tools only loaded on demand instead of always in context, cutting per-message cost), and plugins
 - Built by cutting tools (47 → ~20), adding skills for cost savings, and writing an entirely custom UX instead of inheriting Copilot's
+
+![How we built it: subtract tools, add skills, our own UX](images/day2-ai-in-data-science/33-00.jpg)
 
 > When exploring data, Posit Assistant feels a lot like DataBot. When coding, it feels a lot like Claude Code.
 >
@@ -526,6 +576,9 @@ Models weren't the bottleneck — they kept improving regardless. The harness is
 - Web tool that fans out 7 specialized reviewers over an LLM-generated analysis (narrative + charts) to catch inferential errors, rate them by severity, and flag which are easiest/hardest to fix
 - Reviewers: measurement (are we counting the right thing?), data-generating process/sampling, causality (Rubin causal model), sample size & variance/uncertainty, missing data, outliers, data visualization
 - Demo: a Citi Bike-style bike-share weather-demand prompt (UCI ML repository data) run through GPT-5.6 (medium reasoning effort) — Circuit returned a "good to go" verdict but still surfaced 13 findings, e.g. measuring demand purely by completed rentals undercounts demand for stocked-out bikes (a classic demand-forecasting error)
+
+![Circuit review verdict: Good to Go, with follow-up questions](images/day2-ai-in-data-science/44-55.jpg)
+
 - Chat feature lets non-technical users ask "how do I communicate about this result?" — aimed at leveling up colleagues without a data-analyst background, not just catching errors
 
 ::: {.callout-important}
@@ -555,6 +608,8 @@ Beyond "good to go," Circuit can also return **provisional** or **walk away** ve
 
 ### Three buckets for any AI task
 
+![Delegate: trust AI to do the work entirely (or errors are easy to catch)](images/day2-ai-in-data-science/57-20.jpg)
+
 Delegate
 :   Tasks you trust the AI to do entirely — you've seen it succeed repeatedly, or mistakes are obvious enough to catch immediately (e.g. drafting slides, finding color palettes, code documentation, data labeling)
 
@@ -571,6 +626,8 @@ Own
 - **CLAUDE.md/AGENTS.md**: read on *every* session, so keep it lean. Barrett's own rules: skip flattery/preamble, respond with code and tables instead of prose, prefer validated functions from existing packages over hand-written ones, never silently drop NAs (make errors visible), and never touch statistical modeling decisions without asking
 - **Skills**: triggered only when relevant, via a YAML `description` that specifies "use when..." — cheaper since they're not loaded into every prompt
 - Skills can bundle an assets folder with templates and workflow steps (e.g. a Quarto-analysis skill that checks the research question, data source, and language before doing anything); can also instruct format choices that save tokens, like generating Quarto instead of full HTML
+
+![SKILL.md for a quarto-analysis skill, with a "use when" description](images/day2-ai-in-data-science/64-40.jpg)
 
 ::: {.callout-note}
 ## Echoes Sam Clark's talk
@@ -598,6 +655,9 @@ Barrett noted that Posit Assistant's harness already embodies a similar collabor
 
 - Tasks sent to `mirai` go through a "dispatcher" — a task queue living inside the Shiny process that ensures optimal scheduling (next free worker always gets the next queued task)
 - Risk: if workers can't keep up with incoming tasks, the queue grows unbounded and can trigger an out-of-memory event that takes down dispatcher and the whole Shiny app
+
+![Many users at once: the dispatcher queue fills](images/day2-from-laptop-to-cluster/05-35.jpg)
+
 - Old workaround: turn off dispatcher entirely, so tasks go to each worker in round robin — not optimal scheduling (one worker can be stuck with a backlog while others sit idle), but an OOM only kills one worker's queue rather than the whole app; you can then launch a replacement worker with a single function call
 - This is only recovery, not prevention: a downed worker still raises errors for the tasks it was holding, and relaunching a worker isn't instant, especially on an HPC cluster
 
@@ -606,6 +666,8 @@ Barrett noted that Posit Assistant's harness already embodies a similar collabor
 - New primitives: a memory bound on `daemons()` (sized in megabytes) plus a new `tryMirai()` call
 - Once the queue exceeds the bound, a further `mirai()` call blocks — deliberate behavior for non-interactive/batch use, but unacceptable inside an event loop
 - `tryMirai()` behaves like `mirai()` except when the bound is hit: it returns `NULL` immediately instead of blocking, handing control straight back to the app so the developer can decide how to respond — warn the user, auto-retry, or fall back to a smaller subset of data
+
+![try_mirai() returns NULL once the queue bound is hit](images/day2-from-laptop-to-cluster/09-52.jpg)
 
 ### mori: shared memory for R
 
@@ -618,6 +680,8 @@ Barrett noted that Posit Assistant's harness already embodies a similar collabor
 
 - Recap from last year: prototype locally using cores on one machine; scale to other machines over SSH (local network or cloud instances, e.g. AWS); or launch workers on an HPC cluster via `mirai`'s cluster launcher; compute profiles let you route specific tasks to specific worker types
 - New this year: an HTTP launcher (any cloud service with a REST API for launching jobs can host a `mirai` worker), a launcher for on-prem Kubernetes (launch a worker in a pod), and auto-configuration on Posit Workbench (no configuration needed at all)
+
+![New launchers: your servers (SSH), HPC cluster, Kubernetes/cloud via REST API](images/day2-from-laptop-to-cluster/15-12.jpg)
 
 ::: {.callout-important}
 ## Never block, never copy
@@ -633,12 +697,18 @@ The two failure modes to design against in production R services: blocking the e
 
 - Starting point: "one and done" projects — quick stakeholder request, some cleaning/analysis, a report, done — except stakeholders come back with new data, new features, or data-quality questions, usually all at once on a tight deadline
 - Result looks like "a crime scene": multiple "final" copies of a dataset, unclear whether a given figure came from the model with or without outliers removed, no record of what made it into the final report
+
+![A "one and done" project that became a crime scene](images/day2-from-laptop-to-cluster/21-05.jpg)
+
 - 2026-specific wrinkle: LLM-added files nobody fully understands, "concerningly" sometimes prefixed `probe`
 
 ### Data flow orchestrators and the DAG
 
 - A data flow orchestrator provides an opinionated language for expressing data processes plus tooling for managing their repeated execution
 - Core concept: the DAG (directed acyclic graph) — effectively a one-way flow chart; solid shapes are nodes, connecting lines are edges
+
+![Example Hamilton DAG tied to a git hash](images/day2-from-laptop-to-cluster/22-46.jpg)
+
 - Benefits: visible relationships between data assets; a git hash tied to the DAG's state (so you know exactly which commit produced which output/config, e.g. outliers-removed vs. not); caching — rerunning after a change only recomputes what actually changed downstream, reusing everything else
 
 ### targets (R) and Hamilton (Python): a shared paradigm
@@ -694,6 +764,9 @@ Functions declare nodes, and arguments draw edges. Whenever the mental model get
 ### Building a medallion pipeline
 
 - Uses the medallion architecture: bronze (raw data, untouched, "sacred"), silver (cleaned/conformed — type conversions, renaming, deduplication), gold (analysis-ready, business logic applied, feeds reports)
+
+![The plan: a medallion pipeline (bronze, silver, gold)](images/day2-from-laptop-to-cluster/46-20.jpg)
+
 - Demo: creates the three schemas inside `with_transaction()` (borrowing the `with()` pattern to isolate the DuckDB transaction from the R session) — snapshot 1, authored and commit-messaged
 - Loads raw `mtcars`-style data into `bronze.vehicles` — snapshot 2
 - `get_ducklake_table()` pulls a **lazy** table from bronze; silver is built by selecting four columns and retyping `cylinder` from character to integer, then written with `with_transaction()` — snapshot 3
@@ -705,6 +778,9 @@ Functions declare nodes, and arguments draw edges. Whenever the mental model get
 
 - Demo: "Biff" deletes all vehicles getting more than 20 MPG from silver via `rows_delete()`, with the commit message "small tweak" — snapshot 5, row count silently drops from 32 to 18
 - `get_table_changes()` queries snapshot 5 directly and shows exactly what changed — 14 deletions, including the specific values removed
+
+!["What happened?" is now a query: get_table_changes() on snapshot 5](images/day2-from-laptop-to-cluster/51-45.jpg)
+
 - `restore_table_version()` restores `silver.vehicles` back to snapshot 3 (the known-good version), recorded as a new snapshot 6 with its own author — nothing is lost: the original correct version, Biff's mistake, and the restore are all preserved in the trail, which matters for regulated work (Travis works in pharma and needs to log exactly where data has been)
 
 ::: {.callout-note}
@@ -739,6 +815,9 @@ The row/column/cell-level diff UI shown live (click through snapshots to see exa
 
 - Normal tidymodels flow (split, resample folds, preprocess, define model, build grid, tune) runs fast locally except step six, tuning — that's the one step this solution targets
 - `sparklyr` now provides `tune_grid_spark()` as a drop-in replacement for `tune_grid()` — same arguments (spec, recipe, resamples, `control_grid`), plus a Spark connection telling it where to run
+
+![tune_grid() vs. tune_grid_spark(): same tidymodels objects plus a Spark connection](images/day2-from-laptop-to-cluster/66-52.jpg)
+
 - Enabled by Spark Connect / Databricks Connect: the full resample, model, and recipe R objects are serialized and shipped to Spark directly (previously only flat/rectangular data could be sent this way)
 - Objects are hashed, so re-running after a small change (e.g. a tweaked recipe step) only re-uploads what actually changed, not everything
 - Tuning itself executes using R installed inside the Spark cluster; results are collected back into a standard tidymodels tune-results object, so the rest of the workflow continues unchanged
@@ -746,6 +825,9 @@ The row/column/cell-level diff UI shown live (click through snapshots to see exa
 ### Getting full cluster parallelism
 
 - Gotcha: `tune()`'s `parallel_over` argument defaults to `"resamples"`, which caps concurrency at the fold count (e.g. 10) — invisible locally (an 8-core laptop can't exceed 8 anyway), but it also caps a 32-core Spark cluster at 10 concurrent tasks
+
+![A quick tip: sensitive to parallel_over (10 resamples x 100 combinations on 32 cores)](images/day2-from-laptop-to-cluster/69-55.jpg)
+
 - Switching `parallel_over` to `"everything"` unlocks full cluster parallelism — every core the Spark session has becomes available
 
 ::: {.callout-tip}
@@ -786,6 +868,9 @@ When moving tuning to Spark, changing `tune()`'s `parallel_over` argument from t
 - Advocated for adopting a personal, consistent file naming convention to eliminate small daily decisions.
 - Good file names are machine readable (easy to glob/regex), human readable, and sort in a useful way.
 - Her convention: underscores delimit fields, hyphens delimit words within a field (dates as `YYYY-MM-DD`).
+
+![File names parsed with a regex: underscore delimits fields, hyphen delimits words within fields](images/day2-pint-sized-presentations-from-posit-people/03-55.jpg)
+
 - "Slug"-style names (borrowed from URL slugs) let you guess a file's content at a glance.
 - Left-pad numeric prefixes (e.g., `01`, `02`) so files sort correctly once you hit double digits.
 
@@ -809,6 +894,9 @@ Excellent file names are machine readable, human readable, and sort themselves u
 
 - btw is an R package (co-created with Simon Couch) that attaches helper tools to LLM/coding agents — now nearly 40 tools, including reading/writing files, reading help docs, building R packages, and running R code.
 - The btw app connects these tools to an LLM client inside a Shiny Chat application, giving a configurable, point-and-click coding agent in R.
+
+![Chat with {btw} tools app](images/day2-pint-sized-presentations-from-posit-people/13-20.jpg)
+
 - Configuration can be saved as a `BTW.md` file (YAML front matter + instructions) in a project folder so the same agent setup launches every time.
 - A related convention lets you define named subagents as markdown files under a `BTW agents` folder (e.g., a "grumpy consulting statistician" agent using Kimi K2 to check statistical claims), which the main btw app can call as subagents.
 
@@ -816,6 +904,9 @@ Excellent file names are machine readable, human readable, and sort themselves u
 
 - Positron's SQL support was designed around what humans need: first-class connection management, easy exploration, performance on large tables (demoed a snappy 4-million-row query), reproducibility (filters in the data explorer generate usable code), and staying in a single iterative console instead of switching tools.
 - Those same design goals turned out to double as the ingredients for a good SQL agent harness — an LLM agent needs the ability to see, verify, and actually run queries, not just rely on internal knowledge of SQL.
+
+![Posit Assistant exploring a SQLite bikeshare database in Positron](images/day2-pint-sized-presentations-from-posit-people/20-05.jpg)
+
 - Referenced Posit's earlier natural-language-to-SQL work, Query Chat, in Shiny.
 
 ### Mindful Movement Break — Amy Rossi (Chief People Officer)
@@ -833,6 +924,9 @@ Excellent file names are machine readable, human readable, and sort themselves u
 
 - Explained tabular foundational neural network models: unlike typical ML models trained on one dataset, these are trained where each single training example is an entire synthetic dataset (reportedly on the order of 100M+ generated datasets).
 - Training data is generated from randomly constructed "structural causal models" (random network graphs with prior distributions over rows/columns/relationships), closely approximating Bayesian inference at scale.
+
+![Simulated random data from structural causal models](images/day2-pint-sized-presentations-from-posit-people/32-50.jpg)
+
 - He ported one open-source model's data-generation code to R's torch to experiment with generating arbitrary synthetic datasets.
 - Noted these models predict remarkably well with no training step required on your own data, though they are computationally expensive to run.
 
@@ -854,6 +948,9 @@ Excellent file names are machine readable, human readable, and sort themselves u
 
 - Self-described "biggest quarto fan girl"; walked through deploying Quarto reveal.js slides to GitHub Pages for free in a few steps.
 - Steps: create a folder with a single `index.qmd` (format: `revealjs`), preview locally (Positron/RStudio preview button or `quarto preview`), push the folder to GitHub, then in repo Settings → Pages, set the source branch to `main`.
+
+![Step 4: push Quarto slides to GitHub, then open Settings](images/day2-pint-sized-presentations-from-posit-people/48-50.jpg)
+
 - After ~30–60 seconds, GitHub surfaces a Pages deployment link to share.
 
 ### Community Theater Craft Work — Emil Hvitfeldt (Tidymodels team)
@@ -865,6 +962,9 @@ Excellent file names are machine readable, human readable, and sort themselves u
 ### Jargon Worth Knowing — Joe Cheng (CTO)
 
 - Bike shedding: spending disproportionate time arguing a trivial, easy-to-have-an-opinion-on detail (e.g., what color a shed should be) while complex, high-stakes decisions go unexamined; the name comes from a nuclear power plant committee debating the bike shed instead of the reactor.
+
+![Bikeshed: arguing endlessly about a trivial detail (C. Northcote Parkinson, 1957)](images/day2-pint-sized-presentations-from-posit-people/56-40.jpg)
+
 - Onion in the varnish (via Paul Graham's 2001 essay, originally from chemist Primo Levi): a step in a process that's faithfully repeated long after the original reason for it is gone — Levi's varnish factory kept throwing onions into heated linseed oil (once used to test if it was hot enough, before thermometers) decades after switching to thermometers.
 - Rubber ducking: explaining a problem to someone (or something) in detail often reveals the solution yourself, independent of their input.
 

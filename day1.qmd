@@ -123,11 +123,15 @@ tool
 agent
 :   an LLM within a harness using tools iteratively in a loop until it accomplishes a task
 
+![Harness #2: an agent is an LLM using tools iteratively in a loop](images/day1-being-an-informed-and-savvy-ai-user/13-10.jpg)
+
 ### Evaluation: quality vs. cost
 
 - 10 test queries, scored quality (1–5) vs. cost per query
 - Conversation: worst quality (no context). Workflow: good quality, most expensive. Agent: best quality *and* cheapest (only reads relevant notes)
 - Caveat: not universal — it's empirical; Stanford Healthcare runs all three patterns in production depending on use case
+
+![Quality vs. cost by system: conversation vs. workflow vs. agent](images/day1-being-an-informed-and-savvy-ai-user/18-20.jpg)
 
 ### Takeaway: three questions before reaching for "agent"
 
@@ -153,6 +157,8 @@ agent
 
 ### Persona study (NYC Squirrel Count dataset)
 
+![Same problem, different asker; same data, different ask-style](images/day1-being-an-informed-and-savvy-ai-user/28-30.jpg)
+
 - Gave Posit Assistant the same vague prompt ("I am a [persona], clean this data for me") across three personas on a fixed dataset/task
 - Dataset: 2020 NYC Squirrel Count (72 volunteers, 433 sightings, 24 parks) — messy, mixed structured/unstructured
 - Categorized every change the AI made: preserved / transformed / interpreted / discarded
@@ -169,6 +175,8 @@ Some of these choices are irreversible — a silent NA conversion or a discarded
 
 - Example 4-skill pipeline: analytics metrics → planning a data vis → accessible visualization → Quarto report
 - Problem with review-only feedback: by the time you see a draft, the analytical direction is locked in — feedback becomes revision, not decision-making
+
+![Including users within Skills: user-led checkpoints](images/day1-being-an-informed-and-savvy-ai-user/34-07.jpg)
 
 ::: {.callout-tip}
 ## "Pause, ask, follow directions" skill design rules
@@ -215,6 +223,8 @@ A raw model can't answer "who's keynoting posit::conf," but Claude Desktop can �
 
 - Exercise: predicted LLM success vs. task difficulty, then tested by counting "n"s in "unconventional" — asking directly vs. asking for code that counts. Code won clearly (tokens ≠ letters)
 
+![How we think LLMs work: success vs. task difficulty](images/day1-being-an-informed-and-savvy-ai-user/55-35.jpg)
+
 ### Outcomes
 
 > This class gave me a conceptual foundation that removed my fear. It gave me permission to try. And then I realized building tools was something I could actually do.
@@ -256,12 +266,16 @@ A raw model can't answer "who's keynoting posit::conf," but Claude Desktop can �
 
 - A Snowflake YAML config taught the AI to "speak the business's language": definitions (patient, quarter-to-date incl. a non-standard fiscal calendar), rules, synonyms/abbreviations (e.g. "PTS" = patients, drug slang), and entity relationships/joins across a billion-row dataset
 
+![Semantic layer: definitions, rules, language, relationships](images/day1-being-an-informed-and-savvy-ai-user/72-10.jpg)
+
 ### Feedback loop & trust
 
 - Released as a chatbot; thumbs up/down plus a reason fed straight into fixes (sometimes shipped the next day)
 - Success example: an open-ended trip-planning question ("how should I plan my trip to San Antonio?") combined multiple business rules into a genuinely useful answer
 - Issues fixed via feedback: domain jargon (e.g. "BID dosing" = twice daily), a wrong call count traced to "seen"/"contacted"/"live" ambiguity, missing "center of excellence" data
 - Trust emerged because: fast visible feedback loop, the system spoke their language, and it ran on data/logic they already trusted (years of manual Shiny-app exclusions)
+
+![Trust emerged around the AI](images/day1-being-an-informed-and-savvy-ai-user/77-12.jpg)
 
 ### Closing
 

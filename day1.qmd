@@ -447,6 +447,8 @@ If a request's input tokens repeat an earlier request's input tokens in the same
 >
 > — Hadley Wickham
 
+![New challenge / solution / tool: write it down (data-dict), look at how it changed (data-diff)](images/day1-no-bad-vibes-building-agents-you-can-trust/05-40.jpg)
+
 ### data-dict — write it down
 
 https://github.com/tidyverse/data-dict
@@ -458,6 +460,8 @@ https://github.com/tidyverse/data-dict
 - Agent-driven data cleaning changes three things together — the code, the metadata (the YAML), and the data itself — cross-checking all three is far easier to trust than checking any one alone (demoed: string→date conversion, sentinel values like `-9` converted to real `NA`s, a `0`-as-missing column)
 
 ### data-diff — look at how it changed
+
+![data-diff: parsing dates shows up as a schema change (Utf8 → Date32)](images/day1-no-bad-vibes-building-agents-you-can-trust/13-50.jpg)
 
 https://data-dict.tidyverse.org
 https://github.com/hadley/data-diff
@@ -488,6 +492,9 @@ https://github.com/hadley/data-diff
 - **Citations** aren't just for web search — can be wired into RAG results too, with hover-to-inspect detail
 - **Slash commands**: developer-defined shortcuts that trigger preset instructions/tool calls (e.g. `/add-to-schedule`)
 - **Chat drawer**: a panel in `page_chat` for surfacing structured content alongside the conversation (e.g. a live, agent-editable schedule)
+
+![Schedule Assistant demo: chat drawer showing an agent-editable agenda](images/day1-no-bad-vibes-building-agents-you-can-trust/28-42.jpg)
+
 - Persistent **chat history**: auto save/restore, rename, delete past conversations
 - Chat input now accepts **file attachments** (e.g. drag-and-drop an image)
 - Still just a normal Shiny app underneath — ordinary nav panels/inputs alongside the chat, plus recent bslib features (toolbars, off-canvas panels, dark mode, theming, hosted-trace logging for production use)
@@ -504,6 +511,9 @@ https://posit-dev.github.io/querychat/r/
 - Generates SQL grounded in that metadata; results shown with inspectable SQL
 - Visualization via **ggsql** — a SQL extension for grammar-of-graphics visualization from the ggplot2 maintainers (covered in a parallel talk by Tomasz) — the chat can switch a numeric summary to a distribution (box plot) on request, with inspectable ggsql code
 - New **hand-off** slash command: pick which results from a long chat to keep, choose an output format (Quarto/Shiny/Jupyter) and language (R/Python), get a streamed, editable source document, then download a zip (doc + README + small data files) — decouples a useful finding from the long-lived chat/app
+
+![querychat /handoff slash command](images/day1-no-bad-vibes-building-agents-you-can-trust/35-25.jpg)
+
 - Can drive a full custom Shiny dashboard: predetermined views sit alongside the chat, and the agent can reactively filter what's shown (demoed on loan data — asking for "small business loans" narrows the dashboard's views via a generated SQL filter)
 
 ::: {.callout-note}
@@ -530,6 +540,9 @@ querychat intentionally restricts agent code execution to SQL/ggsql only — a s
 - A non-IDE-centric agent surface, motivated by users spending less time directly in the R/Python session and more time just talking to the agent
 - Tool calls render collapsed/recessed by default (can coalesce multiple actions into one line); full code still viewable behind a toggle
 - Dedicated **artifacts pane** for plots instead of inline chat images — iterating on a plot replaces/versions it (v2) rather than appending a new one; asking for a genuinely different plot adds a new artifact; artifacts can be starred/kept
+
+![Canvas: conversation with a dedicated artifacts pane](images/day1-no-bad-vibes-building-agents-you-can-trust/50-25.jpg)
+
 - "Turn on live Quarto report mode" generates and continuously updates a living `.qmd` report reflecting the conversation, previewed in-app, with one-click publish to Connect/Connect Cloud
 - Built on the same engine as Posit Assistant: same skills/plugins/MCP support, same token-cost reporting, same core agentic personality and data-skepticism
 - Ships first as a mode of Positron (desktop and Workbench)
@@ -539,6 +552,9 @@ querychat intentionally restricts agent code execution to SQL/ggsql only — a s
 
 - Ingredients for a Commons agent: one or more tabular data sources (data frames, SQL DBs, pins, Snowflake/Databricks — data-dict metadata works for any of them), zero or more **measures** (trusted R/Python functions), zero or more free-form context notes
 - Measures are just plain R/Python functions in a directory, tagged with a `@measure` annotation plus argument type hints — no special framework code required
+
+![A Commons measure: plain R function tagged with @measure](images/day1-no-bad-vibes-building-agents-you-can-trust/57-42.jpg)
+
 - Context notes are markdown files with a provenance field (why the user should trust this)
 - Explicitly framed as broader than BI/SQL — demoed on microscopy image-processing data, letting a biologist upload new samples and get them run through the team's existing domain-specific pipeline
 - **Trajectory reviewer**: captures real user conversations post-deployment (with disclosure to users) so the team can see what questions actually came up, then feeds that back into a coding agent to add new measures/context — moves more traffic onto the trust ladder over time
@@ -548,6 +564,9 @@ querychat intentionally restricts agent code execution to SQL/ggsql only — a s
 ### Framing governance, compliance, and risk
 
 - **Governance** = "a collection of capabilities that drive principled performance" — first define the principles (e.g. trustworthy, verifiable analysis), then build capabilities that support them (e.g. code-first analysis is what makes a human-in-the-loop review meaningful in the first place)
+
+![What is governance? A collection of capabilities driving principled performance](images/day1-no-bad-vibes-building-agents-you-can-trust/63-20.jpg)
+
 - **Compliance** = meeting someone else's rules; a quality floor, not a guarantee of good outcomes — good governance reduces the toil of proving compliance so it doesn't crowd out the actual work
 - **Risk** ≠ something to eliminate — it's a probability of loss tied to specific scenarios over time (credit, market, operational risk; cybersecurity sits under operational). The goal is managing magnitude/probability of loss, not driving it to zero (reference: *Financial Engineering Analytics*, William Foote)
 
@@ -561,6 +580,9 @@ A long-standing FDIC policy requires bank employees to take an uninterrupted two
 - "Has your agent ever done something you told it not to?" — about half the room raised hands; the rest likely just didn't notice, not that their prompting was airtight
 - The fix isn't stronger prompting or all-caps instructions in an AGENTS.md — it's a deterministic pre-tool-call hook (supported in Posit Assistant, Claude Code, opencode) that can block a command before it runs, free and fast since it needs no LLM
 - **destructive-command-guard**: open-source hook with prebuilt packs (blocks destructive git/package-manager commands by default, optional SQL pack); supports a one-time approval code to explicitly allow a normally-blocked command just once; auto-detects and configures itself for Posit Assistant/Claude Code - https://github.com/Dicklesworthstone/destructive_command_guard
+
+![destructive command guard: has your agent ever done something you told it not to?](images/day1-no-bad-vibes-building-agents-you-can-trust/71-55.jpg)
+
 - **Agents View** (Wes McKinney's open-source tool, also mentioned in Winston Chang's cost talk) grades individual coding-agent sessions (flagging D/F-grade ones) — useful for spotting too-frequent compaction or under-specified prompts, improving both cost and result quality
 
 ### GRC capabilities coming to Posit Team
@@ -568,6 +590,8 @@ A long-standing FDIC policy requires bank employees to take an uninterrupted two
 - Workbench: enable/disable Posit Assistant globally, by group, or by user; enforce allowed inference providers/models (e.g. ban a model that violates a data-retention policy); enforce org-wide use of tools like destructive-command-guard
 - Agents View is now integrated into Workbench (September release) — cross-session activity visible across RStudio, Positron, and VS Code sessions
 - A new LLM cost auditing/enforcement gateway is built into both Connect and Workbench — per-user/model/agent spend visibility plus spend caps
+
+![Posit Team AI Usage dashboard: egress endpoints, request timing, weekend activity](images/day1-no-bad-vibes-building-agents-you-can-trust/74-36.jpg)
 
 ::: {.callout-warning}
 ## Why the spend cap exists
@@ -592,6 +616,9 @@ Posit's own team once burned $50,000 unexpectedly running Bedrock-backed deploym
 - Live-polled the audience with three visualization options for the same hypothetical poll (49% support, ±5 margin of error):
     - **B** — dot plot with a *uniformly* shaded margin-of-error band (the Times' classical approach)
     - **C** — a bell-curve/density style band (statistically more accurate, since error isn't uniform — values near the point estimate are more likely than values at the tail ends of the 95% interval)
+
+![Poll options B (uniform margin-of-error band) vs. C (density of estimated support)](images/day1-keynote-session-how-to-be-clear-when-you-cant-be-certain/13-10.jpg)
+
 - Margin of error = sampling error: a poll surveys a sample (e.g. 600 people), not the full population (e.g. 1M+ voters); bigger sample → smaller margin
 - The Times deliberately publishes the *less* statistically precise option B over C — a compromise between statistical correctness and audience familiarity (many readers aren't used to reading a density/histogram shape)
 - Built option C in R using **{ggdist}** (`stat_dist_halfeye`), a package from Matthew Kay's 2022 posit::conf lightning talk that extends ggplot2 with uncertainty-distribution geoms
@@ -608,14 +635,23 @@ Non-response bias (some kinds of people are less likely to answer polls at all) 
 
 - 2024 presidential results (Michigan, Virginia): early reported vote can be misleading purely because of *ballot-counting order* — e.g. Michigan's first-reported batch was heavily-Democratic Detroit-suburb absentee ballots, giving Harris a lead that reversed as more (more pro-Trump) in-person votes were counted
 - The Times pairs the raw results table with a live time-series forecast chart: dotted line = reported margin so far, solid line = model's forecast margin, shaded band = uncertainty interval that narrows over the night
+
+![Michigan 2024: estimate of the final margin over time, reported vs. NYT estimate with uncertainty band](images/day1-keynote-session-how-to-be-clear-when-you-cant-be-certain/25-00.jpg)
+
 - The forecast can diverge from the reported vote — it's built by comparing incoming results against pre-election expectations (polling, voter-file data, historical results), so it called Trump ahead in Michigan's forecast before he was ahead in the reported vote
 - That full time-series chart packs in 4 series at once (reported margin, forecast margin, 50% and 95% intervals) — simplified for broad audiences into the **"needle"**: a margin dial plus a second dial translating the uncertainty band into words (toss-up / lean X / likely X)
+
+![Michigan needle in 2024: chance of winning and estimated margin dials](images/day1-keynote-session-how-to-be-clear-when-you-cant-be-certain/29-05.jpg)
+
 - Needles scale better than line charts across many races at once (a presidential page needs an overall needle, an electoral college needle, a popular vote needle, plus one per key state)
 
 ### Case study 2 continued: choosing *not* to show the needle
 
 - Michigan's Aug. 2024 Senate Democratic primary (El-Sayed vs. Stevens): the Times ran the live forecast but deliberately omitted the needle, showing only the time-series line chart
 - Why: primary polling is far less reliable than general-election polling — the pre-election forecast had El-Sayed +10; he won by under 1 point, and the uncertainty band spanned nearly the entire chart
+
+![Michigan Democratic Senate primary: margin over time, shown without the needle](images/day1-keynote-session-how-to-be-clear-when-you-cant-be-certain/34-10.jpg)
+
 - A needle's dial swing *feels* more decisive/prescriptive than the equivalent movement of a line — risky for a race that's genuinely this uncertain
 - Primary-night audiences tend to be more engaged and want the full trajectory (what did the estimate say 5 minutes ago?), not just an arrow
 - Internal Shiny dashboards tracking live vote batches (e.g. a mail-in-ballot batch breaking 21.5 points for Stevens) informed real-time text updates explaining *why* a race remained unsettled — something no public chart alone could convey
@@ -629,9 +665,14 @@ Describing uncertainty in words is often easier than depicting it in a chart —
 
 - The monthly BLS jobs report *feels* like objective, backward-looking "hard data," but it's itself a large-scale survey (of businesses) and gets revised in later months as responses trickle in
 - July 2025 report revised May/June job gains down by a combined 258,000 — became a political flashpoint (the administration alleged BLS bias/manipulation, with no evidence presented)
+
+![Monthly change in jobs with May and June revised down](images/day1-keynote-session-how-to-be-clear-when-you-cant-be-certain/41-25.jpg)
+
 - Longer view: revisions go both up and down over time; the biggest swings track major macro shocks (2008 financial crisis, 2020 pandemic, 2021 recovery), not election cycles
 - Behind the scenes: the original monthly-bars chart is normally generated from a template, but the revision annotations were added by hand in Adobe Illustrator under deadline pressure — a viewer later rebuilt the same chart programmatically in ggplot2 in a 42-minute YouTube tutorial
 - Fix going forward: de-emphasize the noisy month-to-month bars in favor of a 3-month moving-average trend line, so readers focus on trend rather than over-reading a single monthly figure — while still calling out revisions separately when they're big enough to matter
+
+![Jobs chart redesigned around a moving-average trend line](images/day1-keynote-session-how-to-be-clear-when-you-cant-be-certain/45-42.jpg)
 
 ::: {.callout-important}
 ## Closing lessons

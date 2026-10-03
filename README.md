@@ -3,6 +3,8 @@
 - [Day 1: Conf Day 1](day1.qmd)
 - [Day 2: Conf Day 2](day2.qmd)
 
+Talk notes include still frames extracted from the session recordings at key moments (slides, diagrams, demos), stored under `images/<session-slug>/`.
+
 ## Browsing as a website
 
 This project is also a Quarto website, for browsing the notes plus the derived knowledge content in one place.

@@ -15,7 +15,7 @@ Personal running notes from posit::conf(2026) virtual.
 
 ::: {.callout-note}
 ## How these notes get written
-The day notes are AI-assisted: Claude Code drafts and organizes each talk's notes from the raw session transcript and referenced URLs, then structures them into subsections/callouts. An `AGENTS.md` file in the repo acts as the persistent context — conventions for structure, conciseness, and styling — so the drafting stays consistent across separate sessions instead of depending on chat history.
+The day notes are AI-assisted: Claude Code drafts and organizes each talk's notes from the raw session transcript and referenced URLs, then structures them into subsections/callouts. Still frames are also pulled from the session recordings at a handful of key moments per talk (a key diagram, demo, or stat) and embedded alongside the relevant notes. An `AGENTS.md` file in the repo acts as the persistent context — conventions for structure, conciseness, and styling — so the drafting stays consistent across separate sessions instead of depending on chat history.
 :::
 
 ::: {.callout-warning}

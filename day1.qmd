@@ -301,6 +301,8 @@ Talk to humans first, agree on what words mean, then make sure it's a question w
 
 ### Managing context day to day
 
+![Types of context: entered in chat, retrieved automatically, written ahead of time, fetched on demand](images/day1-agents-context-mcp/10-15.jpg)
+
 - Context sources: what you paste in chat, what the harness auto-grabs (system prompt, IDE state, console, schema), files you write in advance (AGENTS.md, skills, memory), and on-demand context (file search, MCP)
 - Write understanding into project context files/AGENTS.md instead of re-explaining every session; use a Save Memory skill for learnings, a Create Skill skill for recurring workflows
 - Reference file paths instead of pasting full file contents — lets the agent search only what it needs, cuts token usage
@@ -325,6 +327,8 @@ A new task, a side quest, or catching yourself re-explaining in circles are all 
 - Recurring worry: "am I sacrificing capability by staying in R instead of Python/Claude Code?" — reframed to only switch language when there's a compelling reason, not by default
 - Agents don't need the largest ecosystem, they need a coherent one — that requirement falls on the developer (to hold a deep mental model of what they're building), since models already understand Python/JS well from training data
 
+![Agents do not need the largest ecosystem. They need a coherent one.](images/day1-agents-context-mcp/23-30.jpg)
+
 ### Demo: rill, a personal RSS reader
 
 https://github.com/JamesHWade/rill
@@ -333,6 +337,8 @@ https://github.com/JamesHWade/rill
 - Built almost entirely from a small set of R packages, each contributing one distinct piece
 
 ### Ecosystem tour
+
+![The pieces fit the work: Shiny, shinychat, ellmer, deputy, httr2, and more behind rill](images/day1-agents-context-mcp/35-50.jpg)
 
 - **shinychat** (R & Python): conversation history (resume/search/rename/fork), exposed thinking traces with an interrupt button, dynamic tool-call display, slash commands reusable for in-app navigation — "a few lines of code" to add to any Shiny app - https://posit-dev.github.io/shinychat/
 - **ellmer**: LLM interfacing; new tool annotations let you flag a tool as read-only vs. world-affecting for downstream safety - https://ellmer.tidyverse.org
@@ -365,6 +371,10 @@ https://github.com/JamesHWade/rill
 - A custom MCP server beats a new/custom CLI: a new CLI isn't in training data (costs the same context to teach it) and has its own distribution problem (everyone must install it)
 - Using an existing personal-auth CLI (e.g. `gh`) means the agent can do anything you personally can on that service — harder to scope down than a purpose-built MCP tool
 
+![Skills: complement to MCP or CLI; Skill + MCP = Plugin](images/day1-agents-context-mcp/48-15.jpg)
+
+![The lethal trifecta: private data, untrusted content, ability to exfiltrate](images/day1-agents-context-mcp/52-30.jpg)
+
 ::: {.callout-warning}
 ## The lethal trifecta (Simon Willison)
 An agent combining (1) access to private data, (2) exposure to untrusted content, and (3) the ability to communicate out can be tricked into exfiltrating private data via prompt injection — surprisingly easy to satisfy, e.g. reading a public GitHub issue (untrusted content) with an agent that also has private repo access and web-request ability.
@@ -382,6 +392,8 @@ An agent combining (1) access to private data, (2) exposure to untrusted content
 - Connect handles Zendesk auth via a built-in integration (negotiates credentials on demand, no long-lived API key stored anywhere) and exposes an OAuth flow to Claude Code
 - Connect's MCP view lists available servers/tools with runnable descriptions, plus usage monitoring (who's using what, when)
 
+![Posit Connect MCP server page: Streamable HTTP endpoint, OAuth, client config](images/day1-agents-context-mcp/57-30.jpg)
+
 ::: {.callout-important}
 ## Guiding principle
 Remote MCP servers are cheap to write today — write narrow ones for exactly what you need, since narrow tools "leave prompt injection with empty hands," and let Connect handle auth, governance, and monitoring.
@@ -395,10 +407,14 @@ Remote MCP servers are cheap to write today — write narrow ones for exactly wh
 - Context length (tokens per request) grows roughly linearly over a conversation, but total cost is the cumulative sum of every request — so total spend grows quadratically (like a parabola) with conversation length
 - Output tokens typically cost ~5x input tokens
 
+![Context length != total tokens transferred: linear vs. quadratic growth](images/day1-agents-context-mcp/67-55.jpg)
+
 ::: {.callout-tip}
 ## Caching is the biggest lever
 If a request's input tokens repeat an earlier request's input tokens in the same order, the repeated portion is served from cache at roughly 1/10th the normal input-token cost.
 :::
+
+![Token breakdown per request: output (5x cost), input, cached input (0.1x cost)](images/day1-agents-context-mcp/71-40.jpg)
 
 ### Why coding agents specifically got expensive
 

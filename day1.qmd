@@ -7,6 +7,8 @@ Some sections of these notes are drafted from auto-generated session captions ra
 
 ## Correct, reproducible, and transparent data agents - Sara Altman & Simon Couch
 
+[Session: Day 1 Keynotes]{.badge .text-bg-secondary}
+
 ### The core tension: convenience vs. correctness
 
 > In the battle between convenience and correctness, convenience is winning.
@@ -98,6 +100,8 @@ Help the agent be correct, and make it less bad when it's inevitably sometimes w
 
 ## From chats to workflows to “agents”: Demystifying LLM jargon by example - Timothy Keyes
 
+[Session: Being an Informed and Savvy AI User]{.badge .text-bg-secondary}
+
 ### Setup
 
 - Speaker: Stanford Healthcare data scientist, also finishing med school
@@ -144,6 +148,8 @@ agent
 - Q&A: stochasticity/variability may belong on your evaluation axis instead of (or with) cost; latency is another common axis
 
 ## Yes And...AI in Your IDE - Allissa Dillman & Padmashri Saravanan
+
+[Session: Being an Informed and Savvy AI User]{.badge .text-bg-secondary}
 
 - https://github.com/BioDataSage/yesand
 
@@ -196,6 +202,8 @@ Some of these choices are irreversible — a silent NA conversion or a discarded
 
 ## Hello, robot: Introducing humans to LLM’s - Kristin Bott
 
+[Session: Being an Informed and Savvy AI User]{.badge .text-bg-secondary}
+
 - https://github.com/posit-dev/ai-intro
 
 ### Case study: Brittany
@@ -236,6 +244,8 @@ A raw model can't answer "who's keynoting posit::conf," but Claude Desktop can �
 - Q&A (James Wade): best practices go stale fast — durable foundational mental models transfer even as specific tips/tools change
 
 ## From Tribal Knowledge to Trusted AI in Pharma - Tanya Cashorali
+
+[Session: Being an Informed and Savvy AI User]{.badge .text-bg-secondary}
 
 ### Setup
 
@@ -288,6 +298,8 @@ Talk to humans first, agree on what words mean, then make sure it's a question w
 
 ## What Context Do Your AI Agents Actually Need - Sharon Wang
 
+[Session: Agents, Context, MCP]{.badge .text-bg-secondary}
+
 ### Reframing the question
 
 - The durable question isn't "what context do agents need" but "what context do *you* need" — that holds even as models/harnesses/best practices keep changing
@@ -322,6 +334,8 @@ A new task, a side quest, or catching yourself re-explaining in circles are all 
 
 ## AI Agents Deserve R - James Wade
 
+[Session: Agents, Context, MCP]{.badge .text-bg-secondary}
+
 ### Framing: a coherent ecosystem, not the largest one
 
 - Recurring worry: "am I sacrificing capability by staying in R instead of Python/Claude Code?" — reframed to only switch language when there's a compelling reason, not by default
@@ -351,6 +365,8 @@ https://github.com/JamesHWade/rill
 - Encouraged the audience to build and contribute to the R agent ecosystem
 
 ## MCP, or not MCP - Neal Richardson
+
+[Session: Agents, Context, MCP]{.badge .text-bg-secondary}
 
 - https://enpiar.com/mcp-posit-conf-2026/#/section
 
@@ -401,6 +417,8 @@ Remote MCP servers are cheap to write today — write narrow ones for exactly wh
 
 ## Why Is AI Costing Me So Much Money? - Winston Chang
 
+[Session: Agents, Context, MCP]{.badge .text-bg-secondary}
+
 ### LLM cost mechanics
 
 - LLMs are stateless — each request resends the *entire* prior conversation; there's no persistent "mind" holding context between turns
@@ -435,6 +453,8 @@ If a request's input tokens repeat an earlier request's input tokens in the same
 - Q&A: caching support depends on the serving software, not just the model — e.g. not consistently present when running open-weights models locally via Ollama/LM Studio
 
 ## data-dict & data-diff: two tools supporting AI-human data science collaboration - Hadley Wickham
+
+[Session: No Bad Vibes: Building Agents You Can Trust]{.badge .text-bg-secondary}
 
 ### Framing: data science agentic workflows differ from software engineering ones
 
@@ -477,6 +497,8 @@ https://github.com/hadley/data-diff
 - Q&A: the YAML is meant to be mostly agent-authored day to day (still human-readable/editable for small fixes); data-dict is scoped to project/analysis-specific metadata, meant to complement rather than replace enterprise catalogs like Databricks/Snowflake
 
 ## The Shiny AI Stack: shinychat, querychat, and the LLM Plumbing Beneath - Garrick Aden-Buie & Carson Sievert
+
+[Session: No Bad Vibes: Building Agents You Can Trust]{.badge .text-bg-secondary}
 
 ### The stack
 
@@ -523,6 +545,8 @@ querychat intentionally restricts agent code execution to SQL/ggsql only — a s
 
 ## AI Agents for Data Science: Posit Assistant, Commons, and Beyond - Joe Cheng
 
+[Session: No Bad Vibes: Building Agents You Can Trust]{.badge .text-bg-secondary}
+
 - Framed as an appendix to the morning Sara Altman & Simon Couch keynote
 
 ### Posit Assistant updates
@@ -560,6 +584,8 @@ querychat intentionally restricts agent code execution to SQL/ggsql only — a s
 - **Trajectory reviewer**: captures real user conversations post-deployment (with disclosure to users) so the team can see what questions actually came up, then feeds that back into a coding agent to add new measures/context — moves more traffic onto the trust ladder over time
 
 ## AI Governance in Posit Team: getting better results from agentic helpers - Elliot Murphy
+
+[Session: No Bad Vibes: Building Agents You Can Trust]{.badge .text-bg-secondary}
 
 ### Framing governance, compliance, and risk
 
@@ -607,6 +633,8 @@ Posit's own team once burned $50,000 unexpectedly running Bedrock-backed deploym
 - Invited attendees to share what governance/agent-risk approaches are and aren't working for them — contact via LinkedIn or the product lounge (Sam Edwards, PM for governance features)
 
 ## Keynote: How to Be Clear When You Can't Be Certain - Christine Zhang
+
+[Session: Keynote Session]{.badge .text-bg-secondary}
 
 - Speaker: graphics editor, The New York Times
 - Not an AI talk — closing keynote, framed around three data-journalism case studies that all boil down to "squaring the circle": representing uncertain/evolving reality with a necessarily simplified chart

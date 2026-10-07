@@ -27,6 +27,7 @@ Each agent's prompt must be self-contained (it starts with zero context) and inc
 3. **If no lineup was given**: instruct the agent to identify individual talk/speaker segments itself (self-introductions, moderator hand-offs, "next up," topic shifts) and to describe an unclear speaker by role/topic instead of guessing a name it can't verify.
 4. **The house style rules**, pasted in full (the agent hasn't read `AGENTS.md`, so restate the substance rather than pointing at the file):
    - One `## <Talk Title> - <Speaker Name>` heading per talk (or `## Keynote: <Title> - <Speaker>` for a keynote slot — including a lightning-talk session that *replaced* a keynote, which still gets the `Keynote:` prefix plus a bullet noting the swap).
+   - Directly under each talk heading (blank line, then the tag, then a blank line): `[Session: <Session Group Title>]{.badge .text-bg-secondary}` — the session the talk was part of, taken from the transcript's `# Day N: <Title> Transcript` header (keynote slots use `Keynote Session`).
    - Structure each talk with its own `###` subsections (setup/context, main content or case study, key takeaways/closing) instead of one flat bullet list.
    - Be concise: one tight bullet per point, merge closely related points, cut filler/repetition/audience banter/color commentary. Keep concrete specifics — names, numbers, quotes, package/tool names, URLs — since those are hard to reconstruct later.
    - Use Quarto markdown features sparingly, one or two per talk at most, only when something genuinely stands apart from a plain bullet:

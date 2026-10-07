@@ -254,7 +254,7 @@ Prompts below are based on [Day 2 notes](day2.qmd).
 
 ### Package Your Judgment, Keep Your Intent — Mirian Lima
 
-**Explain the core thesis in your own words, and how OSA Metrics' four-verb workflow puts it into practice.**
+**Explain the core thesis in your own words, and how OSAA Metrics' four-verb workflow puts it into practice.**
 
 ::: {.callout-tip collapse="true"}
 ## Key points to hit

@@ -7,6 +7,8 @@ Some sections of these notes are drafted from auto-generated session captions ra
 
 ## Keynote: Navigating the Agentic Future - Wes McKinney
 
+[Session: Keynote Session]{.badge .text-bg-secondary}
+
 - Last-minute keynote swap: originally scheduled speaker Emily was unwell, so Wes McKinney (creator of pandas, co-creator of Ibis and Apache Arrow, principal architect at Posit) filled in
 - Also currently building agent-era tools: RoboRev (continuous automated code review) and MessageVault (secure, private email storage/search for AI agents)
 
@@ -113,6 +115,8 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 
 ## Quarto + Accessibility + You - Charlotte Wickham
 
+[Session: Quarto, Connected]{.badge .text-bg-secondary}
+
 ### Why accessibility, why now
 
 - Opening story: Charlotte's PhD student Frances was told three weeks before her dissertation defense that the university would now require dissertations uploaded as Word documents instead of PDF — driven by the ADA Title II web rule (US, taking effect 2027, applies to public entities including state universities)
@@ -158,6 +162,8 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 
 ## Slideware Is Dead - Long Live Quarto - Emil Hvitfeldt
 
+[Session: Quarto, Connected]{.badge .text-bg-secondary}
+
 ### The problem: no single slide tool does it all
 
 - Started from a friend's observation that no tool does everything you'd want for slides: LaTeX-quality math, a UI for moving images around like PowerPoint, and live-rendered/executed markdown — every existing tool trades one of these off
@@ -166,6 +172,7 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 
 ### V1: the Quarto Reveal Editable extension
 
+- Repo: https://github.com/EmilHvitfeldt/quarto-revealjs-editable
 - Loads an extension, marks an element with an `editable` class, and after re-rendering you can drag/resize the image directly in the browser; saving writes the change back into the source document
 
 ![quarto-revealjs-editable demo: Save / Add / Modify controls over a rendered slide](images/day2-quarto-connected/24-45.jpg)
@@ -183,8 +190,8 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 
 ### Coming: Quarto 2 and Quarto Hub
 
-- Quarto 2 (a Rust rewrite of Quarto) cuts render times from minutes to fractions of a second, removing the biggest bottleneck directly
-- Quarto Hub, a new collaborative editor, syncs changes between the rendered slide view and the source document instantaneously in both directions
+- Quarto 2 (a Rust rewrite of Quarto) cuts render times from minutes to fractions of a second, removing the biggest bottleneck directly — https://github.com/quarto-dev/q2
+- Quarto Hub, a new collaborative editor, syncs changes between the rendered slide view and the source document instantaneously in both directions — https://quarto-hub.com
 - Building the "move an image" feature took a couple of weeks in the original extension vs. about 15 minutes on Quarto Hub, because Hub only re-renders the part of the document that actually changed rather than the whole file
 - The same approach isn't slide-specific — it works for any HTML document rendered through Quarto Hub (live rendered-view edits, inline comments), envisioning non-developer collaborators editing without installing an IDE
 
@@ -197,15 +204,18 @@ The word "agent" implies agency they don't have — multi-agent "loop/graph engi
 
 ## Quarto Hub: Collaboratively edit, create, and share documents - Carlos Scheidegger
 
+[Session: Quarto, Connected]{.badge .text-bg-secondary}
+
 ### Live demo
 
+- Public preview: https://quarto-hub.com
 - Split view: markdown source on the left, rendered preview on the right, edits sync instantly in both directions — including a WYSIWYG mode where selecting rendered text lets you edit without touching markdown
 - Demoed live with a second person ("Charlie") editing the same document from elsewhere in real time — a typo fix and a comment appeared as they happened
 
 ### How it works
 
-- Representation is built on Automerge, an open-source CRDT for JSON data — decentralized by design, so collaboration can run fully local/on your own network or through a hosted service
-- Quarto 2 is an entirely new, MIT-licensed codebase, available on GitHub today (installer, still very rough around the edges): a large chunk of Pandoc has been ported to Rust, compiled to WASM, and run inside the browser
+- Representation is built on Automerge, an open-source CRDT for JSON data — decentralized by design, so collaboration can run fully local/on your own network or through a hosted service — https://automerge.org
+- Quarto 2 is an entirely new, MIT-licensed codebase, available on GitHub today (installer, still very rough around the edges): a large chunk of Pandoc has been ported to Rust, compiled to WASM, and run inside the browser — https://github.com/quarto-dev/q2
 
 ![What is Hub? Collaborative editor, representation for collaborative projects, Quarto 2 codebase](images/day2-quarto-connected/39-20.jpg)
 
@@ -239,15 +249,17 @@ The public Quarto Hub preview is explicitly not private or secure — per Posit'
 
 ## The NASA Earthdata Cloud Cookbook: A Quarto Collaboration Story - Andy Teucher
 
+[Session: Quarto, Connected]{.badge .text-bg-secondary}
+
 ### Context: NASA's cloud migration
 
-- Speaker works for OpenScapes (not NASA directly), which supports open, collaborative, reproducible, and inclusive data-intensive science
+- Speaker works for OpenScapes (not NASA directly), which supports open, collaborative, reproducible, and inclusive data-intensive science — https://openscapes.org
 - NASA's Earth Science program manages over 100 petabytes of remote sensing data across 11 separate data centers in the US
 - As NASA moved data from on-premises servers to the cloud, the access patterns scientists needed changed — data center staff had to learn the new patterns themselves, then teach them to researchers
 
 ### What the Cookbook is
 
-- The Earth Data Cloud Cookbook is a Quarto website, published via GitHub Pages, bringing together documentation and tutorials — in both Python and R — for accessing and using NASA Earth Science data from the cloud
+- The Earth Data Cloud Cookbook is a Quarto website, published via GitHub Pages, bringing together documentation and tutorials — in both Python and R — for accessing and using NASA Earth Science data from the cloud — https://nasa-openscapes.github.io/earthdata-cloud-cookbook/
 
 ![The NASA Earthdata Cloud Cookbook site](images/day2-quarto-connected/64-45.jpg)
 
@@ -283,6 +295,8 @@ The public Quarto Hub preview is explicitly not private or secure — per Posit'
 - The project is evolving into a hub-and-spoke model, with some NASA data centers now building their own more specialized cookbooks alongside the central Earth Data Cloud Cookbook
 
 ## Clinical data harmonization with LLMs - Leslie Emery
+
+[Session: Taming Messes with AI]{.badge .text-bg-secondary}
 
 ### Setup: why harmonization is hard
 
@@ -330,6 +344,8 @@ The public Quarto Hub preview is explicitly not private or secure — per Posit'
 
 ## Package Your Judgment, Keep Your Intent - Mirian Lima
 
+[Session: Taming Messes with AI]{.badge .text-bg-secondary}
+
 ### Setup
 
 - Speaker works at the UN Office for the Special Advisor on Africa (OSAA), which provides policy services aligning UN work with African development goals
@@ -343,8 +359,8 @@ Unpackaged, your judgment dies inside the context window. Packaged, it accumulat
 
 - Problem: policy analysts are domain experts who don't code, so everyone queued behind one person for data wrangling — a major bottleneck
 - Needed self-service analytics without sacrificing data trust (reproducibility, traceability, correctness)
-- Split architecture: a centralized **OSA Engine** (back office) handles data ingestion/transformation and serves analysis-ready data; a decentralized **OSA Metrics** (front office) handles the exploratory wrangling — two separate packages/repos
-- OSA Metrics has three layers: a Python API (encapsulates workflow logic), a thin MCP wrapper (deliberately separated from the logic so analysts can still import the package directly into a notebook for a traditional, non-agentic workflow), and a skill (the orchestration layer defining the workflow's rules/constraints for the agent)
+- Split architecture: a centralized **OSA Engine** (back office) handles data ingestion/transformation and serves analysis-ready data; a decentralized **OSAA Metrics** (front office) handles the exploratory wrangling — two separate packages/repos (OSAA Metrics: https://github.com/UN-OSAA/osaa-metrics)
+- OSAA Metrics has three layers: a Python API (encapsulates workflow logic), a thin MCP wrapper (deliberately separated from the logic so analysts can still import the package directly into a notebook for a traditional, non-agentic workflow), and a skill (the orchestration layer defining the workflow's rules/constraints for the agent)
 
 ### The four-verb workflow
 
@@ -371,13 +387,15 @@ Unpackaged, your judgment dies inside the context window. Packaged, it accumulat
 >
 > — quote via Andrej Karpathy (not originally his)
 
-- Only the codifiable part of tacit knowledge can be packaged — the intent (what to look at, what's relevant, what the priorities are) stays with the user; OSA Metrics deliberately doesn't tell analysts what indicators or questions matter
+- Only the codifiable part of tacit knowledge can be packaged — the intent (what to look at, what's relevant, what the priorities are) stays with the user; OSAA Metrics deliberately doesn't tell analysts what indicators or questions matter
 
 ### Q&A
 
 - Generalizability: fully portable, since it's built on open standards (MCP, skills) — works with Claude Code/Desktop, opencode, or any compliant harness, not locked to one vendor
 
 ## When the data doesn't fit the question - Kelli Goggans
+
+[Session: Taming Messes with AI]{.badge .text-bg-secondary}
 
 ### Framing: messy data isn't bad data, it's bad format
 
@@ -403,6 +421,8 @@ Refine your analyses
 - Q&A: a good "North Star question" usually comes from the client/department requesting the work rather than being self-generated — it's meant to guide direction, not to be taken as a literal precise target
 
 ## LLM-Powered Data Workflows: Structuring Inputs and Accelerating Insight - Yasha Kaushal, PhD
+
+[Session: Taming Messes with AI]{.badge .text-bg-secondary}
 
 ### The messy-data problem
 
@@ -458,11 +478,21 @@ downstream cost
 
 ## Roll for Wisdom: What AI Gets Wrong About Data Analysis - Max Kuhn
 
+[Session: AI in Data Science]{.badge .text-bg-secondary}
+
 ### Framing: intelligence vs. wisdom
 
 - D&D-inspired framing: intelligence is "book smart" (factual, cerebral), wisdom is "street smart" (judgment, intuition, knowing what *not* to do)
 
 ![Intelligence (facts, book smarts) vs. wisdom (intuition, good judgment)](images/day2-ai-in-data-science/02-45.jpg)
+
+> Knowledge is knowing a tomato is a fruit; wisdom is not putting it in a fruit salad.
+>
+> — Miles Beresford Kington (1929)
+
+> A clever person solves a problem; a wise person avoids it.
+>
+> — attributed to Albert Einstein
 
 - LLMs are unquestionably intelligent (essentially very complex look-up tables), but their wisdom hasn't caught up to their intelligence
 - Wisdom is hard to teach directly — usually learned by getting burned, like a kid who won't believe a stove is hot until they touch it (opened with quotes from Hesse's *Siddhartha* and Aimee Mann on this)
@@ -472,15 +502,15 @@ downstream cost
 - Common anti-pattern: cramming complex logic into a single inline `if`/`else` assignment — compiles and passes tests, but becomes fragile and hard to revise later
 - Similarly, giant 20–30 line anonymous functions inside `apply`/`map` calls — hard to debug even though they "work"
 
-> It's not a big deal, but over time it will become a big deal — especially how we read our code, how we interact with it, how new people read it.
+> It becomes a second order correctness issue, because if we let the LLMs crap up the codebase long enough, we will start to read code less and less and then there will be bigger correctness and design issues later, as a result. I firmly believe that.
 >
-> — Jenny Bryan (on code smells)
+> — Jenny Bryan ("Our Lady of Perpetual Code Smells"), 2026
 
 ### Where wisdom really matters: data analysis
 
 - Data analysis is different from general software — mistakes here have real consequences, not just messy code
 - Type III error: solving the wrong question entirely (distinct from type I/II)
-- Multiple testing / p-value fishing (the XKCD green-jelly-bean comic) — keep re-running tests on subgroups and something will eventually look "significant"
+- Multiple testing / p-value fishing (the XKCD green-jelly-bean comic) — keep re-running tests on subgroups and something will eventually look "significant" — https://xkcd.com/882/
 - Information leakage: a predictor that's actually an outcome in disguise, e.g. the Ames housing dataset's "garage quality" column when predicting sale price
 - Duke proteomics scandal (pre-AI): researchers swapped cases/controls, withheld data, failed at every stage — patient therapies were altered before it was caught in a third clinical trial (covered on 60 Minutes)
 
@@ -510,6 +540,8 @@ Whether encoded into the system or kept in the loop, the people with domain expe
 :::
 
 ## Three Agents, Two Mistakes, or Designing for LLM-Assisted Data Analysis - Sam Clark
+
+[Session: AI in Data Science]{.badge .text-bg-secondary}
 
 ### Setup
 
@@ -556,6 +588,8 @@ Models weren't the bottleneck — they kept improving regardless. The harness is
 
 ## Between Code and Conclusions: An Evaluation Layer for LLM-Generated Analysis - Nicky Bell
 
+[Session: AI in Data Science]{.badge .text-bg-secondary}
+
 ### Setup
 
 - Speaker: founder of Powered Analysis (mission: give everyone the tools to understand data without code or math); 13 years as a data scientist/educator
@@ -601,6 +635,8 @@ Beyond "good to go," Circuit can also return **provisional** or **walk away** ve
 
 ## Teach Once, Use Often: Building AI Skills for Data Analysis - Tyson Barrett
 
+[Session: AI in Data Science]{.badge .text-bg-secondary}
+
 ### Opening: the nail metaphor
 
 - Childhood story: building forts as a kid, ignoring repeated warnings about an exposed nail until stepping on it himself
@@ -643,6 +679,8 @@ Barrett noted that Posit Assistant's harness already embodies a similar collabor
 - CLAUDE.md vs. skill: a skill is a "kitchen sink" for one specific recurring task, since it's only loaded when triggered; CLAUDE.md should stay minimal since it's read (and costs tokens) on every single prompt
 
 ## Never Block, Never Copy: mirai + mori from Shiny to the Cluster - Charlie Gao
+
+[Session: From Laptop to Cluster]{.badge .text-bg-secondary}
 
 ### Shiny as a demanding production service
 
@@ -692,6 +730,8 @@ The two failure modes to design against in production R services: blocking the e
 - Q&A: still relevant for Shiny apps containerized on Kubernetes — workers can be launched on other Kubernetes pods
 
 ## Friends till the End(-to-end): Moving R and Python Projects into Pipelines with targets and Hamilton - Cory Adkins
+
+[Session: From Laptop to Cluster]{.badge .text-bg-secondary}
 
 ### The problem: ad hoc projects become fragile
 
@@ -746,6 +786,8 @@ Functions declare nodes, and arguments draw edges. Whenever the mental model get
 - Q&A: main advantage over Unix `make` — `make` is file-oriented, while `targets`/Hamilton are function-oriented; if you like functional programming, you'll prefer the latter, but `make` remains a reasonable option
 
 ## Quack to the Future: Building Traceable Data Lakehouses with DuckLake in R - Travis Gerke
+
+[Session: From Laptop to Cluster]{.badge .text-bg-secondary}
 
 ### The problem: data has no git-like audit trail
 
@@ -804,6 +846,8 @@ The row/column/cell-level diff UI shown live (click through snapshots to see exa
 
 ## Prepare locally, run remotely: Easily scale Tidymodels on Databricks with sparklyr - Edgar Ruiz
 
+[Session: From Laptop to Cluster]{.badge .text-bg-secondary}
+
 ### The problem: tuning is embarrassingly parallel but hardware-bound
 
 - Motivating example: a tidymodels grid search with 10 resampling folds x 100 hyperparameter combinations = 1,000 model fits — embarrassingly parallel in principle, but bounded by local hardware
@@ -860,6 +904,8 @@ When moving tuning to Spark, changing `tune()`'s `parallel_over` argument from t
 - Q&A: debugging a failed worker mid-tuning is possible via the Spark UI/logs (described as "a little clunky") but rarely necessary, since Spark-side logs typically expose more detail than a local `tune_grid()` run would
 
 ## Keynote: Pint Sized Presentations from Posit People
+
+[Session: Keynote Session]{.badge .text-bg-secondary}
 
 - This replaced the originally-scheduled closing keynote (Emily's talk) after she became unavailable ("under the weather"); instead, the host (Hadley Wickham, per in-jokes from several speakers) recruited 12 Posit colleagues on short notice to each give an unrehearsed five-minute lightning talk, with a gong threatened for anyone running long.
 
@@ -933,7 +979,7 @@ Excellent file names are machine readable, human readable, and sort themselves u
 ### Connecting to Your Data — Katie Masiello (Solutions Engineering)
 
 - Argued for being more intentional about how teams connect to data sources — covering tooling choice (package vs. driver vs. SDK), credentials (avoid username/password; consider OAuth), and the added complexity of moving a working local connection into production.
-- Introduced a new documentation hub on data source connections, covering fundamentals, access patterns, credential scope/lifetime, and general + source-specific recipes with copyable code examples.
+- Introduced a new documentation hub on data source connections, covering fundamentals, access patterns, credential scope/lifetime, and general + source-specific recipes with copyable code examples — https://docs.posit.co/data-sources
 - docs.posit.co
 - Flagged Workbench and Connect as tools that ease the trade-off between implementation simplicity and security-team comfort.
 

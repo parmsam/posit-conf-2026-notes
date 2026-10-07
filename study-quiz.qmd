@@ -251,7 +251,7 @@ Questions below are based on [Day 2 notes](day2.qmd).
 
 ## {.quiz-question}
 
-**In Mirian Lima's OSA Metrics workflow, what does the "save the story, not the answer" step actually export?**
+**In Mirian Lima's OSAA Metrics workflow, what does the "save the story, not the answer" step actually export?**
 
 - The full raw dataset used in the analysis
 - [A `session.json` with the table schema, generating queries, and every query/chart pair — no raw data]{.correct}

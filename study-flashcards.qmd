@@ -480,7 +480,7 @@ Unpackaged, your judgment dies inside the context window. Packaged (via skills, 
 ## {background-color="#eef6ff"}
 
 ::: {.flashcard-front}
-What are the four verbs in OSA Metrics' workflow, and what does the last one save?
+What are the four verbs in OSAA Metrics' workflow, and what does the last one save?
 :::
 
 ::: {.flashcard-back}
